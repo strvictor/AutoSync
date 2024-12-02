@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  db-postgres:
+    image: postgres:13-alpine
+    environment:
+      POSTGRES_DB: coredb
+      POSTGRES_USER: strvictor
+      POSTGRES_PASSWORD: Str.1009
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  core-app:
+    build: .
+    volumes:
+      - .:/core
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db-postgres
+    environment:
+      DB_NAME: coredb
+      DB_USER: strvictor
+      DB_PASSWORD: Str.1009
+      DB_HOST: db-postgres
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+
+volumes:
+  postgres_data:
