@@ -1,0 +1,110 @@
+
+body {
+    background-color: var(--background-geral);
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+/* Título */
+.container h1 {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+/* Flexbox para os cards */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+/* Estilo base dos cards */
+.card {
+    flex: 1;
+    width: 400px;
+    height: 130px;
+    border-radius: 12px;
+    overflow: hidden;
+    /* transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; */
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo para os cabeçalhos */
+.card-header {
+    font-weight: bold;
+    padding: 5px;
+    font-size: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Estilo para os valores */
+.card-body h2 {
+    font-size: 2rem;
+}
+
+/* Cores específicas */
+.card-red {
+    background: #e63946;
+}
+
+.card-blue {
+    background: var(--main-color);
+}
+
+.card-green {
+    background: #2a9d8f;
+}
+
+.card-yellow {
+    background: var(--contrast-color);
+}
+
+.card-purple {
+    background: #6d6875;
+}
+
+/* Ícones */
+.card-header i {
+    font-size: 1.1rem;
+}
+
+
+
+/* Resposta para dispositivos menores */
+@media (max-width: 768px) {
+    .card {
+        max-width: 100%;
+    }
+
+    .row {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+
+.distanciamento{
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 40px;
+}
+
+#servicesChart {
+    display: block;
+    max-width: 700px; /* Largura máxima */
+    height: auto; /* Altura proporcional */
+    margin: 0 auto; /* Centraliza o gráfico */
+    background-color: #ffffff; /* Fundo branco */
+    border-radius: 8px; /* Bordas arredondadas */
+    padding: 10px; /* Espaçamento interno */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}

@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block 'head' %}
+    <link rel="stylesheet" href="{% static 'home/css/home.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+{% endblock %}
+
+{% block 'dashboard' %}
+<div class="container-fluid distanciamento">
+    <h1>Dashboard</h1>
+    
+    <div class="row">
+        <!-- Card 1: Total Profit -->
+        <div class="card card-red">
+            <div class="card-header">
+                <span>Receita Total</span>
+                <i class="fas fa-wallet"></i>
+            </div>
+            <div class="card-body">
+                <h2>R$ {{total_valor_finalizados}}</h2>
+            </div>
+        </div>
+        
+        <!-- Card 2: Total Orders -->
+        <div class="card card-blue">
+            <div class="card-header">
+                <span>Serviços em Andamento</span>
+                <i class="fas fa-spinner"></i>
+            </div>
+            <div class="card-body">
+                <h2>{{total_pendentes}}</h2>
+            </div>
+        </div>
+        
+        <!-- Card 3: Average Price -->
+        <div class="card card-green">
+            <div class="card-header">
+                <span>Serviços Finalizados</span>
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="card-body">
+                <h2>{{total_finalizados}}</h2>
+            </div>
+        </div>
+        
+        <!-- Card 4: Products Sold -->
+        <div class="card card-yellow">
+            <div class="card-header">
+                <span>Valor Médio Por Serviço</span>
+                <i class="fas fa-exclamation-circle"></i>
+            </div>
+            <div class="card-body">
+                <h2>R$ {{valor_medio}}</h2>
+            </div>
+        </div>
+
+        <!-- Card 5: Pending Tasks -->
+        <div class="card card-purple">
+            <div class="card-header">
+                <span>*falta add*</span>
+                <i class="fas fa-star"></i>
+            </div>
+            <div class="card-body">
+                <h2>!!</h2>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+
+    <!-- Gráficos -->
+    <div style="text-align: center;">
+        <canvas id="servicesChart"></canvas>
+    </div>
+      
+
+</div>
+<!-- <script src="{% static 'home/js/home.js' %}"></script> -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Gráfico de Distribuição de Serviços com fundo branco e tamanho fixo
+    const servicesCtx = document.getElementById('servicesChart').getContext('2d');
+    new Chart(servicesCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Pendentes', 'Finalizados'],
+            datasets: [{
+                data: [{{ total_pendentes }}, {{ total_finalizados }}],
+                backgroundColor: ['#fcbf49', '#0077b6'], // Cores personalizadas da sua paleta
+                hoverBackgroundColor: ['#fcae2e', '#005f8e'] // Cores ao passar o mouse
+            }]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    position: 'top', // Posiciona a legenda abaixo do gráfico
+                    labels: {
+                        color: '#000', // Texto preto
+                        font: {
+                            size: 16
+                        }
+                    }
+                }
+            },
+            maintainAspectRatio: true, // Mantém a proporção do gráfico
+            responsive: true, // Gráfico responsivo
+            layout: {
+                padding: 10 // Espaçamento interno
+            },
+            elements: {
+                arc: {
+                    borderWidth: 2,
+                    borderColor: '#fff' // Adiciona bordas brancas às fatias
+                }
+            }
+        }
+    });
+
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block 'head' %}
+    <link rel="stylesheet" href="{% static 'servicos/css/editar_servico.css' %}">
+{% endblock %}
+
+{% block 'dashboard' %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <a href="{% url 'novo_servico' %}">
+                <div class="card-dashboard">
+                    <p class="text-card">Adicionar Serviço</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6">
+            <a href="{% url 'editar_servico' %}">
+                <div class="card-dashboard">
+                    <p class="text-card">Editar Serviço</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md">
+            <a href="{% url 'listar_servico' %}">
+                <div class="card-dashboard">
+                    <p class="text-card">Listar Serviços</p>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="editar_servico">
+        <form action='{% url "editar_servico" %}' method="POST">
+            {% csrf_token %}
+            <div class="row">
+                <label for="id_cliente">Serviços:</label>
+                <select id="servico" onchange="atualiza_servico()" name="servico" class="form-control">
+                    <option value="" disabled selected>Selecione um serviço</option>
+                    {% for servico in servicos %}
+                    <option value="{{ servico.id }}">{{ servico.titulo }} | {{ servico.cliente }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </form>
+        <br>
+        <p>Em desenvolvimento...</p>
+    </div>
+</div>
+
+<script src="{% static 'servicos/js/editar_servico.js' %}"></script>
+{% endblock %}

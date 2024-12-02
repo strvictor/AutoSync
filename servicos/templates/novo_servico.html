@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block 'head' %}
+    <link rel="stylesheet" href="{% static 'servicos/css/novo_servico.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block 'dashboard' %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <a href="{% url 'novo_servico' %}">
+                <div class="card-dashboard">
+                    <p class="text-card">Adicionar Serviço</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6">
+            <a href="{% url 'editar_servico' %}">
+                <div class="card-dashboard">
+                    <p class="text-card">Editar Serviço</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md">
+            <a href="{% url 'listar_servico' %}">
+                <div class="card-dashboard">
+                    <p class="text-card">Listar Serviços</p>
+                </div>
+            </a>
+        </div>
+    </div>
+    
+    <div class="adicionar_servico">
+        <form action='{% url "novo_servico" %}' method="POST">
+            {% csrf_token %}
+            <div class="row">
+                <!-- Cliente -->
+                <div class="col-md-6 form-group">
+                    <label for="id_cliente">Cliente:</label>
+                    <select id="id_cliente" name="cliente" class="form-control" required>
+                        <option value="" disabled selected>Selecione um cliente</option>
+                        {% for cliente in clientes %}
+                        <option value="{{ cliente.id }}">{{ cliente.nome }} {{ cliente.sobrenome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Carro -->
+                <div class="col-md-6 form-group">
+                    <label for="id_carro">Carro:</label>
+                    <select id="id_carro" name="carro" class="form-control" required>
+                        <option value="" disabled selected>Selecione um Carro</option>
+                    </select>
+                </div>
+
+                <!-- Título do Serviço -->
+                <div class="col-md-6 form-group">
+                    <label for="titulo_servico">Título do Serviço:</label>
+                    <input id="titulo_servico" name="titulo_servico" type="text" class="form-control" required>
+                </div>
+                <div class="col-md-6 form-group">
+                    <label for="titulo_servico">Notificar o Cliente Quando Finalizado?</label>
+                    <select name="notificar" id="Notificar" class="form-control">
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
+                    </select>
+                </div>
+
+                <!-- Categorias -->
+                <!-- <div class="col-md-6 form-group">
+                    <label for="categorias">Serviço(s):</label>
+                    <select id="categorias" name="categorias" class="form-control" required multiple>
+                        {% for categoria in categorias %}
+                        <option value="{{ categoria.id }}">{{ categoria.titulo }}</option>
+                        {% endfor %}
+                    </select>
+                </div> -->
+
+
+                <div class="col-md-12 form-group">
+                    <label for="categorias">Serviços:</label>
+                    <div id="categorias-container">
+                        <div class="row mb-2 categoria-row">
+                            <div class="col-md-8">
+                                <select name="categorias" class="form-control categoria-select" required>
+                                    <option value="" disabled selected>Selecione um serviço</option>
+                                    {% for categoria in categorias %}
+                                    <option value="{{ categoria.id }}">{{ categoria.titulo }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <input type="number" name="quantidades" class="form-control" placeholder="Quantidade" min="1" required>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" id="add-categoria" class="btn btn-primary mt-2">Adicionar Serviço</button>
+                </div>
+                
+
+
+
+                <!-- Data Início -->
+                <div class="col-md-6 form-group">
+                    <label for="data_inicio">Data Início:</label>
+                    <input id="data_inicio" name="data_inicio" type="date" class="form-control" required>
+                </div>
+
+                <!-- Data Entrega -->
+                <div class="col-md-6 form-group">
+                    <label for="data_entrega">Data Entrega:</label>
+                    <input id="data_entrega" name="data_entrega" type="date" class="form-control" required>
+                </div>
+            </div>
+            <br>
+            <input type="submit" value="Cadastrar" class="btn btn-success">
+        </form>
+        <br>
+
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'servicos/js/novo_servico.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        // Ativa o Select2 no campo de categorias
+        $('#categorias').select2({
+            placeholder: "Selecione uma ou mais categorias",
+            allowClear: true
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block 'head' %}
+    <link rel="stylesheet" href="{% static 'servicos/css/listar_servico.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+{% endblock %}
+
+{% block 'dashboard' %}
+<div class="container-fluid distanciamento">
+
+
+
+
+    <h3>Serviços:</h3>
+
+    <br>
+    <div class="row mb-3">
+        <div class="col-12 d-flex justify-content-end"> <!-- Flexbox alinha à direita -->
+            <div class="input-group" style="max-width: 300px;"> <!-- Limita a largura do campo -->
+                <span class="input-group-text">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    class="form-control text-start" 
+                    placeholder="O que deseja buscar?">
+            </div>
+        </div>
+    </div>
+    
+    
+    
+    <table class="table sortable">
+        <thead>
+          <tr>
+            <th scope="col">Protocolo</th>
+            <th scope="col">Titulo do Serviço</th>
+            <th scope="col">Mecânico Responsável</th>
+            <th scope="col">Cliente</th>
+            <th scope="col">Data de Inicio</th>
+            <th scope="col">Data de Entrega</th>
+            <th scope="col">Status</th>
+            <th scope="col">Preço Total</th>
+          </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% for servico in servicos %}
+                <tr>
+                    <th scope="row">
+                        <a href="{% url 'servico' servico.protocolo %}" target="_blank" class="badge badge-dark protocolo">{{ servico.protocolo }}</a>
+                    </th>                    
+                    <td>{{servico.titulo}}</td>
+                    <td>Nome do Mecâncio</td>
+                    <td>{{servico.cliente}}</td>
+                    <td>{{servico.data_inicio|date:"d/m/Y"}}</td>
+                    <td>{{servico.data_entrega|date:"d/m/Y"}}</td>
+                    <td>
+                        {% if servico.finalizado %}
+                            <span class="badge badge-success">Finalizado</span>
+                        {% else %}
+                            <span class="badge badge-info">Pendente</span>
+                        {% endif %}
+                    </td>
+                    <td>R$ {{servico.preco_total}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+
+    {% comment %} <div class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100" style="width: 98%">98%</div>
+    </div>
+    <br>
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100" style="width: 58%">58%</div>
+    </div>
+    <br>
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuenow="" aria-valuemin="0" aria-valuemax="100" style="width: 46%">46%</div>
+    </div> {% endcomment %}
+</div>
+
+<script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+<script src="{% static 'servicos/js/lista_servico.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,309 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_filters %}
+
+{% block 'head' %}
+    <style>
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        .header {
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2rem;
+            color: #1f2937;
+        }
+        .details, .actions, .table-container {
+            padding: 10px 20px;
+            border-radius: 8px;
+            background-color: #ebeff385;
+        }
+        .details p, .actions p {
+            margin: 10px 0;
+            font-size: 1rem;
+        }
+        .details p strong, .actions label {
+            color: #4b5563;
+        }
+        .actions {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .actions h2 {
+            font-size: 1.5rem;
+            color: #1f2937;
+        }
+        .actions form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .actions label {
+            font-weight: bold;
+        }
+        .actions select, .actions input[type="checkbox"] {
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        .actions .btn {
+            padding: 12px 16px;
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .actions .btn:hover {
+            background-color: #2563eb;
+        }
+        .table-container {
+            overflow-x: auto;
+            
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        table, th, td {
+            border: 1px solid #e5e7eb;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f3f4f6;
+            font-weight: bold;
+            color: #374151;
+        }
+        td {
+            color: #1f2937;
+        }
+        .table-container p {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #111827;
+            width: 100%;
+            justify-content: flex-end;
+
+        }
+        .btn-secondary {
+            padding: 10px 16px;
+            background-color: #6b7280;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-secondary:hover {
+            background-color: #4b5563;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+        p {
+            color: #111827;
+        }
+
+        h1{
+            text-transform: capitalize;
+        }
+
+        /* From Uiverse.io by G4b413l */ 
+        .buttonDownload {
+        display: inline-block;
+        position: relative;
+        padding: 12px 25px;
+        background-color: #838681;
+        color: white;
+        font-family: sans-serif;
+        text-decoration: none;
+        font-size: 0.9em;
+        text-align: center;
+        text-indent: 15px;
+        border: none;
+        border-radius: 7px;
+        }
+
+        .buttonDownload:hover {
+        background-color: #686b67;
+        color: white;
+        }
+
+        .buttonDownload:before, .buttonDownload:after {
+        content: ' ';
+        display: block;
+        position: absolute;
+        left: 15px;
+        top: 52%;
+        }
+
+        .buttonDownload:before {
+        width: 10px;
+        height: 2px;
+        border-style: solid;
+        border-width: 0 2px 2px;
+        }
+
+        .buttonDownload:after {
+        width: 0;
+        height: 0;
+        margin-left: 3px;
+        margin-top: -7px;
+        border-style: solid;
+        border-width: 4px 4px 0 4px;
+        border-color: transparent;
+        border-top-color: inherit;
+        animation: downloadArrow 1s linear infinite;
+        animation-play-state: paused;
+        }
+
+        .buttonDownload:hover:before {
+        border-color: #cdefbd;
+        }
+
+        .buttonDownload:hover:after {
+        border-top-color: #cdefbd;
+        animation-play-state: running;
+        }
+
+        @keyframes downloadArrow {
+        0% {
+        margin-top: -7px;
+        opacity: 1;
+        }
+
+        0.001% {
+        margin-top: -15px;
+        opacity: 0.4;
+        }
+
+        50% {
+        opacity: 1;
+        }
+
+        100% {
+        margin-top: 0;
+        opacity: 0.4;
+        }
+        }
+
+
+
+    </style>
+{% endblock %}
+
+{% block 'dashboard' %}
+    <br>
+    <div class="container" id="conteudo">
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <!-- Header -->
+        <div class="header">
+            <h1>{{ servico.titulo }}</h1>
+        </div>
+        
+        <!-- Details -->
+        <div class="details">
+            <p id="protocolo"><strong>Protocolo:</strong> {{ servico.protocolo }}</p>
+            <p><strong>Cliente:</strong> {{ servico.cliente }}</p>
+            <p><strong>Veículo:</strong> {{ servico.carro }}</p>
+            <p><strong>Placa:</strong> {{ servico.carro.placa }}</p>
+            <p><strong>Data de Início:</strong> {{ servico.data_inicio }}</p>
+            <p><strong>Data de Entrega:</strong> {{ servico.data_entrega }}</p>
+            <p><strong>Status:</strong> {{ servico.finalizado|yesno:"Finalizado,Pendente" }}</p>
+        </div>
+        
+        <!-- Actions -->
+        <div class="actions">
+            <h2>Alterar Detalhes</h2>
+            <form method="POST" action="{% url 'alterar_servico' servico.id %}">
+                {% csrf_token %}
+                <label for="status">Status:</label>
+                <select id="status" name="status">
+                    <option value="pendente" {% if not servico.finalizado %}selected{% endif %}>Pendente</option>
+                    <option value="finalizado" {% if servico.finalizado %}selected{% endif %}>Finalizado</option>
+                </select>
+                <label for="notifica_cliente">
+                    <input type="checkbox" id="notifica_cliente" name="notifica_cliente" {% if servico.notifica_cliente == 'Sim' %}checked{% endif %}>
+                    Notificar Cliente
+                </label>
+                <button type="submit" class="btn">Salvar Alterações</button>
+            </form>
+        </div>
+        
+        <!-- Table -->
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Serviço Realizado</th>
+                        <th>Qtd</th>
+                        <th>Preço Unitário</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in servico.servicocategoriaquantidade_set.all %}
+                    <tr>
+                        <td>{{ item.categoria }}</td>
+                        <td>{{ item.quantidade }}</td>
+                        <td>R$ {{ item.categoria.preco }}</td>
+                        <td>R$ {{ item.quantidade|multiply:item.categoria.preco }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <br>
+            <p>Total: R$ {{ servico.preco_total }}</p>
+        </div>
+        
+        <!-- Generate PDF -->
+        <!-- <button id="generatePDF" class="btn-secondary">Gerar PDF</button> -->
+        <button id="generatePDF" class="buttonDownload">Gerar PDF</button>
+        
+        <!-- Footer -->
+        <div class="footer">
+            © 2024 - Oficina X @strvictor
+        </div>
+    </div>
+    <br>
+
+    <script src="{% static 'servicos/js/servico.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+{% endblock %}

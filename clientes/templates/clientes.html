@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block 'head' %}
+    <link rel="stylesheet" href="{% static 'clientes/css/clientes.css' %}">
+{% endblock %}
+
+{% block 'dashboard' %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card-dashboard">
+                <p class="text-card" onclick="exibir_form('1')" >Adicionar clientes</p>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card-dashboard">
+                <p class="text-card" onclick="exibir_form('2')"">Atualizar cliente</p>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="adicionar-cliente" class="adicionar-cliente">
+        <form action="{% url "clientes" %}" method="POST">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-6">
+                    <p>Nome:</p>
+                    <input type="text" class="form-control" placeholder="Primeiro nome" name="nome" required>
+                </div>
+                <div class="col-md-6">
+                    <p>Sobrenome:</p>
+                    <input type="text" class="form-control" placeholder="Sobrenome" name="sobrenome" required>
+                </div>
+            </div>
+
+            <br>
+            <p>E-mail:</p>
+            <input type="email" class="form-control" placeholder="nome@email.com" name="email" required>
+
+            <br>
+            <p>CPF:</p>
+            <input type="text" class="form-control" placeholder="___.___.___-__" name="cpf" required>
+            <hr style="background-color:gray;">
+
+            <div class="add-carros">
+                <h3>Carros</h3>
+                <span class="btn-add-carros" onclick="add_carro()">+ Adicionar um carro</span>
+                <div id="form-carro">
+                    <!-- Campos de carro adicionais serão adicionados aqui por JavaScript -->
+                </div>
+            </div>
+
+            <br>
+            <input type="submit" value="Cadastrar" class="btn-principal">
+        </form>
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+    
+    <div id="atualizar_cliente" class="atualizar_cliente">
+        <p>Cliente:</p>
+        <select id="cliente-select" onchange="dados_clientes()" class="form-control">
+            <option value="" disabled selected>Selecione um cliente</option>
+            {% for cliente in clientes %}
+                <option value="{{cliente.id}}">{{cliente.nome}} {{cliente.sobrenome}}</option>
+            {% endfor %}
+        </select>
+        <br>
+        <div id="form-atualiza-cliente">
+            <input type="hidden" id="id_cliente">
+            <p>Nome:</p>
+            <input type="text" id="nome" class="form-control">
+            <br>
+            <p>Sobrenome:</p>
+            <input type="text" id="sobrenome" class="form-control">
+            <br>
+            <p>E-mail:</p>
+            <input type="text" id="email" class="form-control">
+            <br>
+            <p>CPF:</p>
+            <input type="text" id="cpf" class="form-control">
+            <br>
+            <input type="submit"  onclick="update_cliente()" value="Atualizar" class="btn btn-success">
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <hr style="background-color:gray;">
+            <h3>Carros</h3>
+            <div id="carros">
+                
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<script src="{% static 'clientes/js/clientes.js' %}"></script>
+{% endblock %}

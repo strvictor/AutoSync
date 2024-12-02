@@ -1,0 +1,10 @@
+:root{
+     
+    --main-color: #0077b6;         /* Azul intenso - representa confiança e limpeza */
+    --dark-color: #023047;         /* Azul petróleo - profissional e forte */
+    --light-color: #caf0f8;        /* Azul claro - frescor e modernidade */
+    --contrast-color: #fcbf49;     /* Amarelo mostarda - para detalhes e contrastes */
+    --differential-color: #8ecae6; /* Azul suave - diferencial leve e agradável */
+    --background-geral: #1b1f24; /* Azul escuro */
+       
+}
