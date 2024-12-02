@@ -49,6 +49,16 @@ class ProcessaUsuarios:
             self.erro_msg = 'E-mail já cadastrado.'
             return False
         
+        cpf_clean = str(self.cpf).replace('.', '').replace('-', '')
+
+        # Verificar se o CPF limpo tem 11 dígitos
+        if not cpf_clean.isnumeric() or len(cpf_clean) != 11:
+            self.erro_msg = 'CPF inválido, deve conter apenas 11 dígitos numéricos.'
+            return False
+        
+        # CPF válido, armazena o CPF limpo
+        self.cpf = cpf_clean
+
         return True
     
     

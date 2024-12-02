@@ -4,7 +4,7 @@ class Cliente(models.Model):
     nome = models.CharField(max_length=50)
     sobrenome = models.CharField(max_length=50)
     email = models.EmailField(max_length=254)
-    cpf = models.CharField(max_length=12)
+    cpf = models.CharField(max_length=11)
     
     def __str__(self):
         return self.nome + ' ' + self.sobrenome
