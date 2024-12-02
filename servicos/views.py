@@ -52,6 +52,7 @@ def editar_servico(request):
 def listar_servico(request):
     if request.method == 'GET':
         servicos = Servicos.objects.all()
+        print(servicos)
         return render(request, 'lista_servico.html', {'servicos': servicos})
     else:
         return redirect('listar_servico')

@@ -3,8 +3,7 @@ from secrets import token_hex
 from datetime import datetime
 from clientes.models import Cliente, Carro
 from .categorias import ChoicesCategoriaManutencao
-import locale
-
+from babel.numbers import format_currency
 
 # class CategoriaManutencao(models.Model):
 #     titulo = models.CharField(max_length=100, choices=ChoicesCategoriaManutencao.choices)
@@ -27,7 +26,7 @@ class Servicos(models.Model):
     categoria_manutencao = models.ManyToManyField(
         CategoriaManutencao, through='ServicoCategoriaQuantidade'
     )
-
+    mecanico_resp = models.CharField(max_length=100, blank=True, null=True, default='-')
     data_inicio = models.DateField(null=True)
     data_entrega = models.DateField(null=True)
     finalizado = models.BooleanField(default=False)
@@ -43,12 +42,12 @@ class Servicos(models.Model):
         super(Servicos, self).save(*args, **kwargs)
 
     def preco_total(self):
-
-        locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
         preco_total = 0.0
         for item in self.servicocategoriaquantidade_set.all():
             preco_total += float(item.categoria.preco) * item.quantidade
-        return locale.currency(preco_total, grouping=True, symbol=False)
+        
+        # Formata o valor usando o Babel para moeda brasileira
+        return format_currency(preco_total, 'BRL', locale='pt_BR')
 
 
 class ServicoCategoriaQuantidade(models.Model):

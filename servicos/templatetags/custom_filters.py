@@ -1,5 +1,5 @@
 from django import template
-import locale
+from babel.numbers import format_currency
 
 register = template.Library()
 
@@ -7,8 +7,7 @@ register = template.Library()
 def multiply(value, arg):
 
     try:
-        locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
         multiplicacao = value * arg
-        return locale.currency(multiplicacao, grouping=True, symbol=False)
+        return format_currency(multiplicacao, 'BRL', locale='pt_BR')
     except (TypeError, ValueError):
         return ''

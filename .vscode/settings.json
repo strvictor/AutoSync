@@ -1,5 +1,6 @@
 {
     "conventionalCommits.scopes": [
-        "No campo CPF, na aba de cadastro de clientes, quando o cpf era enviado com '-' e '.' dava erro na model, pois lá limitei o tamanho maximo de 11 caracteres pro campo cpf"
+        "No campo CPF, na aba de cadastro de clientes, quando o cpf era enviado com '-' e '.' dava erro na model, pois lá limitei o tamanho maximo de 11 caracteres pro campo cpf",
+        "Adição do Docker e Postsgres"
     ]
 }

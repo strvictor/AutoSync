@@ -11,9 +11,9 @@ class ProcessaServicos:
         self.requisicao_post = requisicao.POST
 
         self.cliente_selecionado = self.requisicao_post.get('cliente')
-        print(self.cliente_selecionado)
         self.carro_selecionado = self.requisicao_post.get('carro')
         self.titulo_servico = self.requisicao_post.get('titulo_servico')
+        self.mecanico_responsavel = self.requisicao_post.get('mecanico_responsavel')
         self.notifica_cliente = self.requisicao_post.get('notificar')
         self.categorias_servico = self.requisicao_post.getlist('categorias')
         self.quantidades_servico = self.requisicao_post.getlist('quantidades')
@@ -74,6 +74,7 @@ class ProcessaServicos:
             data_inicio=self.data_inicio,
             data_entrega=self.data_entrega,
             notifica_cliente=self.notifica_cliente,
+            mecanico_resp=self.mecanico_responsavel,
         )
         self.salva_servico_bd.save()
 
