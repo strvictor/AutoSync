@@ -25,6 +25,7 @@ def novo_servico(request):
             processa_servicos.salva_servico()
             processa_servicos.associa_categorias()
 
+            #TODO falta enviar o email para o status em orçamento de forma automatica, pode fazer isso, nesse local
             # envia_email = EnviaEmail()
             # envia_email.trata_emails(servico_id)
 
