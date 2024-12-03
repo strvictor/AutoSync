@@ -97,8 +97,8 @@ class ProcessaServicos:
     def muda_status_servico(self, servico_id):
         servico = get_object_or_404(Servicos, id=servico_id)
 
-        servico.finalizado = (self.status == 'finalizado')  # Converte o status
-        servico.notifica_cliente = self.avisa_cliente  # Atualiza a notificação
+        servico.status = self.status
+        servico.notifica_cliente = self.avisa_cliente == True
 
         servico.save()
         return servico.protocolo
@@ -106,12 +106,28 @@ class ProcessaServicos:
 
 class EnviaEmail:
     @staticmethod
-    def _(id_servico):
+    def trata_emails(id_servico):
         servico_cliente = Servicos.objects.get(id=id_servico)
 
-        if servico_cliente.finalizado:
-            # servico finalizado
-            valida_info_email.delay(servico_cliente.id)
+        if servico_cliente.status == 'Em Orçamento' and servico_cliente.notifica_cliente:
+            assunto = "Seu orçamento está pronto! Confira os detalhes 💼"
+
+            caminho = r'emails/modelo_em_orcamento.html'
+            valida_info_email.delay(id_servico, caminho, assunto)
+
+        elif servico_cliente.status == 'Orçamento Reprovado' and servico_cliente.notifica_cliente:
+            assunto = "Orçamento Reprovado - Estamos à disposição para ajustes 💬"
+
+            caminho = r'emails/modelo_orcamento_reprovado.html'
+            valida_info_email.delay(id_servico, caminho, assunto)
+            
+        elif servico_cliente.status == 'Em Andamento' and servico_cliente.notifica_cliente:
+            assunto = "Seu serviço está em andamento. Acompanhe o progresso! 🚗"
+
+            caminho = r'emails/modelo_andamento.html'
+            valida_info_email.delay(id_servico, caminho, assunto)
         else:
-            # serviço como pendente ou outro status
-            ...
+            assunto = 'Tudo pronto! Seu veículo está à sua espera 🚗'
+
+            caminho = r'emails/modelo_finalizado.html'
+            valida_info_email.delay(id_servico, caminho, assunto)

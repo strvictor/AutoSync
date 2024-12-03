@@ -1,0 +1,23 @@
+{% extends "email_base/email_base.html" %}
+
+{% load custom_filters %}
+
+{% block title %}Serviço em Andamento{% endblock %}
+
+{% block header %}Seu serviço está em andamento!{% endblock %}
+
+{% block content %}
+<p>Olá, <strong>{{ nome }} {{ sobrenome }}</strong>,</p>
+<p>Gostaríamos de informar que o serviço relacionado ao seu veículo está em andamento. Estamos trabalhando para concluir tudo com a máxima qualidade e eficiência.</p>
+<h2>Detalhes do Serviço</h2>
+<ul>
+    <li><strong>Protocolo:</strong> {{ protocolo_servico }}</li>
+    <li><strong>Título do Serviço:</strong> {{ titulo_servico }}</li>
+    <li><strong>Previsão de Entrega:</strong> {{ servico.data_entrega }}</li>
+    <li><strong>Veículo:</strong> {{ carro }}</li>
+    <li><strong>Placa:</strong> {{ placa }}</li>
+</ul>
+
+<p>Se precisar de informações adicionais, entre em contato conosco.</p>
+<a href="https://api.whatsapp.com/send?phone=5591993233036&text=Ol%C3%A1%2C%20gostaria%20de%20mais%20detalhes%20sobre%20a%20ordem%20de%20servi%C3%A7o%3A%20{{ protocolo_servico }}" class="button">Entre em contato</a>
+{% endblock %}

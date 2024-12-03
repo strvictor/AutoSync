@@ -246,7 +246,7 @@
             <p><strong>Placa:</strong> {{ servico.carro.placa }}</p>
             <p><strong>Data de Início:</strong> {{ servico.data_inicio }}</p>
             <p><strong>Data de Entrega:</strong> {{ servico.data_entrega }}</p>
-            <p><strong>Status:</strong> {{ servico.finalizado|yesno:"Finalizado,Pendente" }}</p>
+            <p><strong>Status:</strong> {{ servico.status }}</p>
         </div>
         
         <!-- Actions -->
@@ -256,11 +256,13 @@
                 {% csrf_token %}
                 <label for="status">Status:</label>
                 <select id="status" name="status">
-                    <option value="pendente" {% if not servico.finalizado %}selected{% endif %}>Pendente</option>
-                    <option value="finalizado" {% if servico.finalizado %}selected{% endif %}>Finalizado</option>
+                    <option value="Em Orçamento" {% if servico.status == 'Em Orçamento' %}selected{% endif %}>Em Orçamento</option>
+                    <option value="Orçamento Reprovado" {% if servico.status == 'Orçamento Reprovado' %}selected{% endif %}>Orçamento Reprovado</option>
+                    <option value="Em Andamento" {% if servico.status == 'Em Andamento' %}selected{% endif %}>Em Andamento</option>
+                    <option value="Finalizado" {% if servico.status == 'Finalizado' %}selected{% endif %}>Finalizado</option>
                 </select>
                 <label for="notifica_cliente">
-                    <input type="checkbox" id="notifica_cliente" name="notifica_cliente" {% if servico.notifica_cliente == 'Sim' %}checked{% endif %}>
+                    <input type="checkbox" id="notifica_cliente" name="notifica_cliente" {% if servico.notifica_cliente == 'True' %}checked{% endif %}>
                     Notificar Cliente
                 </label>
                 <button type="submit" class="btn">Salvar Alterações</button>

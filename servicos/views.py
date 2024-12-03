@@ -3,12 +3,11 @@ from django.shortcuts import render
 # Create your views here.
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
-from .commands import ProcessaServicos
+from .commands import ProcessaServicos, EnviaEmail
 from django.core import serializers
 from django.contrib import messages 
 from .models import Servicos
 import json
-from servicos.tasks import valida_info_email
 
 
 # Falta validar as mensagens de retorno ao front-end
@@ -25,6 +24,10 @@ def novo_servico(request):
         if processa_servicos.valida_ids():
             processa_servicos.salva_servico()
             processa_servicos.associa_categorias()
+
+            # envia_email = EnviaEmail()
+            # envia_email.trata_emails(servico_id)
+
             messages.success(request, "Cliente adicionado com sucesso!")
 
             return redirect('novo_servico')
@@ -77,7 +80,10 @@ def alterar_servico(request, servico_id):
         messages.success(request, "Serviço atualizado com sucesso!")
 
         print('Envia Email com Celery')
-        valida_info_email.delay(servico_id)
+
+        envia_email = EnviaEmail()
+        envia_email.trata_emails(servico_id)
+        # valida_info_email.delay(servico_id)
         
         return redirect('servico', protocolo) 
 

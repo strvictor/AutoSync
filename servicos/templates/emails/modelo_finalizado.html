@@ -1,0 +1,44 @@
+{% extends "email_base/email_base.html" %}
+
+{% load custom_filters %}
+
+{% block title %}Serviço Concluído{% endblock %}
+
+{% block header %}Serviço Concluído!{% endblock %}
+
+{% block content %}
+<p>Olá, <strong>{{ nome }} {{ sobrenome }}</strong>,</p>
+<p>Estamos felizes em informar que o serviço relacionado ao seu veículo foi concluído com sucesso.</p>
+<h2>Detalhes do Serviço:</h2>
+<ul>
+    <li><strong>Protocolo:</strong> {{ protocolo_servico }}</li>
+    <li><strong>Título do Serviço:</strong> {{ titulo_servico }}</li>
+    <li><strong>Veículo:</strong> {{ carro }}</li>
+    <li><strong>Placa:</strong> {{ placa }}</li>
+</ul>
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Serviço Realizado</th>
+                <th>Qtd</th>
+                <th>Preço Unitário</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in servico.servicocategoriaquantidade_set.all %}
+            <tr>
+                <td>{{ item.categoria }}</td>
+                <td>{{ item.quantidade }}</td>
+                <td>R$ {{ item.categoria.preco }}</td>
+                <td>R$ {{ item.quantidade|multiply:item.categoria.preco }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <p>Total: R$ {{ servico.preco_total }}</p>
+</div>
+<a href="https://api.whatsapp.com/send?phone=5591993233036&text=Ol%C3%A1%2C%20gostaria%20de%20mais%20detalhes%20sobre%20a%20ordem%20de%20servi%C3%A7o%3A%20{{ protocolo_servico }}" class="button">Entre em contato</a>
+{% endblock %}

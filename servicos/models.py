@@ -29,8 +29,8 @@ class Servicos(models.Model):
     mecanico_resp = models.CharField(max_length=100, blank=True, null=True, default='-')
     data_inicio = models.DateField(null=True)
     data_entrega = models.DateField(null=True)
-    finalizado = models.BooleanField(default=False)
-    notifica_cliente = models.CharField(max_length=4, default='True')
+    status = models.CharField(max_length=25, default='Em Orçamento')
+    notifica_cliente = models.CharField(max_length=5, default='True')
     protocolo = models.CharField(max_length=18, null=True, blank=True, unique=True)
 
     def __str__(self):

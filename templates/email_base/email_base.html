@@ -5,17 +5,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Serviço Concluído</title>
+    <title>{% block title %}Serviço Concluído{% endblock %}</title>
     <style>
-        :root{
-     
+        :root {
             --main-color: #0077b6;         /* Azul intenso - representa confiança e limpeza */
             --dark-color: #023047;         /* Azul petróleo - profissional e forte */
             --light-color: #caf0f8;        /* Azul claro - frescor e modernidade */
             --contrast-color: #fcbf49;     /* Amarelo mostarda - para detalhes e contrastes */
             --differential-color: #8ecae6; /* Azul suave - diferencial leve e agradável */
-            --background-geral: #1b1f24; /* Azul escuro */
-                
+            --background-geral: #1b1f24;   /* Azul escuro */
         }
 
         body {
@@ -25,6 +23,7 @@
             margin: 0;
             padding: 20px;
         }
+
         .email-container {
             background-color: #ffffff;
             border: 1px solid #ddd;
@@ -34,25 +33,30 @@
             margin: auto;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
+
         .header {
-            background-color: #0077b6;;
+            background-color: #0077b6;
             color: white;
             padding: 10px;
             text-align: center;
             border-radius: 8px 8px 0 0;
         }
+
         .content {
             padding: 20px;
         }
+
         .content h2 {
-            color: #0077b6;;
+            color: #0077b6;
         }
+
         .footer {
             text-align: center;
             margin-top: 20px;
             color: #777;
             font-size: 12px;
         }
+
         .button {
             display: inline-block;
             padding: 10px 20px;
@@ -62,10 +66,12 @@
             border-radius: 4px;
             margin-top: 10px;
         }
+
         .button:hover {
             background-color: #023047;
             color: white;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -74,82 +80,51 @@
             background-color: #ffffff;
             color: #333;
         }
+
         thead {
-            background-color: #0077b6;;
+            background-color: #0077b6;
             color: white;
         }
+
         th, td {
             text-align: left;
             padding: 10px;
             border: 1px solid #ddd;
         }
+
         tbody tr:nth-child(odd) {
             background-color: #f9f9f9;
         }
+
         tbody tr:nth-child(even) {
             background-color: #ffffff;
         }
+
         tbody tr:hover {
             background-color: #f1f1f1;
         }
+
         .table-container p {
             font-size: 1.2rem;
             font-weight: bold;
             text-align: right;
             color: #111827;
-
         }
     </style>
 </head>
 <body>
     <div class="email-container">
         <div class="header">
-            <h1>Serviço Concluído!</h1>
+            <h1>{% block header %}Serviço Concluído!{% endblock %}</h1>
         </div>
         <div class="content">
-            <p>Olá, <strong>{{ nome }} {{ sobrenome }}!</strong></p>
-            <p>Estamos felizes em informar que o serviço relacionado ao seu veículo foi concluído com sucesso.</p>
-            <h2>Detalhes do Serviço</h2>
-            <ul>
-                <li><strong>Protocolo:</strong> {{ protocolo_servico }}</li>
-                <li><strong>Título do Serviço:</strong> {{ titulo_servico }}</li>
-                <li><strong>Veículo:</strong> {{ carro }}</li>
-                <li><strong>Placa:</strong> {{ placa }}</li>
-            </ul>
-
-            <div class="table-container">
-
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Serviço Realizado</th>
-                            <th>Qtd</th>
-                            <th>Preço Unitário</th>
-                            <th>Subtotal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for item in servico.servicocategoriaquantidade_set.all %}
-                        <tr>
-                            <td>{{ item.categoria }}</td>
-                            <td>{{ item.quantidade }}</td>
-                            <td>R$ {{ item.categoria.preco }}</td>
-                            <td>R$ {{ item.quantidade|multiply:item.categoria.preco }}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                <br>
-                <p>Total: R$ {{ servico.preco_total }}</p>
-            </div>
-
-
-            <p>Se precisar de mais informações ou assistência, não hesite em entrar em contato conosco.</p>
-            <a href="https://api.whatsapp.com/send?phone=5591993233036&text=%F0%9F%91%8B%20Ol%C3%A1%2C%20gostaria%20de%20mais%20detalhes%20sobre%20a%20ordem%20de%20servi%C3%A7o%3A%20{{ protocolo_servico }}%0A" class="button">Entre em contato</a>
+            {% block content %}
+            <!-- Conteúdo principal será substituído nos templates filhos -->
+            {% endblock %}
         </div>
         <div class="footer">
-            <p>Obrigado por escolher nossos serviços!</p>
-            <p>Equipe [Nome da Oficina]</p>
+            <p>{% block footer %}Obrigado por escolher nossos serviços!{% endblock %}</p>
+            <p>Equipe AutoSync</p>
         </div>
     </div>
 </body>

@@ -9,7 +9,7 @@ from django.conf import settings
 
 
 @shared_task
-def valida_info_email(id_servico):
+def valida_info_email(id_servico, caminho, assunto):
     # Obtém o serviço usando o ID
     servico_cliente = Servicos.objects.get(id=id_servico)
 
@@ -26,10 +26,8 @@ def valida_info_email(id_servico):
     }
 
     # Renderiza o e-mail
-    html_content = render_to_string('emails/template_email.html', contexto)
+    html_content = render_to_string(caminho, contexto)
     text_content = strip_tags(html_content)
-
-    assunto = 'Tudo pronto! Seu veículo está à sua espera 🚗'
 
     # Envia o e-mail usando send_mail, o que pode ser mais simples para Celery
     send_mail(

@@ -58,10 +58,14 @@
                     <td>{{servico.data_inicio|date:"d/m/Y"}}</td>
                     <td>{{servico.data_entrega|date:"d/m/Y"}}</td>
                     <td>
-                        {% if servico.finalizado %}
-                            <span class="badge badge-success">Finalizado</span>
+                        {% if servico.status == 'Em Orçamento' %}
+                            <span class="badge badge-info">Em Orçamento</span>
+                        {% elif servico.status == 'Orçamento Reprovado' %}
+                            <span class="badge badge-danger">Orçamento Reprovado</span>
+                        {% elif servico.status == 'Em Andamento' %}
+                            <span class="badge badge-warning">Em Andamento</span>
                         {% else %}
-                            <span class="badge badge-info">Pendente</span>
+                            <span class="badge badge-success">Finalizado</span>
                         {% endif %}
                     </td>
                     <td>{{servico.preco_total}}</td>

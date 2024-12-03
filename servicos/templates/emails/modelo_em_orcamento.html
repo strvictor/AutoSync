@@ -1,0 +1,48 @@
+{% extends "email_base/email_base.html" %}
+
+{% load custom_filters %}
+
+{% block title %}Seu Serviço está em Orçamento{% endblock %}
+
+{% block header %}Detalhes do Orçamento do seu Serviço{% endblock %}
+
+{% block content %}
+<p>Olá, <strong>{{ nome }} {{ sobrenome }}</strong>,</p>
+<p>Segue abaixo o detalhamento do orçamento referente ao serviço solicitado para o seu veículo:</p>
+
+<h2>Detalhes do Serviço</h2>
+<ul>
+    <li><strong>Protocolo:</strong> {{ protocolo_servico }}</li>
+    <li><strong>Título do Serviço:</strong> {{ titulo_servico }}</li>
+    <li><strong>Veículo:</strong> {{ carro }}</li>
+    <li><strong>Placa:</strong> {{ placa }}</li>
+</ul>
+
+<div class="table-container">
+    <table>
+        <thead>
+            <tr>
+                <th>Serviço</th>
+                <th>Quantidade</th>
+                <th>Preço Unitário</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in servico.servicocategoriaquantidade_set.all %}
+            <tr>
+                <td>{{ item.categoria }}</td>
+                <td>{{ item.quantidade }}</td>
+                <td>R$ {{ item.categoria.preco }}</td>
+                <td>R$ {{ item.quantidade|multiply:item.categoria.preco }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <br>
+    <p><strong>Valor Total do Orçamento:</strong> R$ {{ servico.preco_total }}</p>
+</div>
+
+<p>Por favor, entre em contato para aprovar ou ajustar o orçamento, ou caso precise de mais informações.</p>
+<a href="https://api.whatsapp.com/send?phone=5591993233036&text=Ol%C3%A1%2C%20gostaria%20de%20aprovar%20ou%20ajustar%20o%20or%C3%A7amento%20da%20ordem%20de%20servi%C3%A7o%3A%20{{ protocolo_servico }}" class="button">Entre em contato</a>
+{% endblock %}
