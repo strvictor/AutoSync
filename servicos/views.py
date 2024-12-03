@@ -8,6 +8,7 @@ from django.core import serializers
 from django.contrib import messages 
 from .models import Servicos
 import json
+from servicos.tasks import valida_info_email
 
 
 # Falta validar as mensagens de retorno ao front-end
@@ -76,7 +77,8 @@ def alterar_servico(request, servico_id):
         messages.success(request, "Serviço atualizado com sucesso!")
 
         print('Envia Email com Celery')
-
+        valida_info_email.delay(servico_id)
+        
         return redirect('servico', protocolo) 
 
     return redirect('listar_servico') 

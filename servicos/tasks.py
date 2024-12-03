@@ -1,13 +1,14 @@
 
-from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
 from servicos.models import Servicos
 from celery import shared_task
+from django.core.mail import send_mail
+from django.conf import settings
 
 
-@shared_task()
+@shared_task
 def valida_info_email(id_servico):
     # Obtém o serviço usando o ID
     servico_cliente = Servicos.objects.get(id=id_servico)
@@ -30,14 +31,13 @@ def valida_info_email(id_servico):
 
     assunto = 'Tudo pronto! Seu veículo está à sua espera 🚗'
 
-    # Cria e envia o e-mail
-    email = EmailMultiAlternatives(
+    # Envia o e-mail usando send_mail, o que pode ser mais simples para Celery
+    send_mail(
         assunto,
         text_content,
         settings.EMAIL_HOST_USER,
         [contexto['email_cliente']],
+        fail_silently=False,
+        html_message=html_content
     )
-    email.attach_alternative(html_content, "text/html")
-    
-    email.send()
-    print(f"\nE-mail enviado para:\nProtocolo: {servico_cliente.protocolo}\nNome: {servico_cliente.cliente.nome}\nE-mail: {servico_cliente.cliente.email}\n")
+    return f"\nE-mail enviado para:\nProtocolo: {servico_cliente.protocolo}\nNome: {servico_cliente.cliente.nome}\nE-mail: {servico_cliente.cliente.email}\n"

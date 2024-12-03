@@ -1,12 +1,10 @@
-version: '3.8'
-
 services:
   db-postgres:
     image: postgres:13-alpine
     environment:
       POSTGRES_DB: coredb
-      POSTGRES_USER: strvictor
-      POSTGRES_PASSWORD: Str.1009
+      POSTGRES_USER: userposts
+      POSTGRES_PASSWORD: passposts
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
@@ -18,16 +16,44 @@ services:
       - .:/core
     ports:
       - "8000:8000"
+    env_file:
+      - .env
     depends_on:
+      - db-postgres
+      - rabbitmq
+    environment:
+      DB_NAME: coredb
+      DB_USER: userposts
+      DB_PASSWORD: passposts
+      DB_HOST: db-postgres
+      CELERY_BROKER_URL: amqp://guest:guest@rabbitmq:5672//
+    command: >
+      sh -c "python manage.py makemigrations &&
+              python manage.py migrate &&
+              python manage.py runserver 0.0.0.0:8000"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "5672:5672"  # Porta de comunicação do RabbitMQ
+      - "15672:15672"  # Porta do painel de administração
+
+  celery-worker:
+    build: .
+    depends_on:
+      - rabbitmq
       - db-postgres
     environment:
       DB_NAME: coredb
-      DB_USER: strvictor
-      DB_PASSWORD: Str.1009
+      DB_USER: userposts
+      DB_PASSWORD: passposts
       DB_HOST: db-postgres
+      CELERY_BROKER_URL: amqp://guest:guest@rabbitmq:5672//
     command: >
-      sh -c "python manage.py migrate &&
-             python manage.py runserver 0.0.0.0:8000"
+      sh -c "celery -A core worker --loglevel=info"
 
 volumes:
   postgres_data:
