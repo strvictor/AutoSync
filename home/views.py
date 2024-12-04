@@ -4,8 +4,8 @@ from servicos.models import Servicos
 
 def home(request):
     # Filtrar serviços por status
-    pendentes = Servicos.objects.filter(finalizado=False)
-    finalizados = Servicos.objects.filter(finalizado=True)
+    pendentes = Servicos.objects.filter(status='Em Andamento')
+    finalizados = Servicos.objects.filter(status='Finalizado')
 
     # Calcular totais
     total_pendentes = pendentes.count()

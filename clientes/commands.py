@@ -91,11 +91,15 @@ class ProcessaUsuarios:
                 ano=ano,
                 cliente=self.cliente_bd
             )
+
             if Carro.objects.filter(placa=placa).exists():
-                self.erro_msg = f'Placa {placa} ja existe no banco de dados. O carro {nome_carro} ano {ano} não foi cadastrado.'
-                return False
+                self.erro_msg += f'A placa {placa} ja existe no banco de dados. O carro {nome_carro} ano {ano} não foi cadastrado.\n'
+                continue
             
             carro.save()
+
+        if self.erro_msg:
+            return False
 
 
 class AtualizaUsuarios:

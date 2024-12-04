@@ -10,7 +10,7 @@ from .models import Servicos
 import json
 
 
-# Falta validar as mensagens de retorno ao front-end
+#TODO Falta validar as mensagens de retorno ao front-end
 def novo_servico(request):
     if request.method == 'GET':
         clientes_obj, categorias_obj = ProcessaServicos(request).retorna_obj()
@@ -36,7 +36,7 @@ def novo_servico(request):
             return HttpResponse(f'ERRO {processa_servicos.erro_msg}')
 
 
-# Em desenvolvimento 
+#TODO Em desenvolvimento 
 def editar_servico(request):
     if request.method == 'GET':
         lista_servicos = Servicos.objects.all()
@@ -53,7 +53,6 @@ def editar_servico(request):
         return redirect('editar_servico')
     
 
-# ? adicionar mais alguma funcionalidade ?
 def listar_servico(request):
     if request.method == 'GET':
         servicos = Servicos.objects.all()
@@ -62,7 +61,6 @@ def listar_servico(request):
         return redirect('listar_servico')
 
 
-# > alterar nome da view (melhorar a legibilidade)
 def protocolo(request, protocolo):
     if request.method == 'GET':
         servicos = get_object_or_404(Servicos, protocolo=protocolo)
@@ -71,7 +69,6 @@ def protocolo(request, protocolo):
         return redirect('listar_servico')
 
 
-# Ok
 def alterar_servico(request, servico_id):
     if request.method == 'POST':
         processa_servico = ProcessaServicos(request)
@@ -80,7 +77,6 @@ def alterar_servico(request, servico_id):
         messages.success(request, "Serviço atualizado com sucesso!")
 
         print('Envia Email com Celery')
-
         envia_email = EnviaEmail()
         envia_email.trata_emails(servico_id)
         
@@ -88,7 +84,7 @@ def alterar_servico(request, servico_id):
 
     return redirect('listar_servico') 
 
-# Ok
+
 def carros_por_cliente(request, cliente_id):
     processa_servicos = ProcessaServicos(request)
     
