@@ -21,7 +21,7 @@ class ProcessaServicos:
         self.data_entrega = self.requisicao_post.get('data_entrega')
 
         self.status = self.requisicao_post.get('status')  
-        self.avisa_cliente = self.requisicao_post.get('notifica_cliente') == 'on'  
+        self.avisa_cliente = self.requisicao_post.get('notifica_cliente') == 'on' #converte o valor do checkbox para True ou False
 
 
     def valida_ids(self):
@@ -98,7 +98,7 @@ class ProcessaServicos:
         servico = get_object_or_404(Servicos, id=servico_id)
 
         servico.status = self.status
-        servico.notifica_cliente = self.avisa_cliente == True
+        servico.notifica_cliente = self.avisa_cliente
 
         servico.save()
         return servico.protocolo
@@ -109,25 +109,26 @@ class EnviaEmail:
     def trata_emails(id_servico):
         servico_cliente = Servicos.objects.get(id=id_servico)
 
+
         if servico_cliente.status == 'Em Orçamento' and servico_cliente.notifica_cliente:
-            assunto = "Seu orçamento está pronto! Confira os detalhes 💼"
+            assunto = "AutoSync: Seu orçamento está pronto! Confira os detalhes 💼"
 
             caminho = r'emails/modelo_em_orcamento.html'
             valida_info_email.delay(id_servico, caminho, assunto)
 
         elif servico_cliente.status == 'Orçamento Reprovado' and servico_cliente.notifica_cliente:
-            assunto = "Orçamento Reprovado - Estamos à disposição para ajustes 💬"
+            assunto = "AutoSync: Orçamento Reprovado - Estamos à disposição para ajustes 💬"
 
             caminho = r'emails/modelo_orcamento_reprovado.html'
             valida_info_email.delay(id_servico, caminho, assunto)
             
         elif servico_cliente.status == 'Em Andamento' and servico_cliente.notifica_cliente:
-            assunto = "Seu serviço está em andamento. Acompanhe o progresso! 🚗"
+            assunto = "AutoSync: Seu serviço está em andamento. Acompanhe o progresso! 🚗"
 
             caminho = r'emails/modelo_andamento.html'
             valida_info_email.delay(id_servico, caminho, assunto)
-        else:
-            assunto = 'Tudo pronto! Seu veículo está à sua espera 🚗'
+        elif servico_cliente.status == 'Finalizado' and servico_cliente.notifica_cliente:
+            assunto = 'AutoSync: Tudo pronto! Seu veículo está à sua espera 🚗'
 
             caminho = r'emails/modelo_finalizado.html'
             valida_info_email.delay(id_servico, caminho, assunto)

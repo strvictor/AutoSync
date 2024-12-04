@@ -262,7 +262,7 @@
                     <option value="Finalizado" {% if servico.status == 'Finalizado' %}selected{% endif %}>Finalizado</option>
                 </select>
                 <label for="notifica_cliente">
-                    <input type="checkbox" id="notifica_cliente" name="notifica_cliente" {% if servico.notifica_cliente == 'True' %}checked{% endif %}>
+                    <input type="checkbox" id="notifica_cliente" name="notifica_cliente" checked>
                     Notificar Cliente
                 </label>
                 <button type="submit" class="btn">Salvar Alterações</button>

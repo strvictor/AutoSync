@@ -57,7 +57,6 @@ def editar_servico(request):
 def listar_servico(request):
     if request.method == 'GET':
         servicos = Servicos.objects.all()
-        print(servicos)
         return render(request, 'lista_servico.html', {'servicos': servicos})
     else:
         return redirect('listar_servico')
@@ -84,7 +83,6 @@ def alterar_servico(request, servico_id):
 
         envia_email = EnviaEmail()
         envia_email.trata_emails(servico_id)
-        # valida_info_email.delay(servico_id)
         
         return redirect('servico', protocolo) 
 

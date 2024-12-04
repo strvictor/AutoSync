@@ -30,7 +30,7 @@ class Servicos(models.Model):
     data_inicio = models.DateField(null=True)
     data_entrega = models.DateField(null=True)
     status = models.CharField(max_length=25, default='Em Orçamento')
-    notifica_cliente = models.CharField(max_length=5, default='True')
+    notifica_cliente = models.BooleanField(max_length=5, default=True)
     protocolo = models.CharField(max_length=18, null=True, blank=True, unique=True)
 
     def __str__(self):
