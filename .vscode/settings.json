@@ -6,5 +6,10 @@
     ],
     "todo-tree.tree.showBadges": true,
     "todo-tree.tree.disableCompactFolders": true,
-    "todo-tree.tree.showCountsInTree": true
+    "todo-tree.tree.showCountsInTree": true,
+    "python.testing.pytestArgs": [
+        "clientes"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true
 }

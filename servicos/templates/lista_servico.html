@@ -53,7 +53,7 @@
                         <a href="{% url 'servico' servico.protocolo %}" target="_blank" class="badge badge-dark protocolo">{{ servico.protocolo }}</a>
                     </th>                    
                     <td>{{servico.titulo}}</td>
-                    <td>{{servico.mecanico_resp}}</td>
+                    <td>{{servico.mecanico_resp|default:"-"}}</td>
                     <td>{{servico.cliente}}</td>
                     <td>{{servico.data_inicio|date:"d/m/Y"}}</td>
                     <td>{{servico.data_entrega|date:"d/m/Y"}}</td>

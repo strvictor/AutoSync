@@ -124,17 +124,14 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 # Configurações de email
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.office365.com'  # Altere para o seu servidor SMTP
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'paulo.victor@cabanaclube.com.br'  # Seu endereço de e-mail
-EMAIL_HOST_PASSWORD = 'Str.1009'  # Sua senha de e-mail
-EMAIL_USE_TLS = True
-
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND')
+EMAIL_HOST = os.getenv('EMAIL_HOST')
+EMAIL_PORT = os.getenv('EMAIL_PORT', 587)
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True').lower() in ('true', '1', 'yes')
 
 # Celery settings
-CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')  # Padrão para desenvolvimento
-CELERY_ACCEPT_CONTENT = ['json']
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')  
 CELERY_TASK_SERIALIZER = 'json'

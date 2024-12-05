@@ -240,7 +240,7 @@
         <!-- Details -->
         <div class="details">
             <p id="protocolo"><strong>Protocolo:</strong> {{ servico.protocolo }}</p>
-            <p><strong>Mecanico:</strong> {{ servico.mecanico_resp }}</p>
+            <p><strong>Mecanico:</strong> {{ servico.mecanico_resp|default:"-" }}</p>
             <p><strong>Cliente:</strong> {{ servico.cliente }}</p>
             <p><strong>Veículo:</strong> {{ servico.carro }}</p>
             <p><strong>Placa:</strong> {{ servico.carro.placa }}</p>

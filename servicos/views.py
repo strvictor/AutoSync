@@ -31,7 +31,7 @@ def novo_servico(request):
 
             messages.success(request, "Cliente adicionado com sucesso!")
 
-            return redirect('novo_servico')
+            return redirect('listar_servico')
         else:
             return HttpResponse(f'ERRO {processa_servicos.erro_msg}')
 
