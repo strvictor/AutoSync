@@ -4,6 +4,8 @@ from servicos.models import Servicos
 
 def home(request):
     # Filtrar serviços por status
+    em_orcamento = Servicos.objects.filter(status='Em Orçamento')
+    orcamento_reprovado = Servicos.objects.filter(status='Orçamento Reprovado')
     pendentes = Servicos.objects.filter(status='Em Andamento')
     finalizados = Servicos.objects.filter(status='Finalizado')
 
