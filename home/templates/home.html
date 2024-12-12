@@ -9,8 +9,87 @@
 
 {% block 'dashboard' %}
 <div class="container-fluid distanciamento">
-    <h1>Dashboard</h1>
+    {% comment %} <h1>Dashboard</h1>
     
+
+    <div class="row">
+        <div class="col-xl-3 col-md-6">
+            <div class="card card-stats">
+                <!-- Card body -->
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h5 class="card-title text-uppercase text-muted mb-0">Total Sales</h5>
+                            <span class="h2 font-weight-bold mb-0">${{ total_sales|default:0 }}</span>
+                        </div>
+                        <div class="col-auto">
+                            <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
+                                <i class="ni ni-active-40"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="mt-3 mb-0 text-sm"><span class="text-nowrap">Sales in the last 12mo</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Charts -->
+    <div class="container-fluid mt--6">
+        <div class="row">
+            <div class="col-xl-8">
+                <div class="card bg-default">
+                    <div class="card-header bg-transparent">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h6 class="text-light text-uppercase ls-1 mb-1">Overview</h6>
+                                <h5 class="h3 text-white mb-0">Sales value</h5>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Line Chart -->
+                    <div class="card-body">
+                        <!-- Chart -->
+                        <div class="chart">
+                            <!-- Chart wrapper -->
+                            <canvas id="chartSales" class="chart-canvas"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-xl-4">
+                <div class="card">
+                    <div class="card-header bg-transparent">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h6 class="text-uppercase text-muted ls-1 mb-1">Performance</h6>
+                                <h5 class="h3 mb-0">Total orders</h5>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bar Chart  -->
+                    <div class="card-body">
+                        <!-- Chart -->
+                        <div class="chart">
+                            <canvas id="chartOrders" class="chart-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+
+
     <div class="row">
         <!-- Card 1: Total Profit -->
         <div class="card card-red">
@@ -119,6 +198,69 @@
     });
 
 
-</script>
+</script> {% endcomment %}
+
+
+<div>
+    <h1>Dashboard</h1>
+    <canvas id="chartSales" width="400" height="200"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function SalesChart(data, labels) {
+            // Variables
+            var sales_chart_data = data;
+
+            var $chart = document.getElementById('chartSales').getContext('2d');
+
+            new Chart($chart, {
+                type: 'line',
+                options: {
+                    scales: {
+                        y: {
+                            grid: {
+                                lineWidth: 1,
+                                color: '#ddd',
+                                zeroLineColor: '#ddd',
+                            },
+                            ticks: {
+                                callback: function (value) {
+                                    return 'R$ ' + value;
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    return 'R$ ' + context.raw;
+                                }
+                            }
+                        }
+                    }
+                },
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Performance',
+                        data: sales_chart_data,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                }
+            });
+        }
+
+        // Dados passados do contexto Django
+        const data = {{ orders_month_report|safe }};
+        const labels = {{ orders_month_report_labels|safe }};
+
+        // Renderizar o gráfico
+        SalesChart(data, labels);
+    </script>
+
 
 {% endblock %}

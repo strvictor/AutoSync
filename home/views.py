@@ -2,6 +2,14 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from servicos.models import Servicos
 
+
+from django.db.models import Sum, F, ExpressionWrapper, DecimalField
+from django.db.models.functions import TruncMonth
+from django.shortcuts import render
+from django.contrib import messages
+from servicos.models import Servicos
+
+
 def home(request):
     # Filtrar serviços por status
     em_orcamento = Servicos.objects.filter(status='Em Orçamento')
@@ -40,4 +48,35 @@ def home(request):
             'valor_medio': '0',
         }
     
-    return render(request, 'home.html', contexto)
+
+
+    context = {'segment': 'index'}
+
+    # Gerar relatório de serviços finalizados agrupados por mês
+    servicos_por_mes = (
+        Servicos.objects.filter(status="Finalizado")
+        .annotate(mes=TruncMonth('data_finalizacao'))  # Agrupar por mês
+        .annotate(
+            valor_total=ExpressionWrapper(
+                F('servicocategoriaquantidade__quantidade') * F('servicocategoriaquantidade__categoria__preco'),
+                output_field=DecimalField(max_digits=10, decimal_places=2)
+            )
+        )
+        .values('mes')
+        .annotate(total_valor=Sum('valor_total'))  # Soma total por mês
+        .order_by('mes')
+    )
+
+    # Preparar dados para o gráfico
+    orders_month_report = [
+        {'mes': servico['mes'].strftime('%Y-%m'), 'total_valor': float(servico['total_valor'])}
+        for servico in servicos_por_mes
+    ]
+    orders_month_report_labels = [item['mes'] for item in orders_month_report]
+    orders_month_report_data = [item['total_valor'] for item in orders_month_report]
+
+    # Adicionar ao contexto
+    context['orders_month_report'] = orders_month_report_data
+    context['orders_month_report_labels'] = orders_month_report_labels
+
+    return render(request, 'home.html', context)

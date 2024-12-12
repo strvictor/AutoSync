@@ -30,6 +30,7 @@ class Servicos(models.Model):
     data_inicio = models.DateField(null=True)
     data_entrega = models.DateField(null=True)
     status = models.CharField(max_length=25, default='Em Orçamento')
+    data_finalizacao = models.DateTimeField(auto_now_add=False, blank=True, null=True)
     notifica_cliente = models.BooleanField(max_length=5, default=True)
     protocolo = models.CharField(max_length=18, null=True, blank=True, unique=True)
 
@@ -39,6 +40,10 @@ class Servicos(models.Model):
     def save(self, *args, **kwargs):
         if not self.protocolo:
             self.protocolo = datetime.now().strftime('%d%m%Y%H%M%S') + token_hex(2)
+
+        # if self.status == 'Finalizado':
+        #     self.data_finalizacao = datetime.now()
+            
         super(Servicos, self).save(*args, **kwargs)
 
     def preco_total(self):
