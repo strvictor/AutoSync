@@ -9,13 +9,13 @@
 
 {% block 'dashboard' %}
 <div class="container-fluid distanciamento">
-    {% comment %} <h1>Dashboard</h1>
+    <!-- <h1>Dashboard</h1>
     
 
     <div class="row">
         <div class="col-xl-3 col-md-6">
             <div class="card card-stats">
-                <!-- Card body -->
+
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
@@ -35,7 +35,6 @@
     </div>
 
 
-    <!-- Charts -->
     <div class="container-fluid mt--6">
         <div class="row">
             <div class="col-xl-8">
@@ -49,11 +48,8 @@
                         </div>
                     </div>
 
-                    <!-- Line Chart -->
                     <div class="card-body">
-                        <!-- Chart -->
                         <div class="chart">
-                            <!-- Chart wrapper -->
                             <canvas id="chartSales" class="chart-canvas"></canvas>
                         </div>
                     </div>
@@ -71,9 +67,7 @@
                         </div>
                     </div>
 
-                    <!-- Bar Chart  -->
                     <div class="card-body">
-                        <!-- Chart -->
                         <div class="chart">
                             <canvas id="chartOrders" class="chart-canvas"></canvas>
                         </div>
@@ -91,7 +85,6 @@
 
 
     <div class="row">
-        <!-- Card 1: Total Profit -->
         <div class="card card-red">
             <div class="card-header">
                 <span>Receita Total</span>
@@ -102,7 +95,6 @@
             </div>
         </div>
         
-        <!-- Card 2: Total Orders -->
         <div class="card card-blue">
             <div class="card-header">
                 <span>Serviços em Andamento</span>
@@ -113,7 +105,6 @@
             </div>
         </div>
         
-        <!-- Card 3: Average Price -->
         <div class="card card-green">
             <div class="card-header">
                 <span>Serviços Finalizados</span>
@@ -124,7 +115,6 @@
             </div>
         </div>
         
-        <!-- Card 4: Products Sold -->
         <div class="card card-yellow">
             <div class="card-header">
                 <span>Valor Médio Por Serviço</span>
@@ -135,7 +125,6 @@
             </div>
         </div>
 
-        <!-- Card 5: Pending Tasks -->
         <div class="card card-purple">
             <div class="card-header">
                 <span>*falta add*</span>
@@ -149,14 +138,12 @@
     <br>
     <br>
 
-    <!-- Gráficos -->
     <div style="text-align: center;">
         <canvas id="servicesChart"></canvas>
     </div>
       
 
 </div>
-<!-- <script src="{% static 'home/js/home.js' %}"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     // Gráfico de Distribuição de Serviços com fundo branco e tamanho fixo
@@ -198,69 +185,133 @@
     });
 
 
-</script> {% endcomment %}
+</script> -->
 
 
 <div>
     <h1>Dashboard</h1>
-    <canvas id="chartSales" width="400" height="200"></canvas>
+    <canvas id="chartSales"></canvas>
+    <canvas id="ordercharts"></canvas>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        function SalesChart(data, labels) {
-            // Variables
-            var sales_chart_data = data;
+<script>
+    function SalesChart(data, labels) {
+        var $chart = document.getElementById('chartSales').getContext('2d');
 
-            var $chart = document.getElementById('chartSales').getContext('2d');
-
-            new Chart($chart, {
-                type: 'line',
-                options: {
-                    scales: {
-                        y: {
-                            grid: {
-                                lineWidth: 1,
-                                color: '#ddd',
-                                zeroLineColor: '#ddd',
-                            },
-                            ticks: {
-                                callback: function (value) {
-                                    return 'R$ ' + value;
-                                }
+        new Chart($chart, {
+            type: 'line',
+            options: {
+                scales: {
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 20
                             }
                         }
                     },
-                    plugins: {
-                        tooltip: {
-                            callbacks: {
-                                label: function (context) {
-                                    return 'R$ ' + context.raw;
-                                }
+                    y: {
+                        grid: {
+                            lineWidth: 0.3,
+                            color: '#ddd',
+                            zeroLineColor: '#ddd',
+                        },
+                        ticks: {
+                            callback: function (value) {
+                                return 'R$ ' + value + ' ';
+                            },
+                            font: {
+                                size: 20
                             }
                         }
                     }
                 },
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Performance',
-                        data: sales_chart_data,
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        tension: 0.4,
-                        fill: true
-                    }]
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                return 'R$ ' + context.raw;
+                            }
+                        }
+                    }
                 }
-            });
-        }
+            },
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Total / Mês',
+                    data: data,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            }
+        });
+    }
 
-        // Dados passados do contexto Django
-        const data = {{ orders_month_report|safe }};
-        const labels = {{ orders_month_report_labels|safe }};
+    function OrderChart(data, labels) {
+        var orders_chart_data = data.map(obj => obj.total_order);
 
-        // Renderizar o gráfico
-        SalesChart(data, labels);
-    </script>
+        var $chart = document.getElementById('ordercharts').getContext('2d');
+
+        new Chart($chart, {
+            type: 'bar',
+            options: {
+                scales: {
+                    x: {
+                        ticks: {
+                            font: {
+                                size: 20
+                            }
+                        }
+                    },
+                    y: {
+                        grid: {
+                            lineWidth: 1,
+                            color: '#dfe2e6',
+                            zeroLineColor: '#dfe2e6'
+                        },
+                        ticks: {
+                            callback: function (value) {
+                                if (!(value % 10)) {
+                                    return value;
+                                }
+                            },
+                            font: {
+                                size: 20
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            label: function (context) {
+                                return context.raw;
+                            }
+                        }
+                    }
+                }
+            },
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Sales',
+                    data: orders_chart_data,
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            }
+        });
+    }
+
+    const data = {{ valores_meses|safe }};
+    const labels = {{ nomes_meses|safe }};
+
+    SalesChart(data, labels);
+    OrderChart(data, labels);
+</script>
 
 
 {% endblock %}

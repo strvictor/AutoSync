@@ -50,7 +50,7 @@ def home(request):
     
 
 
-    context = {'segment': 'index'}
+    contexto = {}
 
     # Gerar relatório de serviços finalizados agrupados por mês
     servicos_por_mes = (
@@ -75,8 +75,26 @@ def home(request):
     orders_month_report_labels = [item['mes'] for item in orders_month_report]
     orders_month_report_data = [item['total_valor'] for item in orders_month_report]
 
-    # Adicionar ao contexto
-    context['orders_month_report'] = orders_month_report_data
-    context['orders_month_report_labels'] = orders_month_report_labels
+    meses_abreviados = {
+    "01": "jan",
+    "02": "fev",
+    "03": "mar",
+    "04": "abr",
+    "05": "mai",
+    "06": "jun",
+    "07": "jul",
+    "08": "ago",
+    "09": "set",
+    "10": "out",
+    "11": "nov",
+    "12": "dez",
+    }
 
-    return render(request, 'home.html', context)
+    nomes_meses = [meses_abreviados[data.split('-')[1]] for data in orders_month_report_labels]
+    # Adicionar ao contexto
+    contexto['valores_meses'] = orders_month_report_data
+    contexto['nomes_meses'] = nomes_meses
+
+    print(contexto)
+
+    return render(request, 'home.html', contexto)
