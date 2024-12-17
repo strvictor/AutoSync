@@ -13,7 +13,6 @@ def valida_info_email(id_servico, caminho, assunto):
     # Obtém o serviço usando o ID
     servico_cliente = Servicos.objects.get(id=id_servico)
 
-    # Cria o contexto para o template
     contexto = {
         'titulo_servico': servico_cliente.titulo,
         'protocolo_servico': servico_cliente.protocolo,
@@ -29,7 +28,6 @@ def valida_info_email(id_servico, caminho, assunto):
     html_content = render_to_string(caminho, contexto)
     text_content = strip_tags(html_content)
 
-    # Envia o e-mail usando send_mail, o que pode ser mais simples para Celery
     send_mail(
         assunto,
         text_content,
