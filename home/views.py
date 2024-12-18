@@ -31,24 +31,22 @@ def home(request):
         for servico in finalizados
         for item in servico.servicocategoriaquantidade_set.all()
     )
-    try:
-        contexto = {
-            'total_pendentes': total_pendentes,
-            'total_valor_pendentes': total_valor_pendentes,
-            'total_finalizados': total_finalizados,
-            'total_valor_finalizados': total_valor_finalizados,
-            'valor_medio': total_valor_finalizados / total_finalizados,
-        }
-    except ZeroDivisionError:
-        contexto = {
-            'total_pendentes': total_pendentes,
-            'total_valor_pendentes': total_valor_pendentes,
-            'total_finalizados': total_finalizados,
-            'total_valor_finalizados': total_valor_finalizados,
-            'valor_medio': '0',
-        }
-    
 
+    try:
+        valor_medio = total_valor_finalizados / total_finalizados
+    except ZeroDivisionError:
+        valor_medio = 0
+    
+    dados_cards = {
+        'total_pendentes': total_pendentes,
+        'total_valor_pendentes': total_valor_pendentes,
+        'total_finalizados': total_finalizados,
+        'total_valor_finalizados': total_valor_finalizados,
+        'valor_medio': valor_medio,
+        'em_orcamento': em_orcamento.count(),
+        'orc_reprovado': orcamento_reprovado.count()
+
+    }
 
     contexto = {}
 
@@ -91,9 +89,10 @@ def home(request):
     }
 
     nomes_meses = [meses_abreviados[data.split('-')[1]] for data in orders_month_report_labels]
-    # Adicionar ao contexto
+
     contexto['valores_meses'] = orders_month_report_data
     contexto['nomes_meses'] = nomes_meses
+    contexto['dados_cards'] = dados_cards
 
     print(contexto)
 

@@ -9,81 +9,6 @@
 
 {% block 'dashboard' %}
 <div class="container-fluid distanciamento">
-    <!-- <h1>Dashboard</h1>
-    
-
-    <div class="row">
-        <div class="col-xl-3 col-md-6">
-            <div class="card card-stats">
-
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <h5 class="card-title text-uppercase text-muted mb-0">Total Sales</h5>
-                            <span class="h2 font-weight-bold mb-0">${{ total_sales|default:0 }}</span>
-                        </div>
-                        <div class="col-auto">
-                            <div class="icon icon-shape bg-gradient-red text-white rounded-circle shadow">
-                                <i class="ni ni-active-40"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="mt-3 mb-0 text-sm"><span class="text-nowrap">Sales in the last 12mo</span></p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="container-fluid mt--6">
-        <div class="row">
-            <div class="col-xl-8">
-                <div class="card bg-default">
-                    <div class="card-header bg-transparent">
-                        <div class="row align-items-center">
-                            <div class="col">
-                                <h6 class="text-light text-uppercase ls-1 mb-1">Overview</h6>
-                                <h5 class="h3 text-white mb-0">Sales value</h5>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card-body">
-                        <div class="chart">
-                            <canvas id="chartSales" class="chart-canvas"></canvas>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-            <div class="col-xl-4">
-                <div class="card">
-                    <div class="card-header bg-transparent">
-                        <div class="row align-items-center">
-                            <div class="col">
-                                <h6 class="text-uppercase text-muted ls-1 mb-1">Performance</h6>
-                                <h5 class="h3 mb-0">Total orders</h5>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="card-body">
-                        <div class="chart">
-                            <canvas id="chartOrders" class="chart-canvas"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-
-
-
-
-
-
     <div class="row">
         <div class="card card-red">
             <div class="card-header">
@@ -91,7 +16,7 @@
                 <i class="fas fa-wallet"></i>
             </div>
             <div class="card-body">
-                <h2>R$ {{total_valor_finalizados}}</h2>
+                <h2>R$ {{dados_cards.total_valor_finalizados|default:'0'}}</h2>
             </div>
         </div>
         
@@ -101,7 +26,7 @@
                 <i class="fas fa-spinner"></i>
             </div>
             <div class="card-body">
-                <h2>{{total_pendentes}}</h2>
+                <h2>{{dados_cards.total_pendentes|default:'0'}}</h2>
             </div>
         </div>
         
@@ -111,7 +36,7 @@
                 <i class="fas fa-check-circle"></i>
             </div>
             <div class="card-body">
-                <h2>{{total_finalizados}}</h2>
+                <h2>{{dados_cards.total_finalizados|default:'0'}}</h2>
             </div>
         </div>
         
@@ -121,7 +46,7 @@
                 <i class="fas fa-exclamation-circle"></i>
             </div>
             <div class="card-body">
-                <h2>R$ {{valor_medio}}</h2>
+                <h2>R$ {{dados_cards.valor_medio|default:'0'}}</h2>
             </div>
         </div>
 
@@ -136,9 +61,10 @@
         </div>
     </div>
     <br>
+    <hr style="background-color:gray;">
     <br>
 
-    <div style="text-align: center;">
+    <div>
         <canvas id="servicesChart"></canvas>
     </div>
       
@@ -151,11 +77,11 @@
     new Chart(servicesCtx, {
         type: 'doughnut',
         data: {
-            labels: ['Pendentes', 'Finalizados'],
+            labels: ['Pendentes', 'Finalizados', 'Em Orçamento', 'Orçamento Reprovado'],
             datasets: [{
-                data: [{{ total_pendentes }}, {{ total_finalizados }}],
-                backgroundColor: ['#fcbf49', '#0077b6'], // Cores personalizadas da sua paleta
-                hoverBackgroundColor: ['#fcae2e', '#005f8e'] // Cores ao passar o mouse
+                data: [{{ dados_cards.total_pendentes }}, {{ dados_cards.total_finalizados }}, {{dados_cards.em_orcamento}}, {{dados_cards.orc_reprovado}}],
+                backgroundColor: ['#fcbf49', '#0077b6', '#80b918', '#d90429'], // Cores personalizadas da sua paleta
+                hoverBackgroundColor: ['#fcae2e', '#005f8e', '#4d800e', '#b0021d'] // Cores ao passar o mouse
             }]
         },
         options: {
@@ -165,7 +91,7 @@
                     labels: {
                         color: '#000', // Texto preto
                         font: {
-                            size: 16
+                            size: 10
                         }
                     }
                 }
@@ -185,11 +111,11 @@
     });
 
 
-</script> -->
+</script>
 
 
 <div>
-    <h1>Dashboard</h1>
+    <h1>Dashboard 2</h1>
     <canvas id="chartSales"></canvas>
     <canvas id="ordercharts"></canvas>
 </div>
