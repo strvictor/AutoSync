@@ -23,7 +23,7 @@
     height: 130px;
     border-radius: 12px;
     overflow: hidden;
-    transition: transform 0.:3s ease-in-out, box-shadow 0.3s ease-in-out;
+    transition: transform 0.3s ease-in-out;
     color: white;
     text-align: center;
     padding: 20px;
@@ -31,7 +31,8 @@
 
 .card:hover {
     transform: scale(1.05);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
 }
 
 /* Estilo para os cabeçalhos */
@@ -97,11 +98,17 @@
 }
 
 #servicesChart {
-    max-width: 800px; /* Largura máxima */
-    height: auto; /* Altura proporcional */
-    margin: 0 auto; /* Centraliza o gráfico */
-    background:rgb(120, 57, 221); /* Fundo branco */
+    width: 450px !important; /* Largura máxima */
+    height: 450px !important; /* Altura proporcional */
+    /* margin: 0 auto;  */
+    background: #292e332d; /* Fundo branco */
     border-radius: 8px; /* Bordas arredondadas */
-    padding: 10px; /* Espaçamento interno */
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    padding: 8px; /* Espaçamento interno */
+    transition: transform 0.3s ease-in-out;
+}
+
+#servicesChart:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
 }
