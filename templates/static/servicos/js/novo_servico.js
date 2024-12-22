@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 .then((data) => {
                     console.log(data)
                     // Limpa as opções do select de carros
-                    carroSelect.innerHTML = '<option value="">Selecione um Carro</option>';
+                    carroSelect.innerHTML = '<option value="">Selecione um Veículo</option>';
                     data.carros.forEach((carro) => {
                         const option = document.createElement("option");
                         option.value = carro.id;

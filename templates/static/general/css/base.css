@@ -41,6 +41,12 @@
 .sidebar.open .logo-details .logo_name{
   opacity: 1;
 }
+
+.logo_img {
+  width: 180px;
+  height: 180px;
+}
+
 .sidebar .logo-details #btn{
   position: absolute;
   top: 50%;
