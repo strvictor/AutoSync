@@ -79,58 +79,50 @@
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+
 <script>
     const ctx = document.getElementById('stackedBarChart').getContext('2d');
     const rootStyles = getComputedStyle(document.documentElement);
-    const cardVermelho = rootStyles.getPropertyValue('--card-vermelho').trim();
-    const cardAzul = rootStyles.getPropertyValue('--main-color').trim();
-    const cardVerde = rootStyles.getPropertyValue('--card-azul').trim();
-    const cardAmarelo = rootStyles.getPropertyValue('--contrast-color').trim();
-    const cardRoxo = rootStyles.getPropertyValue('--card-roxo').trim();
+    const cardColors = [rootStyles.getPropertyValue('--card-vermelho').trim(), 
+                        rootStyles.getPropertyValue('--main-color').trim(), 
+                        rootStyles.getPropertyValue('--card-azul').trim(), 
+                        rootStyles.getPropertyValue('--contrast-color').trim(), 
+                        rootStyles.getPropertyValue('--card-roxo').trim()];
 
+    // Dados do contexto Django
+    const meses = {{ meses_retorno|safe }};
+    const categorias = {{ categorias|safe }};
+    const quantidadeServicos = {{ quantidade_servicos|safe }};
 
+    // Criar um mapeamento para organizar os dados por categoria e por mês
+    const dadosPorCategoria = {};
+    categorias.forEach((categoria, index) => {
+        if (!dadosPorCategoria[categoria]) {
+            dadosPorCategoria[categoria] = Array(meses.length).fill(0);
+        }
+        const mesIndex = meses.indexOf(meses[index]); // Localizar o índice do mês correspondente
+        if (mesIndex !== -1) {
+            dadosPorCategoria[categoria][mesIndex] += quantidadeServicos[index];
+        }
+    });
 
+    // Criar datasets para o gráfico
+    const datasets = Object.keys(dadosPorCategoria).map((categoria, index) => {
+        return {
+            label: categoria,
+            data: dadosPorCategoria[categoria],
+            backgroundColor: cardColors[index % cardColors.length],
+            borderColor: cardColors[index % cardColors.length],
+            borderWidth: 1,
+        };
+    });
+
+    // Renderizar o gráfico
     const stackedBarChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['Manutenção', 'Troca de Óleo', 'Alinhamento', 'Pintura', 'Freios', 'Manutenção', 'Troca de Óleo', 'Alinhamento', 'Pintura', 'Freios', 'Manutenção', 'Troca de Óleo', 'Alinhamento', 'Pintura', 'Freios'], // Categorias principais
-            datasets: [
-                {
-                    label: 'Janeiro',
-                    data: [10, 15, 5, 20, 25, 10, 15, 5, 20, 25, 10, 15, 5, 20, 25],
-                    backgroundColor: cardRoxo,
-                    borderColor: cardRoxo,
-                    borderWidth: 1,
-                },
-                {
-                    label: 'Fevereiro',
-                    data: [10, 15, 5, 20, 25, 10, 15, 5, 20, 25, 10, 15, 5, 20, 25],
-                    backgroundColor: cardAzul,
-                    borderColor: cardAzul,
-                    borderWidth: 1,
-                },
-                {
-                    label: 'Março',
-                    data: [10, 15, 5, 20, 25, 10, 15, 5, 20, 25, 10, 15, 5, 20, 25],
-                    backgroundColor: cardVerde,
-                    borderColor: cardVerde,
-                    borderWidth: 1,
-                },
-                {
-                    label: 'Abril',
-                    data: [10, 15, 5, 20, 25, 10, 15, 5, 20, 25, 10, 15, 5, 20, 25],
-                    backgroundColor: cardAmarelo,
-                    borderColor: cardAmarelo,
-                    borderWidth: 1,
-                },
-                {
-                    label: 'Maio',
-                    data: [10, 15, 5, 20, 25, 10, 15, 5, 20, 25, 10, 15, 5, 20, 25],
-                    backgroundColor: cardVermelho,
-                    borderColor: cardVermelho,
-                    borderWidth: 1,
-                },
-            ],
+            labels: meses, // Meses no eixo X
+            datasets: datasets, // Categorias no eixo Y
         },
         options: {
             responsive: true,
@@ -173,6 +165,8 @@
 
 
 
+
+
 <script>
     // Gráfico de Distribuição de Serviços com fundo transparente
     const servicesCtx = document.getElementById('servicesChart').getContext('2d');
@@ -183,7 +177,7 @@
             labels: ['Pendentes', 'Finalizados', 'Em Orçamento', 'Orçamento Reprovado'],
             datasets: [{
                 data: [{{ dados_cards.total_pendentes }}, {{ dados_cards.total_finalizados }}, {{ dados_cards.em_orcamento }}, {{ dados_cards.orc_reprovado }}],
-                backgroundColor: [cardAmarelo, cardVerde, cardAzul, cardVermelho], // Cores personalizadas
+                backgroundColor: ['#fcae2e', '#005f8e', '#4d800e', '#b0021d'], // Cores personalizadas [cardAmarelo, cardVerde, cardAzul, cardVermelho]
                 hoverBackgroundColor: ['#fcae2e', '#005f8e', '#4d800e', '#b0021d'], // Cores ao passar o mouse
                 borderWidth: 0
             }]
