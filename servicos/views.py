@@ -22,12 +22,12 @@ def novo_servico(request):
     elif request.method == 'POST':
         processa_servicos = ProcessaServicos(request)
         if processa_servicos.valida_ids():
-            processa_servicos.salva_servico()
+            protocolo = processa_servicos.salva_servico()
             processa_servicos.associa_categorias()
 
-            messages.success(request, "Cliente adicionado com sucesso!")
+            messages.success(request, "Serviço adicionado com sucesso!")
 
-            return redirect('listar_servico')
+            return redirect('servico', protocolo)
         else:
             return HttpResponse(f'ERRO {processa_servicos.erro_msg}')
 

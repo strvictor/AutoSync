@@ -77,6 +77,7 @@ class ProcessaServicos:
             mecanico_resp=self.mecanico_responsavel,
         )
         self.salva_servico_bd.save()
+        return self.salva_servico_bd.protocolo
 
 
     def retorna_obj(self):

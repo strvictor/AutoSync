@@ -16,7 +16,7 @@
                 <i class="fas fa-wallet"></i>
             </div>
             <div class="card-body">
-                <h2>R$ {{dados_cards.total_valor_finalizados|default:'0'}}</h2>
+                <h2>{{dados_cards.total_valor_finalizados|default:'0'}}</h2>
             </div>
         </div>
         
@@ -46,50 +46,154 @@
                 <i class="fas fa-exclamation-circle"></i>
             </div>
             <div class="card-body">
-                <h2>R$ {{dados_cards.valor_medio|default:'0'}}</h2>
+                <h2>{{dados_cards.valor_medio|default:'0'}}</h2>
             </div>
         </div>
 
         <div class="card card-purple">
             <div class="card-header">
-                <span>*falta add*</span>
+                <span>Serviços Reprovados</span>
                 <i class="fas fa-star"></i>
             </div>
             <div class="card-body">
-                <h2>!!</h2>
+                <h2>{{dados_cards.orc_reprovado|default:'0'}}</h2>
             </div>
         </div>
     </div>
     <br>
     <hr style="background-color:gray;">
     <br>
-
-    <div>
-        <canvas id="servicesChart"></canvas>
+    <div class="graficos">
+        <div class="rosca">
+            <p>1</p>
+            <canvas id="servicesChart"></canvas>
+        </div>
+        
+        <div class="barras">
+            <p>2</p>
+            <canvas id="stackedBarChart"></canvas>
+        </div>
     </div>
-      
+
 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
-    // Gráfico de Distribuição de Serviços com fundo branco e tamanho fixo
+    const ctx = document.getElementById('stackedBarChart').getContext('2d');
+    const rootStyles = getComputedStyle(document.documentElement);
+    const cardVermelho = rootStyles.getPropertyValue('--card-vermelho').trim();
+    const cardAzul = rootStyles.getPropertyValue('--main-color').trim();
+    const cardVerde = rootStyles.getPropertyValue('--card-azul').trim();
+    const cardAmarelo = rootStyles.getPropertyValue('--contrast-color').trim();
+    const cardRoxo = rootStyles.getPropertyValue('--card-roxo').trim();
+
+
+
+    const stackedBarChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Manutenção', 'Troca de Óleo', 'Alinhamento', 'Pintura', 'Freios', 'Manutenção', 'Troca de Óleo', 'Alinhamento', 'Pintura', 'Freios', 'Manutenção', 'Troca de Óleo', 'Alinhamento', 'Pintura', 'Freios'], // Categorias principais
+            datasets: [
+                {
+                    label: 'Janeiro',
+                    data: [10, 15, 5, 20, 25, 10, 15, 5, 20, 25, 10, 15, 5, 20, 25],
+                    backgroundColor: cardRoxo,
+                    borderColor: cardRoxo,
+                    borderWidth: 1,
+                },
+                {
+                    label: 'Fevereiro',
+                    data: [10, 15, 5, 20, 25, 10, 15, 5, 20, 25, 10, 15, 5, 20, 25],
+                    backgroundColor: cardAzul,
+                    borderColor: cardAzul,
+                    borderWidth: 1,
+                },
+                {
+                    label: 'Março',
+                    data: [10, 15, 5, 20, 25, 10, 15, 5, 20, 25, 10, 15, 5, 20, 25],
+                    backgroundColor: cardVerde,
+                    borderColor: cardVerde,
+                    borderWidth: 1,
+                },
+                {
+                    label: 'Abril',
+                    data: [10, 15, 5, 20, 25, 10, 15, 5, 20, 25, 10, 15, 5, 20, 25],
+                    backgroundColor: cardAmarelo,
+                    borderColor: cardAmarelo,
+                    borderWidth: 1,
+                },
+                {
+                    label: 'Maio',
+                    data: [10, 15, 5, 20, 25, 10, 15, 5, 20, 25, 10, 15, 5, 20, 25],
+                    backgroundColor: cardVermelho,
+                    borderColor: cardVermelho,
+                    borderWidth: 1,
+                },
+            ],
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: {
+                        color: '#fff',
+                    },
+                },
+                tooltip: {
+                    mode: 'index',
+                    intersect: false,
+                },
+            },
+            scales: {
+                x: {
+                    stacked: true,
+                    ticks: {
+                        color: '#fff',
+                    },
+                },
+                y: {
+                    stacked: true,
+                    ticks: {
+                        color: '#fff',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Quantidade de Serviços',
+                        color: '#fff',
+                    },
+                },
+            },
+        },
+    });
+</script>
+
+
+
+
+<script>
+    // Gráfico de Distribuição de Serviços com fundo transparente
     const servicesCtx = document.getElementById('servicesChart').getContext('2d');
+    
     new Chart(servicesCtx, {
         type: 'doughnut',
         data: {
             labels: ['Pendentes', 'Finalizados', 'Em Orçamento', 'Orçamento Reprovado'],
             datasets: [{
-                data: [{{ dados_cards.total_pendentes }}, {{ dados_cards.total_finalizados }}, {{dados_cards.em_orcamento}}, {{dados_cards.orc_reprovado}}],
-                backgroundColor: ['#fcbf49', '#0077b6', '#80b918', '#d90429'], // Cores personalizadas da sua paleta
-                hoverBackgroundColor: ['#fcae2e', '#005f8e', '#4d800e', '#b0021d'] // Cores ao passar o mouse
+                data: [{{ dados_cards.total_pendentes }}, {{ dados_cards.total_finalizados }}, {{ dados_cards.em_orcamento }}, {{ dados_cards.orc_reprovado }}],
+                backgroundColor: [cardAmarelo, cardVerde, cardAzul, cardVermelho], // Cores personalizadas
+                hoverBackgroundColor: ['#fcae2e', '#005f8e', '#4d800e', '#b0021d'], // Cores ao passar o mouse
+                borderWidth: 0
             }]
         },
         options: {
             plugins: {
                 legend: {
-                    position: 'top', // Posiciona a legenda abaixo do gráfico
+                    position: 'top',
                     labels: {
-                        color: '#fff', // Texto preto
+                        color: '#fff',
                         font: {
                             size: 10
                         }
@@ -98,21 +202,9 @@
             },
             maintainAspectRatio: true, // Mantém a proporção do gráfico
             responsive: true, // Gráfico responsivo
-            layout: {
-                padding: 5 // Espaçamento interno
-            },
-            elements: {
-                arc: {
-                    borderWidth: 2,
-                    borderColor: '#fff' // Adiciona bordas brancas às fatias
-                }
-            }
         }
     });
-
-
 </script>
-
 
 <div>
     <h1>Dashboard 2</h1>

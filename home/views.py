@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from servicos.models import Servicos
-
+from babel.numbers import format_currency
 
 from django.db.models import Sum, F, ExpressionWrapper, DecimalField
 from django.db.models.functions import TruncMonth
@@ -41,8 +41,8 @@ def home(request):
         'total_pendentes': total_pendentes,
         'total_valor_pendentes': total_valor_pendentes,
         'total_finalizados': total_finalizados,
-        'total_valor_finalizados': total_valor_finalizados,
-        'valor_medio': valor_medio,
+        'total_valor_finalizados': format_currency(float(total_valor_finalizados), 'BRL', locale='pt_BR'),
+        'valor_medio': format_currency(float(valor_medio), 'BRL', locale='pt_BR'),
         'em_orcamento': em_orcamento.count(),
         'orc_reprovado': orcamento_reprovado.count()
 
@@ -64,6 +64,8 @@ def home(request):
         .annotate(total_valor=Sum('valor_total'))  # Soma total por mês
         .order_by('mes')
     )
+
+    print(servicos_por_mes)
 
     # Preparar dados para o gráfico
     orders_month_report = [

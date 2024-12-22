@@ -3,11 +3,6 @@
     height: 500px !important;
 
 }
-/* Título */
-.container h1 {
-    text-align: center;
-    margin-bottom: 40px;
-}
 
 /* Flexbox para os cards */
 .row {
@@ -21,12 +16,12 @@
     flex: 1;
     width: 400px;
     height: 130px;
-    border-radius: 12px;
+    border-radius: 8px;
     overflow: hidden;
     transition: transform 0.3s ease-in-out;
     color: white;
     text-align: center;
-    padding: 20px;
+    padding: 10px 12px;
 }
 
 .card:hover {
@@ -39,7 +34,7 @@
 .card-header {
     font-weight: bold;
     padding: 5px;
-    font-size: 1rem;
+    font-size: 0.9rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -47,12 +42,12 @@
 
 /* Estilo para os valores */
 .card-body h2 {
-    font-size: 2rem;
+    font-size: 1.8rem;
 }
 
 /* Cores específicas */
 .card-red {
-    background: #e63946;
+    background: var(--card-vermelho);
 }
 
 .card-blue {
@@ -60,7 +55,7 @@
 }
 
 .card-green {
-    background: #2a9d8f;
+    background: var(--card-azul);
 }
 
 .card-yellow {
@@ -68,7 +63,7 @@
 }
 
 .card-purple {
-    background: #6d6875;
+    background: var(--card-roxo);
 }
 
 /* Ícones */
@@ -88,6 +83,17 @@
         flex-direction: column;
         align-items: center;
     }
+    .graficos {
+        flex-direction: column;
+        align-items: center;
+    }
+    .rosca {
+        width: 100%;
+
+    }
+    .barras {
+        width: 100%;
+    }
 }
 
 
@@ -97,18 +103,31 @@
     padding-top: 40px;
 }
 
-#servicesChart {
-    width: 450px !important; /* Largura máxima */
-    height: 450px !important; /* Altura proporcional */
-    /* margin: 0 auto;  */
-    background: #292e332d; /* Fundo branco */
-    border-radius: 8px; /* Bordas arredondadas */
-    padding: 8px; /* Espaçamento interno */
-    transition: transform 0.3s ease-in-out;
+
+.graficos {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    width: 100%;
 }
 
-#servicesChart:hover {
-    transform: scale(1.05);
-    transition: transform 0.3s ease-in-out;
+.rosca {
+    width: 35%;
+    background: #292e332d;
+    border-radius: 8px;
+
+}
+
+.barras {
+    width: 65%;
+    background: #292e332d;
+    border-radius: 8px; 
+}
+
+.rosca:hover {
+    cursor: pointer;
+}
+
+.barras:hover {
     cursor: pointer;
 }
