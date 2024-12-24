@@ -65,7 +65,7 @@
     <br>
     <div class="graficos">
         <div class="rosca">
-            <p>1</p>
+            <p>Com esse dashboard você conseguirá facilmente visualizar o andamento por status de seus serviços</p>
             <canvas id="servicesChart"></canvas>
         </div>
         
@@ -83,46 +83,31 @@
 <script>
     const ctx = document.getElementById('stackedBarChart').getContext('2d');
     const rootStyles = getComputedStyle(document.documentElement);
-    const cardColors = [rootStyles.getPropertyValue('--card-vermelho').trim(), 
-                        rootStyles.getPropertyValue('--main-color').trim(), 
-                        rootStyles.getPropertyValue('--card-azul').trim(), 
-                        rootStyles.getPropertyValue('--contrast-color').trim(), 
-                        rootStyles.getPropertyValue('--card-roxo').trim()];
+    const cardVermelho = rootStyles.getPropertyValue('--card-vermelho').trim();
+    const cardAzul = rootStyles.getPropertyValue('--main-color').trim();
+    const cardVerde = rootStyles.getPropertyValue('--card-azul').trim();
+    const cardAmarelo = rootStyles.getPropertyValue('--contrast-color').trim();
+    const cardRoxo = rootStyles.getPropertyValue('--card-roxo').trim();
 
-    // Dados do contexto Django
-    const meses = {{ meses_retorno|safe }};
-    const categorias = {{ categorias|safe }};
-    const quantidadeServicos = {{ quantidade_servicos|safe }};
+    // Dados retornados do sistema
+    const meses = {{meses_retorno|safe}};
+    const categorias = {{categorias|safe}};
+    const quantidadeServicosPorMes = {{quantidade_servicos_por_mes|safe}};
 
-    // Criar um mapeamento para organizar os dados por categoria e por mês
-    const dadosPorCategoria = {};
-    categorias.forEach((categoria, index) => {
-        if (!dadosPorCategoria[categoria]) {
-            dadosPorCategoria[categoria] = Array(meses.length).fill(0);
-        }
-        const mesIndex = meses.indexOf(meses[index]); // Localizar o índice do mês correspondente
-        if (mesIndex !== -1) {
-            dadosPorCategoria[categoria][mesIndex] += quantidadeServicos[index];
-        }
-    });
+    const cores = [cardVermelho, cardAzul, cardVerde, cardAmarelo, cardRoxo];
 
-    // Criar datasets para o gráfico
-    const datasets = Object.keys(dadosPorCategoria).map((categoria, index) => {
-        return {
-            label: categoria,
-            data: dadosPorCategoria[categoria],
-            backgroundColor: cardColors[index % cardColors.length],
-            borderColor: cardColors[index % cardColors.length],
-            borderWidth: 1,
-        };
-    });
-
-    // Renderizar o gráfico
+    // Configuração do gráfico ajustada
     const stackedBarChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: meses, // Meses no eixo X
-            datasets: datasets, // Categorias no eixo Y
+            labels: categorias, // Categorias como rótulos do eixo X
+            datasets: meses.map((mes, index) => ({
+                label: mes,
+                data: quantidadeServicosPorMes[mes], // Quantidade de serviços para o mês correspondente
+                backgroundColor: cores[index % cores.length], // Cores diferentes por mês
+                borderColor: cores[index % cores.length],
+                borderWidth: 1,
+            })),
         },
         options: {
             responsive: true,
@@ -161,9 +146,6 @@
         },
     });
 </script>
-
-
-
 
 
 
