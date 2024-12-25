@@ -1,0 +1,14 @@
+setup:
+  addons:
+    - plan: heroku-postgresql:hobby-dev
+      as: DATABASE
+    - plan: cloudamqp:lemur
+      as: CLOUDAMQP
+
+build:
+  docker:
+    web: Dockerfile
+
+run:
+  web: python manage.py migrate && python manage.py runserver 0.0.0.0:8000
+  worker: celery -A core worker --loglevel=info
