@@ -1,6 +1,6 @@
 build:
   docker:
-    web: Dockerfile  # Define o Dockerfile para o serviço principal
+    web: Dockerfile  # Define o Dockerfile para o serviço principal (web)
 
 run:
   web:
@@ -8,7 +8,6 @@ run:
       - sh
       - -c
       - "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
-    image: python:3.12.7-alpine3.20  # Define a imagem Docker para o processo web
 
   worker:
     command:
@@ -17,4 +16,3 @@ run:
       - core
       - worker
       - --loglevel=info
-    image: python:3.12.7-alpine3.20  # Define a imagem Docker para o processo Celery (usando a mesma imagem do web)
