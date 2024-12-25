@@ -1,6 +1,6 @@
 build:
   docker:
-    web: Dockerfile  # Define o Dockerfile para o serviço principal (web)
+    web: Dockerfile  # Define o Dockerfile para o serviço principal
 
 run:
   web:
@@ -8,6 +8,7 @@ run:
       - sh
       - -c
       - "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    image: web
 
   worker:
     command:
@@ -16,3 +17,4 @@ run:
       - core
       - worker
       - --loglevel=info
+    image: web
