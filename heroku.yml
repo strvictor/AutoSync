@@ -13,10 +13,8 @@ run:
       - manage.py
       - migrate
       - "&&"
-      - python
-      - manage.py
-      - runserver
-      - 0.0.0.0:8000
+      - gunicorn
+      - myproject.wsgi:application  # Use Gunicorn para produção
     image: web
 
   worker:
