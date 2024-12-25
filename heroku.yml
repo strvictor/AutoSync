@@ -1,14 +1,9 @@
-setup:
-  addons:
-    - plan: heroku-postgresql:hobby-dev
-      as: DATABASE
-    - plan: cloudamqp:lemur
-      as: CLOUDAMQP
-
 build:
   docker:
-    web: Dockerfile
+    web: Dockerfile  # Define o Dockerfile para o serviço principal
 
 run:
-  web: python manage.py migrate && python manage.py runserver 0.0.0.0:8000
-  worker: celery -A core worker --loglevel=info
+  worker:
+    command:
+      - celery -A core worker --loglevel=info
+    image: python:3.12.7-alpine3.20  # Define a imagem Docker para o processo Celery
