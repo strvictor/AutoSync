@@ -159,8 +159,8 @@
             labels: ['Pendentes', 'Finalizados', 'Em Orçamento', 'Orçamento Reprovado'],
             datasets: [{
                 data: [{{ dados_cards.total_pendentes }}, {{ dados_cards.total_finalizados }}, {{ dados_cards.em_orcamento }}, {{ dados_cards.orc_reprovado }}],
-                backgroundColor: ['#fcae2e', '#005f8e', '#4d800e', '#b0021d'], // Cores personalizadas [cardAmarelo, cardVerde, cardAzul, cardVermelho]
-                hoverBackgroundColor: ['#fcae2e', '#005f8e', '#4d800e', '#b0021d'], // Cores ao passar o mouse
+                backgroundColor: [cardAmarelo, cardVerde, cardAzul, cardVermelho], // Cores personalizadas [cardAmarelo, cardVerde, cardAzul, cardVermelho]
+                hoverBackgroundColor: ['#ffdb73', '#2a9d8f', '#0099cc', '#ff6f6f'], // Cores ao passar o mouse
                 borderWidth: 0
             }]
         },

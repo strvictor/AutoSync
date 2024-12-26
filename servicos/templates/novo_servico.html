@@ -87,17 +87,23 @@
                     <label for="categorias">Serviços:</label>
                     <div id="categorias-container">
                         <div class="row mb-2 categoria-row">
-                            <div class="col-md-8">
+                            <div class="col-md-6">
                                 <select name="categorias" class="form-control categoria-select" required>
                                     <option value="" disabled selected>Selecione um serviço</option>
-                                    {% for categoria in categorias %}
-                                    <option value="{{ categoria.id }}">{{ categoria.titulo }}</option>
-                                    {% endfor %}
+                                        {% for categoria in categorias %}
+                                            <option value="{{ categoria.id }}">{{ categoria.titulo }}</option>
+                                        {% endfor %}
                                 </select>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
+                                <input type="number" name="valor_mao_de_obra" class="form-control" placeholder="Valor do Serviço">
+                            </div>
+                            <div class="col-md-3">
                                 <input type="number" name="quantidades" class="form-control" placeholder="Quantidade" min="1" required>
                             </div>
+                            <!-- <div class="col-md-1">
+                                <button type="button" class="btn btn-danger" onclick="remover_servico()">X</button>
+                            </div> -->
                         </div>
                     </div>
                     <button type="button" id="add-categoria" class="btn btn-primary mt-2">Adicionar Serviço</button>

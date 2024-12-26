@@ -129,7 +129,11 @@ def home(request):
 
     # Organizar as categorias e preparar os dados finais
     categorias = sorted(categorias_set)
+    print(categorias)
+
     meses = list(dados_estruturados.keys())
+    print(meses)
+    
     quantidade_servicos_por_mes = {
         mes: [dados_estruturados[mes].get(categoria, 0) for categoria in categorias]
         for mes in meses
@@ -137,6 +141,10 @@ def home(request):
 
     contexto['meses_retorno'] = meses
     contexto['categorias'] = categorias
+    #TODO
+    # Precisa somar a quantidade de serviços por categorias e retornar também.
+    # Por ex:
+    # Se tiver 4 quantidade no serviço 'troca de oleo' ele só vai contar como 1, precisa iterar sobre esses serviços e somar a sua quantidade.
     contexto['quantidade_servicos_por_mes'] = quantidade_servicos_por_mes
 
 
