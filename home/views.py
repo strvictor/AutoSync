@@ -8,7 +8,6 @@ from django.db.models import Count
 from django.db.models import Sum, F, ExpressionWrapper, DecimalField
 from django.db.models.functions import TruncMonth
 from django.shortcuts import render
-from django.contrib import messages
 from servicos.models import Servicos, ServicoCategoriaQuantidade
 
 
@@ -47,7 +46,6 @@ def home(request):
         'valor_medio': format_currency(float(valor_medio), 'BRL', locale='pt_BR'),
         'em_orcamento': em_orcamento.count(),
         'orc_reprovado': orcamento_reprovado.count()
-
     }
 
     contexto = {}
@@ -98,37 +96,48 @@ def home(request):
     contexto['dados_cards'] = dados_cards
 
 
-
-
-
+    # Obter dados agrupados por mês e categoria
     servicos_por_categoria_mes = (
-    ServicoCategoriaQuantidade.objects.filter(servico__status="Finalizado")
-    .annotate(mes=TruncMonth('servico__data_finalizacao'))  # Agrupar por mês
-    .values('mes', 'categoria__titulo')  # Selecionar mês e categoria
-    .annotate(total_servicos=Count('id'))  # Contar os serviços por categoria
-    .order_by('mes', 'categoria__titulo')  # Ordenar por mês e por categoria
+        ServicoCategoriaQuantidade.objects.filter(servico__status="Finalizado")
+        .annotate(mes=TruncMonth('servico__data_finalizacao'))  # Agrupar por mês
+        .values('mes', 'categoria__titulo')  # Selecionar mês e categoria
+        .annotate(total_servicos=Count('id'))  # Contar os serviços por categoria
+        .order_by('mes', 'categoria__titulo')  # Ordenar por mês e por categoria
     )
 
-    # Mapear o resultado para três listas separadas
+    # Mapear os meses para abreviações
     meses_abreviados = {
-    1: "jan", 2: "fev", 3: "mar", 4: "abr", 5: "mai", 6: "jun",
-    7: "jul", 8: "ago", 9: "set", 10: "out", 11: "nov", 12: "dez"
+        1: "jan", 2: "fev", 3: "mar", 4: "abr", 5: "mai", 6: "jun",
+        7: "jul", 8: "ago", 9: "set", 10: "out", 11: "nov", 12: "dez"
     }
 
-    # Extrair os valores
-    meses = [meses_abreviados[servico['mes'].month] for servico in servicos_por_categoria_mes]
-    categorias = [servico['categoria__titulo'] for servico in servicos_por_categoria_mes]
-    quantidade_servicos = [servico['total_servicos'] for servico in servicos_por_categoria_mes]
+    # Processar os dados em um formato estruturado
+    dados_estruturados = {}
+    categorias_set = set()
+    
+    for servico in servicos_por_categoria_mes:
+        mes = meses_abreviados[servico['mes'].month]
+        categoria = servico['categoria__titulo']
+        quantidade = servico['total_servicos']
 
-    meses_retorno = []
-    for mes in meses:
-        if mes not in meses_retorno:
-            meses_retorno.append(mes)
+        categorias_set.add(categoria)
 
-    contexto['meses_retorno'] = meses_retorno
+        if mes not in dados_estruturados:
+            dados_estruturados[mes] = {}
+
+        dados_estruturados[mes][categoria] = quantidade
+
+    # Organizar as categorias e preparar os dados finais
+    categorias = sorted(categorias_set)
+    meses = list(dados_estruturados.keys())
+    quantidade_servicos_por_mes = {
+        mes: [dados_estruturados[mes].get(categoria, 0) for categoria in categorias]
+        for mes in meses
+    }
+
+    contexto['meses_retorno'] = meses
     contexto['categorias'] = categorias
-    contexto['quantidade_servicos'] = quantidade_servicos
+    contexto['quantidade_servicos_por_mes'] = quantidade_servicos_por_mes
 
-    print(contexto)
 
     return render(request, 'home.html', contexto)
