@@ -14,7 +14,7 @@ run:
       - migrate
       - "&&"
       - gunicorn
-      - myproject.wsgi:application  # Use Gunicorn para produção
+      - core.wsgi:application  # Use Gunicorn para produção
     image: web
 
   worker:
