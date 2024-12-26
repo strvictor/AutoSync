@@ -1,27 +1,3 @@
 build:
   docker:
-    web: Dockerfile  # Define o Dockerfile para o serviço principal
-
-run:
-  web:
-    command:
-      - python
-      - manage.py
-      - makemigrations
-      - "&&"
-      - python
-      - manage.py
-      - migrate
-      - "&&"
-      - gunicorn
-      - core.wsgi:application  # Use Gunicorn para produção
-    image: web
-
-  worker:
-    command:
-      - celery
-      - -A
-      - core
-      - worker
-      - --loglevel=info
-    image: web
+    web: Dockerfile
