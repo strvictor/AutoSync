@@ -17,6 +17,7 @@ class ProcessaServicos:
         self.notifica_cliente = self.requisicao_post.get('notificar')
         self.categorias_servico = self.requisicao_post.getlist('categorias')
         self.quantidades_servico = self.requisicao_post.getlist('quantidades')
+        self.valor_mao_de_obra = self.requisicao_post.getlist('valor_mao_de_obra')
         self.data_inicio = self.requisicao_post.get('data_inicio')
         self.data_entrega = self.requisicao_post.get('data_entrega')
 
@@ -40,8 +41,8 @@ class ProcessaServicos:
             return False
 
         # Valida categorias e quantidades
-        if not self.categorias_servico or not self.quantidades_servico:
-            self.erro_msg = 'Categorias e/ou quantidades não fornecidas!'
+        if not self.categorias_servico or not self.quantidades_servico or not self.valor_mao_de_obra:
+            self.erro_msg = 'Categorias, valor de mão de obra e/ou quantidades não fornecidas!'
             return False
 
         if len(self.categorias_servico) != len(self.quantidades_servico):
@@ -56,11 +57,14 @@ class ProcessaServicos:
         categorias_objs = CategoriaManutencao.objects.filter(id__in=self.categorias_servico)
 
         # Associa categoria e quantidade (exemplo fictício de ManyToMany com dados extras)
-        for categoria_id, quantidade in zip(self.categorias_servico, self.quantidades_servico):
+        for categoria_id, quantidade, valor_mao_de_obra in zip(self.categorias_servico, self.quantidades_servico, self.valor_mao_de_obra):
+            if not valor_mao_de_obra:
+                valor_mao_de_obra = 0
             categoria_obj = categorias_objs.get(id=categoria_id)
             self.salva_servico_bd.categoria_manutencao.add(
                 categoria_obj,
-                through_defaults={'quantidade': quantidade}  # Exemplo de uso do campo adicional
+                through_defaults={'quantidade': quantidade,
+                                'valor_mao_de_obra': valor_mao_de_obra}
             )
 
         self.salva_servico_bd.save()
@@ -103,6 +107,9 @@ class ProcessaServicos:
 
         servico.save()
         return servico.protocolo
+    
+    def testes(self):
+        print(f'Valor da mão de obra: {self.valor_mao_de_obra}')
 
 
 class EnviaEmail:

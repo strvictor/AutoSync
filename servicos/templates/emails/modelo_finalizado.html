@@ -23,6 +23,7 @@
                 <th>Serviço Realizado</th>
                 <th>Qtd</th>
                 <th>Preço Unitário</th>
+                <th>Mão de Obra</th>
                 <th>Subtotal</th>
             </tr>
         </thead>
@@ -32,13 +33,14 @@
                 <td>{{ item.categoria }}</td>
                 <td>{{ item.quantidade }}</td>
                 <td>R$ {{ item.categoria.preco }}</td>
-                <td>R$ {{ item.quantidade|multiply:item.categoria.preco }}</td>
+                <td>R$ {{ item.valor_mao_de_obra }}</td>
+                <td>{% calcular_total item.quantidade item.categoria.preco item.valor_mao_de_obra %}</td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
     <br>
-    <p>Total: R$ {{ servico.preco_total }}</p>
+    <p>Total: {{ servico.preco_total }}</p>
 </div>
 <a href="https://api.whatsapp.com/send?phone=5591993233036&text=Ol%C3%A1%2C%20gostaria%20de%20mais%20detalhes%20sobre%20a%20ordem%20de%20servi%C3%A7o%3A%20{{ protocolo_servico }}" class="button">Entre em contato</a>
 {% endblock %}

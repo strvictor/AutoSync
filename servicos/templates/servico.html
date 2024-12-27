@@ -104,9 +104,9 @@
         .table-container p {
             font-size: 1.1rem;
             font-weight: bold;
-            color: #111827;
+            color: #111c27;
             width: 100%;
-            justify-content: flex-end;
+            text-align: right;
 
         }
         .btn-secondary {
@@ -129,7 +129,7 @@
             color: #6b7280;
         }
         p {
-            color: #111827;
+            color: #111427;
         }
 
         h1{
@@ -277,6 +277,7 @@
                         <th>Serviço Realizado</th>
                         <th>Qtd</th>
                         <th>Preço Unitário</th>
+                        <th>Mão de Obra</th>
                         <th>Subtotal</th>
                     </tr>
                 </thead>
@@ -286,20 +287,18 @@
                         <td>{{ item.categoria }}</td>
                         <td>{{ item.quantidade }}</td>
                         <td>R$ {{ item.categoria.preco }}</td>
-                        <td>R$ {{ item.quantidade|multiply:item.categoria.preco }}</td>
+                        <td>R$ {{ item.valor_mao_de_obra }}</td>
+                        <td>{% calcular_total item.quantidade item.categoria.preco item.valor_mao_de_obra %}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
-            <br>
-            <p>Total: R$ {{ servico.preco_total }}</p>
+            <hr>
+            <p>Total: {{ servico.preco_total }}</p>
         </div>
         
-        <!-- Generate PDF -->
-        <!-- <button id="generatePDF" class="btn-secondary">Gerar PDF</button> -->
         <button id="generatePDF" class="buttonDownload">Gerar PDF</button>
         
-        <!-- Footer -->
         <div class="footer">
             © 2024 - Oficina X @strvictor
         </div>

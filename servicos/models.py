@@ -49,7 +49,7 @@ class Servicos(models.Model):
     def preco_total(self):
         preco_total = 0.0
         for item in self.servicocategoriaquantidade_set.all():
-            preco_total += float(item.categoria.preco) * item.quantidade
+            preco_total += float(item.categoria.preco) * item.quantidade + float(item.valor_mao_de_obra)
         
         # Formata o valor usando o Babel para moeda brasileira
         return format_currency(preco_total, 'BRL', locale='pt_BR')
@@ -59,7 +59,7 @@ class ServicoCategoriaQuantidade(models.Model):
     servico = models.ForeignKey(Servicos, on_delete=models.CASCADE)
     categoria = models.ForeignKey(CategoriaManutencao, on_delete=models.CASCADE)
     quantidade = models.PositiveIntegerField(default=1)
-    valor_mao_de_obra = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    valor_mao_de_obra = models.DecimalField(max_digits=7, decimal_places=2, default=0)
 
 
     def __str__(self):
