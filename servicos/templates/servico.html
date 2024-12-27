@@ -2,6 +2,10 @@
 {% load static %}
 {% load custom_filters %}
 
+{% block 'title' %}
+Serviço | {{ servico.titulo }}
+{% endblock %}
+
 {% block 'head' %}
     <style>
         body {
