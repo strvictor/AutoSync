@@ -35,6 +35,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    # APPS DO DJANGO
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,9 +43,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # APPS CRIADOS
     'clientes',
     'servicos',
     'home',
+    'autenticacao',
 ]
 
 MIDDLEWARE = [
@@ -149,3 +152,11 @@ EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True').lower() in ('true', '1', 'yes
 # Celery settings
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')  
 CELERY_TASK_SERIALIZER = 'json'
+
+# Autenticação com base no email - personalizada
+AUTHENTICATION_BACKENDS = [
+    'autenticacao.authentication_backends.EmailBackend',
+]
+
+# Tempo de sessão - 24h
+SESSION_COOKIE_AGE = 86400

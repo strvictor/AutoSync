@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | AutoSync</title>
+    <link rel="stylesheet" href="{% static 'autenticacao/css/pagina_login.css' %}">
+</head>
+<body>
+    <section>
+        <form action="{% url 'login_usuario' %}" method="post">
+            {% csrf_token %}
+            <img src="{% static 'autenticacao/img/logo_autosync.png' %}" alt="Logo AutoSync">
+            <h1>Login</h1>
+            <div class="div-login">
+                <p>E-mail<span>*</span></p>
+                <input type="email" name="email" placeholder="Insira seu e-mail" required>
+            </div>
+            <div class="div-login">
+                <p>Senha<span>*</span></p>
+                <input type="password" name="senha" placeholder="Insira sua senha" required>
+            </div>
+            {% if login_errado %}
+                <div class="login_errado">
+                    <p>{{ login_errado }}</p>  
+                </div>
+            {% endif %}
+            <button type="submit">Login</button>
+        </form>
+    </section>
+</body>
+</html>

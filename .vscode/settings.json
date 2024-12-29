@@ -4,7 +4,8 @@
         "Adição do Docker e Postsgres",
         "Celery + RabbitMq",
         "Dashboard",
-        "Serviçoes"
+        "Serviçoes",
+        "Autenticação"
     ],
     "todo-tree.tree.showBadges": true,
     "todo-tree.tree.disableCompactFolders": true,
