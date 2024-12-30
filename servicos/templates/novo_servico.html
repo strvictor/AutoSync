@@ -7,7 +7,7 @@ Novo Serviço | AutoSync
 
 {% block 'head' %}
     <link rel="stylesheet" href="{% static 'servicos/css/novo_servico.css' %}">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/css/select2.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 {% endblock %}
 
 {% block 'dashboard' %}
@@ -92,7 +92,7 @@ Novo Serviço | AutoSync
                     <div id="categorias-container">
                         <div class="row mb-2 categoria-row">
                             <div class="col-md-6">
-                                <select name="categorias" class="form-control categoria-select" required>
+                                <select name="categorias" id='categorias' class="form-control" required>
                                     <option value="" disabled selected>Selecione um serviço</option>
                                         {% for categoria in categorias %}
                                             <option value="{{ categoria.id }}">{{ categoria.titulo }}</option>
@@ -144,18 +144,21 @@ Novo Serviço | AutoSync
         {% endif %}
 
     </div>
+
+    <h1>Teste</h1>
+    <select id="teste" class="js-example-basic-single form-control" name="state">
+        <option value="AL">Alabama</option>
+        <option value="WY">Wyoming</option>
+    </select>  
 </div>
 
+{% endblock %}
+
+{% block 'body' %}
+<!-- Scripts -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="{% static 'servicos/js/novo_servico.js' %}"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0/dist/js/select2.min.js"></script>
-<script>
-    $(document).ready(function() {
-        // Ativa o Select2 no campo de categorias
-        $('#categorias').select2({
-            placeholder: "Selecione uma ou mais categorias",
-            allowClear: true
-        });
-    });
-</script>
+
+
 {% endblock %}
