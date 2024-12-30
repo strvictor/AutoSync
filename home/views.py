@@ -9,10 +9,8 @@ from django.db.models import Sum, F, ExpressionWrapper, DecimalField
 from django.db.models.functions import TruncMonth
 from django.shortcuts import render
 from servicos.models import Servicos, ServicoCategoriaQuantidade
-from django.contrib.auth.decorators import login_required
 
 
-@login_required(login_url="login/") 
 def home(request):
     # Filtrar serviços por status
     em_orcamento = Servicos.objects.filter(status='Em Orçamento')

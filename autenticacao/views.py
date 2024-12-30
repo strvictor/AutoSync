@@ -11,14 +11,10 @@ def login_usuario(request):
 
         # Autenticar usando o email
         usuario = authenticate(request, username=email, password=senha)
-
-        print(f'USUARIO >> {usuario}')
         
         if usuario is not None:
             login(request, usuario)
-            # usuario ja autenticado
             return redirect('home')
         else:
             # Autenticação falhou
             return render(request, 'pagina_login.html', {'login_errado': 'E-mail ou Senha incorretos!'})
-        
