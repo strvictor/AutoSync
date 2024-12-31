@@ -28,8 +28,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-
-
 $(document).ready(function () {
     $('#add-categoria').on('click', function () {
         // Duplica o primeiro campo existente no container
@@ -37,6 +35,7 @@ $(document).ready(function () {
         $('#categorias-container').append(newField);
     });
 });
+
 
 $(document).ready(function () {
     $('#categorias').select2({
