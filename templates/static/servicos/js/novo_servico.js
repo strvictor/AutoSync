@@ -30,9 +30,45 @@ document.addEventListener("DOMContentLoaded", function () {
 
 $(document).ready(function () {
     $('#add-categoria').on('click', function () {
-        // Duplica o primeiro campo existente no container
+        // Duplica o primeiro elemento com a classe 'categoria-row'
         const newField = $('.categoria-row:first').clone();
+
+        // Remove IDs duplicados e cria novos IDs únicos
+        newField.find('[id]').each(function () {
+            const originalId = $(this).attr('id');
+            const newId = originalId + '_' + ($('.categoria-row').length + 1);
+            $(this).attr('id', newId);
+        });
+
+        // Limpa os valores dos campos clonados
+        newField.find('input, select').val('');
+
+        // Remove a instância existente do Select2 no campo clonado
+        newField.find('.select2').remove();
+
+        // Adiciona o novo campo ao container
         $('#categorias-container').append(newField);
+
+        // Inicializa o Select2 no novo campo
+        const selectElement = newField.find('select');
+        selectElement.select2({
+            placeholder: 'Selecione um serviço',
+            allowClear: true,
+            minimumResultsForSearch: 4,
+            maximumInputLength: 20,
+        });
+
+        // Garante que o Select2 tenha a largura correta
+        selectElement.next('.select2-container').css('width', '100%');
+    });
+
+    // Inicializa o Select2 para os campos já existentes na página
+    $('.categoria-row select').select2({
+        placeholder: 'Selecione um serviço',
+        allowClear: true,
+        minimumResultsForSearch: 4,
+        maximumInputLength: 20,
+        width: 'resolve', // Ajusta a largura com base no elemento pai
     });
 });
 

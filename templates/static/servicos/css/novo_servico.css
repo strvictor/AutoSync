@@ -23,23 +23,14 @@ a {
 }
 
 .text-card{
-
     font-size: 25px;
     text-decoration: none;
     text-decoration-line: none;
 }
 
+
 .select2-container .select2-selection--single {
-    display: flex;
-    align-items: center; /* Centraliza o texto verticalmente */
-}
-
-/* Ajusta o padding interno */
-.select2-container--default .select2-selection--single .select2-selection__rendered {
-    padding: 10px; /* Aumente o padding conforme necessário */
-}
-
-/* Ajuste do ícone de dropdown */
-.select2-container--default .select2-selection--single .select2-selection__arrow {
-    height: 500px; /* Deve ser igual à altura do select */
+    padding-top: 3.5px;
+    padding-left: 3.5px;
+    height: 37.5px !important;
 }
