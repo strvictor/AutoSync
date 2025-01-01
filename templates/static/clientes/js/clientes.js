@@ -79,39 +79,85 @@ function dados_clientes() {
 
         div_carros = document.getElementById('carros')
         div_carros.innerHTML = ''
-        for(i=0; i<data['carros'].length; i++){
-            id_carro = data['carros'][i]['id']
-            carro = data['carros'][i]['fields']['carro']
-            placa = data['carros'][i]['fields']['placa']
-            ano = data['carros'][i]['fields']['ano']
+        if (data['carros'].length > 0) {
+            for (i = 0; i < data['carros'].length; i++) {
+                id_carro = data['carros'][i]['id']
+                carro = data['carros'][i]['fields']['carro']
+                placa = data['carros'][i]['fields']['placa']
+                ano = data['carros'][i]['fields']['ano']
 
-            div_carros.innerHTML += `
-            <form action='atualiza_carro/${id_carro}' method='POST'>
-                <div class='row'>
-                    <div class='col-md'>
-                        <p>Nome:</p>
-                        <input type='text' name='carro' class='form-control' value='${carro}'>
+                div_carros.innerHTML += `
+                <form action='atualiza_carro/${id_carro}' method='POST'>
+                    <div class='row'>
+                        <div class='col-md'>
+                            <p>Nome:</p>
+                            <input type='text' name='carro' class='form-control' value='${carro}'>
+                        </div>
+                        <div class='col-md'>
+                            <p>Placa:</p>
+                            <input type='text' name='placa' class='form-control' value='${placa}'>
+                        </div>
+                        <div class='col-md'>
+                            <p>Ano:</p>
+                            <input type='text' name='ano' class='form-control' value='${ano}'>
+                        </div>
+                        <div class='col-md'>
+                            <p>Ação:</p>
+                            <input type='submit' class='btn btn-success' value='Atualizar Carro'>
+                        </div>
                     </div>
-                    <div class='col-md'>
-                        <p>Placa:</p>
-                        <input type='text' name='placa' class='form-control' value='${placa}'>
+                </form>
+                <br>
+            `;
+            }
+        } else {
+            div_carros.innerHTML = `
+                <form id="novo-carro-form" method="POST" action="/clientes/salva_carro/">
+                <h6>Cadastre um veículo:</h6>
+                    <div class="row">
+                        <div class="col-md">
+                            <p>Veículo:</p>
+                            <input type="text" name="carro" class="form-control" placeholder="Digite o nome do veículo" required>
+                        </div>
+                        <div class="col-md">
+                            <p>Placa:</p>
+                            <input type="text" name="placa" class="form-control" placeholder="Digite a placa" required>
+                        </div>
+                        <div class="col-md">
+                            <p>Ano:</p>
+                            <input type="text" name="ano" class="form-control" placeholder="Digite o ano" required>
+                        </div>
+                        <input type="hidden" name="id_cliente" class="form-control" value="${id_cliente}">
+                        <div class="col-md">
+                            <p>Ação:</p>
+                            <button type="button" id="adicionar-carro" class="btn btn-primary">Adicionar Carro</button>
+                        </div>
                     </div>
-                    <div class='col-md'>
-                        <p>Ano:</p>
-                        <input type='text' name='ano' class='form-control' value='${ano}'>
-                    </div>
-                    <div class='col-md'>
-                        <p>Ação:</p>
-                        <input type='submit' class='btn btn-success' value='Atualizar Carro'>
-                    </div>
-                </div>
-            </form>
-            <br>
-        `;
-        
+                </form>
+                <br>
+            `;
+
+            document.getElementById('adicionar-carro').addEventListener('click', function() {
+                const novoCarroForm = document.getElementById('novo-carro-form');
+                const novoCarroData = new FormData(novoCarroForm);
+
+                fetch("/clientes/salva_carro/", {
+                    method: "POST",
+                    headers: {
+                        'X-CSRFToken': csrf_token,
+                    },
+                    body: novoCarroData
+                }).then(response => response.json()).then(result => {
+                    if (result.success) {
+                        alert('Carro adicionado com sucesso!');
+                        dados_clientes(); // Atualiza os dados do cliente
+                    } else {
+                        alert('Erro ao adicionar o carro.');
+                    }
+                });
+            });
         }
     })
-
 }
 
 function update_cliente() {
