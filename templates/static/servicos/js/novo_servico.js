@@ -3,22 +3,29 @@ document.addEventListener("DOMContentLoaded", function () {
     const carroSelect = document.querySelector("#id_carro");
 
     if (clienteSelect && carroSelect) {
-        clienteSelect.addEventListener("change", function () {
-            const clienteId = clienteSelect.value;
+        // Inicializa o Select2 nos selects
+        $(clienteSelect).select2();
+        $(carroSelect).select2();
 
-            // Faça a requisição para buscar os carros associados ao cliente selecionado
+        // Usa o evento específico do Select2
+        $(clienteSelect).on("select2:select", function () {
+            const clienteId = $(this).val(); // Obtém o valor selecionado
+
+            // Faz a requisição para buscar os carros associados ao cliente selecionado
             fetch(`/servicos/carros-por-cliente/${clienteId}/`)
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log(data)
                     // Limpa as opções do select de carros
-                    carroSelect.innerHTML = '<option value="">Selecione um Veículo</option>';
+                    $(carroSelect).empty().append(new Option("Selecione um Veículo", ""));
+
+                    // Adiciona as novas opções
                     data.carros.forEach((carro) => {
-                        const option = document.createElement("option");
-                        option.value = carro.id;
-                        option.textContent = carro.nome; // Atualize conforme o campo relevante
-                        carroSelect.appendChild(option);
+                        const option = new Option(carro.nome, carro.id, false, false); // Texto e valor
+                        $(carroSelect).append(option);
                     });
+
+                    // Atualiza o Select2 para refletir as novas opções
+                    $(carroSelect).trigger("change");
                 })
                 .catch((error) => {
                     console.error("Erro ao buscar carros:", error);
@@ -26,6 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
 
 
 $(document).ready(function () {
@@ -75,6 +83,15 @@ $(document).ready(function () {
 
 $(document).ready(function () {
     $('#categorias').select2({
+        placeholder: 'Selecione um serviço',
+        allowClear: true,
+        minimumResultsForSearch: 4, // Mostra a barra de pesquisa sempre
+        maximumInputLength: 20,    // Limita o número de caracteres que podem ser digitados
+    });
+});
+
+$(document).ready(function () {
+    $('.select-carro').select2({
         placeholder: 'Selecione um serviço',
         allowClear: true,
         minimumResultsForSearch: 4, // Mostra a barra de pesquisa sempre
