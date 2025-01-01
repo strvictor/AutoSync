@@ -23,7 +23,6 @@ a {
 }
 
 .text-card{
-
     font-size: 25px;
     text-decoration: none;
     text-decoration-line: none;
@@ -35,4 +34,9 @@ a {
 
 .custom-dropdown {
     max-height: 2000px; /* Controla a altura do dropdown */
+
+.select2-container .select2-selection--single {
+    padding-top: 3.5px;
+    padding-left: 3.5px;
+    height: 37.5px !important;
 }

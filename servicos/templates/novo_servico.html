@@ -43,7 +43,7 @@ Novo Serviço | AutoSync
                 <!-- Cliente -->
                 <div class="col-md-6 form-group">
                     <label for="id_cliente">Cliente:</label>
-                    <select id="id_cliente" name="cliente" class="form-control" required>
+                    <select id="id_cliente" name="cliente" class="form-control select-carro" required>
                         <option value="" disabled selected>Selecione um cliente</option>
                         {% for cliente in clientes %}
                         <option value="{{ cliente.id }}">{{ cliente.nome }} {{ cliente.sobrenome }}</option>
@@ -144,12 +144,6 @@ Novo Serviço | AutoSync
         {% endif %}
 
     </div>
-
-    <h1>Teste</h1>
-    <select id="teste" class="js-example-basic-single form-control" name="state">
-        <option value="AL">Alabama</option>
-        <option value="WY">Wyoming</option>
-    </select>  
 </div>
 
 {% endblock %}
@@ -159,6 +153,4 @@ Novo Serviço | AutoSync
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="{% static 'servicos/js/novo_servico.js' %}"></script>
-
-
 {% endblock %}

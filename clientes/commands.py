@@ -161,10 +161,22 @@ class AtualizaCarros:
 
         return True
 
-
     def atualiza_carro(self):
         # Atualiza os atributos do carro e salva no banco
         self.carro_bd.carro = self.nome_carro
         self.carro_bd.placa = self.placa_carro
         self.carro_bd.ano = self.ano_carro
         self.carro_bd.save()
+
+    @staticmethod
+    def salva_carro_novo(id_cliente, nome_carro, placa, ano):
+        cliente = Cliente.objects.get(id=id_cliente)
+        carro = Carro(
+            carro=nome_carro,
+            placa=placa,
+            ano=ano,
+            cliente=cliente
+        )
+        carro.save()
+
+      

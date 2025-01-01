@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from .models import Cliente
 from .commands import ProcessaUsuarios, AtualizaUsuarios, AtualizaCarros
 from django.http import JsonResponse
@@ -67,11 +67,20 @@ def atualiza_carro(request, id_carro):
             return redirect('clientes')
         else:
             messages.error(request, atualiza_carros_bd.erro_msg)
-            return redirect('clientes.html')
+            return redirect('clientes')
          
     else:
         return render(request, 'clientes.html')
     
+def salva_carro(request):
+    id_cliente = request.POST.get('id_cliente')
+    nome = request.POST.get('carro')
+    placa = request.POST.get('placa')
+    ano = request.POST.get('ano')
+
+    AtualizaCarros.salva_carro_novo(id_cliente, nome, placa, ano)
+    return HttpResponse('Carro salvo com sucesso!')
+
 
 def update_cliente(request, id_cliente):
     if request.method == 'GET':
