@@ -43,5 +43,7 @@ $(document).ready(function () {
         allowClear: true,
         minimumResultsForSearch: 4, // Mostra a barra de pesquisa sempre
         maximumInputLength: 20,    // Limita o número de caracteres que podem ser digitados
+        dropdownCssClass: 'custom-dropdown',
+        selectionCssClass: 'custom-selection',
     });
 });

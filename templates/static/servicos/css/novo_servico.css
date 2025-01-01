@@ -29,17 +29,10 @@ a {
     text-decoration-line: none;
 }
 
-.select2-container .select2-selection--single {
-    display: flex;
-    align-items: center; /* Centraliza o texto verticalmente */
+.custom-selection {
+    height: 500px;
 }
 
-/* Ajusta o padding interno */
-.select2-container--default .select2-selection--single .select2-selection__rendered {
-    padding: 10px; /* Aumente o padding conforme necessário */
-}
-
-/* Ajuste do ícone de dropdown */
-.select2-container--default .select2-selection--single .select2-selection__arrow {
-    height: 500px; /* Deve ser igual à altura do select */
+.custom-dropdown {
+    max-height: 2000px; /* Controla a altura do dropdown */
 }
