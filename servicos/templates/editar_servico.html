@@ -38,7 +38,6 @@ Atualizar Serviço | AutoSync
     <div class="editar_servico">
         <form action='{% url "editar_servico" %}' method="POST">
             {% csrf_token %}
-            <div class="row">
                 <label for="id_cliente">Serviços:</label>
                 <select id="servico" onchange="atualiza_servico()" name="servico" class="form-control">
                     <option value="" disabled selected>Selecione um serviço</option>
@@ -46,10 +45,30 @@ Atualizar Serviço | AutoSync
                     <option value="{{ servico.id }}">{{ servico.titulo }} | {{ servico.cliente }}</option>
                     {% endfor %}
                 </select>
-            </div>
         </form>
         <br>
-        <p>Em desenvolvimento...</p>
+        <div id="form-atualiza-servico" style="display: none;">
+            <input type="hidden" id="id_servico">
+            <p>Título:</p>
+            <input type="text" id="titulo" class="form-control">
+            <br>
+            <p>Cliente:</p>
+            <input type="text" id="cliente" class="form-control">
+            <br>
+            <p>Carro:</p>
+            <input type="text" id="carro" class="form-control">
+            <br>
+            <p>Categoria de Manutenção:</p>
+            <input type="text" id="categoria_manutencao" class="form-control">
+            <br>
+            <p>Data de Início:</p>
+            <input type="date" id="data_inicio" class="form-control">
+            <br>
+            <p>Data de Entrega:</p>
+            <input type="date" id="data_entrega" class="form-control">
+            <br>
+            <button id="salvar-servico" class="btn btn-success">Salvar</button>
+        </div>
     </div>
 </div>
 

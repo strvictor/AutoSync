@@ -6,7 +6,7 @@ from django.http import HttpResponse, JsonResponse
 from .commands import ProcessaServicos, EnviaEmail
 from django.core import serializers
 from django.contrib import messages 
-from .models import Servicos
+from .models import Servicos, Cliente, Carro
 import json
 
 
@@ -40,14 +40,40 @@ def editar_servico(request):
 
     elif request.method == 'POST':
         id_servico = request.POST.get('servico_id')
-        servicos = Servicos.objects.filter(id=id_servico)
+        servicos = Servicos.objects.filter(id=id_servico).select_related('cliente', 'carro').prefetch_related('categoria_manutencao')
+        
+        if servicos.exists():
+            servico = servicos.first()
+            cliente = servico.cliente
+            carro = servico.carro
+            categorias = servico.categoria_manutencao.all()
 
-        json_formatado = json.loads(serializers.serialize('json', servicos))
+            servico_data = {
+                'id': servico.id,
+                'titulo': servico.titulo,
+                'cliente': {
+                    'id': cliente.id,
+                    'nome': cliente.nome,
+                    'sobrenome': cliente.sobrenome,
+                    'email': cliente.email,
+                    'cpf': cliente.cpf,
+                },
+                'carro': {
+                    'id': carro.id,
+                    'carro': carro.carro,
+                    'placa': carro.placa,
+                    'ano': carro.ano,
+                },
+                'categorias': [{'id': categoria.id, 'titulo': categoria.titulo, 'preco': categoria.preco} for categoria in categorias],
+                'data_inicio': servico.data_inicio,
+                'data_entrega': servico.data_entrega,
+            }
 
-        return JsonResponse({'valores': json_formatado})
+            return JsonResponse({'valores': servico_data})
+        else:
+            return JsonResponse({'error': 'Serviço não encontrado'}, status=404)
     else:
         return redirect('editar_servico')
-    
 
 def listar_servico(request):
     if request.method == 'GET':

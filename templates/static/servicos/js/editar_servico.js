@@ -1,30 +1,62 @@
 function atualiza_servico() {
-    servicoId = document.getElementById("servico").value;
-    csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value
+    const servicoId = document.getElementById('servico').value;
+    const csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
 
+    const data = new FormData();
+    data.append('servico_id', servicoId);
 
-    data = new FormData()
-    data.append('servico_id', servicoId)
-
-    fetch("/servicos/editar_servico/",{
+    fetch("/servicos/editar_servico/", {
         method: "POST",
-        headers:{
+        headers: {
             'X-CSRFToken': csrf_token,
         },
         body: data
-    }).then(function(result){
-        return result.json()
-    }).then(function(data){
+    }).then(function(result) {
+        return result.json();
+    }).then(function(data) {
+        if (data.error) {
+            alert(data.error);
+            return;
+        }
 
-        console.log(data)
-        
-        console.log(data['valores'][0]['pk'])
-        console.log(data['valores'][0]['fields']['titulo'])
-        console.log(data['valores'][0]['fields']['cliente'])
-        console.log(data['valores'][0]['fields']['carro'])
-        console.log(data['valores'][0]['fields']['categoria_manutencao'])
-        console.log(data['valores'][0]['fields']['data_inicio'])
-        console.log(data['valores'][0]['fields']['data_entrega'])
-        console.log(data['valores'][0]['fields']['finalizado'])
+        const servico = data['valores'];
 
-    })}
+        document.getElementById('form-atualiza-servico').style.display = 'block';
+
+        document.getElementById('id_servico').value = servico.id;
+        document.getElementById('titulo').value = servico.titulo;
+        document.getElementById('cliente').value = `${servico.cliente.nome} ${servico.cliente.sobrenome}`;
+        document.getElementById('carro').value = `${servico.carro.carro} (${servico.carro.placa})`;
+        document.getElementById('categoria_manutencao').value = servico.categorias.map(categoria => categoria.titulo).join(', ');
+        document.getElementById('data_inicio').value = servico.data_inicio;
+        document.getElementById('data_entrega').value = servico.data_entrega;
+    });
+}
+
+document.getElementById('salvar-servico').addEventListener('click', function() {
+    const servicoId = document.getElementById('id_servico').value;
+    const csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+
+    const data = new FormData();
+    data.append('servico_id', servicoId);
+    data.append('titulo', document.getElementById('titulo').value);
+    data.append('cliente', document.getElementById('cliente').value);
+    data.append('carro', document.getElementById('carro').value);
+    data.append('categoria_manutencao', document.getElementById('categoria_manutencao').value);
+    data.append('data_inicio', document.getElementById('data_inicio').value);
+    data.append('data_entrega', document.getElementById('data_entrega').value);
+
+    fetch("/servicos/atualiza_servico/", {
+        method: "POST",
+        headers: {
+            'X-CSRFToken': csrf_token,
+        },
+        body: data
+    }).then(function(result) {
+        return result.json();
+    }).then(function(data) {
+        alert('Serviço atualizado com sucesso!');
+    }).catch(function(error) {
+        console.error('Erro ao atualizar serviço:', error);
+    });
+});
