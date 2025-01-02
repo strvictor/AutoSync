@@ -28,13 +28,6 @@ a {
     text-decoration-line: none;
 }
 
-.custom-selection {
-    height: 500px;
-}
-
-.custom-dropdown {
-    max-height: 2000px; /* Controla a altura do dropdown */
-
 .select2-container .select2-selection--single {
     padding-top: 3.5px;
     padding-left: 3.5px;
