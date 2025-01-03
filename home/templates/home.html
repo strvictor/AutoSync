@@ -66,20 +66,35 @@ Dashboard | AutoSync
     </div>
     <br>
     <hr style="background-color:gray;">
-    <br>
-    <div class="graficos">
-        <div class="rosca">
-            {% comment %} <p>Com esse dashboard você conseguirá facilmente visualizar o andamento por status de seus serviços</p> {% endcomment %}
-            <canvas id="servicesChart"></canvas>
+    <div class="pai">
+        <div class="insights">
+            <h3>Insights do Faturamento Mensal</h3>
+            <p>Acompanhe o desempenho do faturamento mensal para identificar tendências e oportunidades de crescimento.</p>
         </div>
-        
-        <div class="barras">
-            <p>2</p>
-            <canvas id="stackedBarChart"></canvas>
+        <div class="graficos">
+            <div class="rosca">
+                <canvas id="servicesChart"></canvas>
+            </div>
+            
+            <div class="barras">
+                <canvas id="stackedBarChart"></canvas>
+            </div>
+            
+        </div>
+        <div class="insights">
+            <h3>Insights do Faturamento Mensal</h3>
+            <p>Acompanhe o desempenho do faturamento mensal para identificar tendências e oportunidades de crescimento.</p>
+        </div>
+        <div class="graficos-v2">
+            <div class="vendas">
+                <canvas id="chartSales"></canvas>
+            </div>
+            <div class="faturamento">
+                <canvas id="ordercharts"></canvas>
+            </div>
         </div>
     </div>
-
-
+ 
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -116,6 +131,11 @@ Dashboard | AutoSync
         options: {
             responsive: true,
             plugins: {
+                title: {
+                    display: true,
+                    text: 'Distribuição de Serviços por Categoria',
+                    color: '#fff',
+                },
                 legend: {
                     display: true,
                     position: 'top',
@@ -170,6 +190,11 @@ Dashboard | AutoSync
         },
         options: {
             plugins: {
+                title: {
+                    display: true,
+                    text: 'Distribuição de Serviços',
+                    color: '#fff',
+                },
                 legend: {
                     position: 'top',
                     labels: {
@@ -186,13 +211,6 @@ Dashboard | AutoSync
     });
 </script>
 
-<div>
-    <h1>Dashboard 2</h1>
-    <canvas id="chartSales"></canvas>
-    <canvas id="ordercharts"></canvas>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     function SalesChart(data, labels) {
         var $chart = document.getElementById('chartSales').getContext('2d');
@@ -216,7 +234,7 @@ Dashboard | AutoSync
                         },
                         ticks: {
                             callback: function (value) {
-                                return 'R$ ' + value + ' ';
+                                return ' R$ ' + value + ' ';
                             },
                             font: {
                                 size: 20
@@ -225,10 +243,18 @@ Dashboard | AutoSync
                     }
                 },
                 plugins: {
+                    title: {
+                        display: true,
+                        text: 'Total de Vendas / Mês',
+                        color: '#fff',
+                        font: {
+                            size: 16
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function (context) {
-                                return 'R$ ' + context.raw;
+                                return ' R$ ' + context.raw;
                             }
                         }
                     }
@@ -248,8 +274,6 @@ Dashboard | AutoSync
     }
 
     function OrderChart(data, labels) {
-        var orders_chart_data = data.map(obj => obj.total_order);
-
         var $chart = document.getElementById('ordercharts').getContext('2d');
 
         new Chart($chart, {
@@ -265,15 +289,13 @@ Dashboard | AutoSync
                     },
                     y: {
                         grid: {
-                            lineWidth: 1,
+                            lineWidth: 0.3,
                             color: '#dfe2e6',
                             zeroLineColor: '#dfe2e6'
                         },
                         ticks: {
                             callback: function (value) {
-                                if (!(value % 10)) {
-                                    return value;
-                                }
+                                return ' R$ ' + value + ' ';
                             },
                             font: {
                                 size: 20
@@ -282,10 +304,18 @@ Dashboard | AutoSync
                     }
                 },
                 plugins: {
+                    title: {
+                        display: true,
+                        text: 'Faturamento / Mês',
+                        color: '#fff',
+                        font: {
+                            size: 16
+                        }
+                    },
                     tooltip: {
                         callbacks: {
                             label: function (context) {
-                                return context.raw;
+                                return ' R$ ' + context.raw;
                             }
                         }
                     }
@@ -294,8 +324,8 @@ Dashboard | AutoSync
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'Sales',
-                    data: orders_chart_data,
+                    label: 'Faturamento / Mês',
+                    data: data,
                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
                     borderColor: 'rgba(75, 192, 192, 1)',
                     borderWidth: 1

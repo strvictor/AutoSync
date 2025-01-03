@@ -1,15 +1,8 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-from servicos.models import Servicos
-from babel.numbers import format_currency
-from django.db.models import Count
-
-
-from django.db.models import Sum, F, ExpressionWrapper, DecimalField
-from django.db.models.functions import TruncMonth
-from django.shortcuts import render
 from servicos.models import Servicos, ServicoCategoriaQuantidade
-
+from babel.numbers import format_currency
+from django.db.models import Count, Sum, F, ExpressionWrapper, DecimalField
+from django.db.models.functions import TruncMonth
 
 def home(request):
     # Filtrar serviços por status
@@ -50,58 +43,12 @@ def home(request):
 
     contexto = {}
 
-    servicos_por_mes = (
-        Servicos.objects.filter(status="Finalizado")
-        .annotate(mes=TruncMonth('data_finalizacao'))  # Agrupar por mês
-        .annotate(
-            valor_total=ExpressionWrapper(
-                F('servicocategoriaquantidade__quantidade') * F('servicocategoriaquantidade__categoria__preco'),
-                output_field=DecimalField(max_digits=10, decimal_places=2)
-            )
-        )
-        .values('mes')
-        .annotate(total_valor=Sum('valor_total'))  # Soma total por mês
-        .order_by('mes')
-    )
-
-    # Preparar dados para o gráfico
-    orders_month_report = [
-        {'mes': servico['mes'].strftime('%Y-%m'), 'total_valor': float(servico['total_valor'])}
-        for servico in servicos_por_mes
-    ]
-
-
-    orders_month_report_labels = [item['mes'] for item in orders_month_report]
-    orders_month_report_data = [item['total_valor'] for item in orders_month_report]
-
-    meses_abreviados = {
-    "01": "jan",
-    "02": "fev",
-    "03": "mar",
-    "04": "abr",
-    "05": "mai",
-    "06": "jun",
-    "07": "jul",
-    "08": "ago",
-    "09": "set",
-    "10": "out",
-    "11": "nov",
-    "12": "dez",
-    }
-
-    nomes_meses = [meses_abreviados[data.split('-')[1]] for data in orders_month_report_labels]
-
-    contexto['valores_meses'] = orders_month_report_data
-    contexto['nomes_meses'] = nomes_meses
-    contexto['dados_cards'] = dados_cards
-
-
     # Obter dados agrupados por mês e categoria
     servicos_por_categoria_mes = (
         ServicoCategoriaQuantidade.objects.filter(servico__status="Finalizado")
         .annotate(mes=TruncMonth('servico__data_finalizacao'))  # Agrupar por mês
         .values('mes', 'categoria__titulo')  # Selecionar mês e categoria
-        .annotate(total_servicos=Count('id'))  # Contar os serviços por categoria
+        .annotate(total_servicos=Sum('quantidade'))  # Somar a quantidade de serviços por categoria
         .order_by('mes', 'categoria__titulo')  # Ordenar por mês e por categoria
     )
 
@@ -125,27 +72,50 @@ def home(request):
         if mes not in dados_estruturados:
             dados_estruturados[mes] = {}
 
-        dados_estruturados[mes][categoria] = quantidade
+        if categoria not in dados_estruturados[mes]:
+            dados_estruturados[mes][categoria] = 0
+
+        dados_estruturados[mes][categoria] += quantidade
 
     # Organizar as categorias e preparar os dados finais
     categorias = sorted(categorias_set)
-    print(categorias)
-
     meses = list(dados_estruturados.keys())
-    print(meses)
     
     quantidade_servicos_por_mes = {
         mes: [dados_estruturados[mes].get(categoria, 0) for categoria in categorias]
         for mes in meses
     }
 
+    # Preparar dados para os gráficos de vendas e pedidos
+    servicos_por_mes = (
+        Servicos.objects.filter(status="Finalizado")
+        .annotate(mes=TruncMonth('data_finalizacao'))  # Agrupar por mês
+        .annotate(
+            valor_total=ExpressionWrapper(
+                F('servicocategoriaquantidade__quantidade') * F('servicocategoriaquantidade__categoria__preco'),
+                output_field=DecimalField(max_digits=10, decimal_places=2)
+            )
+        )
+        .values('mes')
+        .annotate(total_valor=Sum('valor_total'))  # Soma total por mês
+        .order_by('mes')
+    )
+
+    orders_month_report = [
+        {'mes': servico['mes'].strftime('%Y-%m'), 'total_valor': float(servico['total_valor'])}
+        for servico in servicos_por_mes
+    ]
+
+    orders_month_report_labels = [item['mes'] for item in orders_month_report]
+    orders_month_report_data = [item['total_valor'] for item in orders_month_report]
+
+    nomes_meses = [meses_abreviados[int(data.split('-')[1])] for data in orders_month_report_labels]
+
+    contexto['valores_meses'] = orders_month_report_data
+    contexto['nomes_meses'] = nomes_meses
+    contexto['dados_cards'] = dados_cards
     contexto['meses_retorno'] = meses
     contexto['categorias'] = categorias
-    #TODO
-    # Precisa somar a quantidade de serviços por categorias e retornar também.
-    # Por ex:
-    # Se tiver 4 quantidade no serviço 'troca de oleo' ele só vai contar como 1, precisa iterar sobre esses serviços e somar a sua quantidade.
     contexto['quantidade_servicos_por_mes'] = quantidade_servicos_por_mes
-
 
     return render(request, 'home.html', contexto)
