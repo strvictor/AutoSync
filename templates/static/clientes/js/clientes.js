@@ -1,3 +1,12 @@
+$(document).ready(function () {
+    $('.select-cliente').select2({
+        placeholder: 'Selecione um cliente',
+        allowClear: true,
+        minimumResultsForSearch: 4, // Mostra a barra de pesquisa sempre
+        maximumInputLength: 20,    // Limita o número de caracteres que podem ser digitados
+    });
+});
+
 function add_carro() {
     const container = document.getElementById("form-carro");
 

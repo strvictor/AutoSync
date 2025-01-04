@@ -158,6 +158,10 @@
     width: 100%;
     gap: 30px;
     justify-content: space-between;
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: height 0.5s ease, opacity 0.5s ease;
 }
 
 .texto-rosca {
@@ -233,13 +237,6 @@
     transition: all 0.3s;
 }
 
-.insights2 {
-    height: 0;
-    opacity: 0;
-    overflow: hidden;
-    transition: height 0.5s ease, opacity 0.5s ease;
-}
-
 .insights2.visible {
     height: auto;
     opacity: 1;
@@ -274,6 +271,7 @@
     .insights2 {
         flex-direction: column;
     }
+
     .texto-rosca, .texto-barras {
         width: 100%;
     }
@@ -281,10 +279,12 @@
     .cabecalho{
         flex-direction: column;
     }
+
     .dados-inicias {
         text-align: center;
         width: 100%;
     }
+    
     .icon-grafico {
         height: 0;
         opacity: 0;

@@ -7,6 +7,7 @@ Clientes | AutoSync
 
 {% block 'head' %}
     <link rel="stylesheet" href="{% static 'clientes/css/clientes.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 {% endblock %}
 
 {% block 'dashboard' %}
@@ -74,7 +75,7 @@ Clientes | AutoSync
     
     <div id="atualizar_cliente" class="atualizar_cliente">
         <p>Cliente:</p>
-        <select id="cliente-select" onchange="dados_clientes()" class="form-control">
+        <select id="cliente-select" onchange="dados_clientes()" class="select-cliente form-control">
             <option value="" disabled selected>Selecione um cliente</option>
             {% for cliente in clientes %}
                 <option value="{{cliente.id}}">{{cliente.nome}} {{cliente.sobrenome}}</option>
@@ -120,5 +121,7 @@ Clientes | AutoSync
     </div>
 
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="{% static 'clientes/js/clientes.js' %}"></script>
 {% endblock %}

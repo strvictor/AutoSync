@@ -32,7 +32,12 @@ def novo_servico(request):
             return HttpResponse(f'ERRO {processa_servicos.erro_msg}')
 
 
-#TODO Em desenvolvimento 
+#TODO Em desenvolvimento
+# Idéia:
+# Adicionar um form para o input de busca de serviço, ao selecionar é enviado o id desse serviço para um endpoint ex: servicos/alterar_serviço<id>
+# Pego esse id aqui na view e faço as buscas do serviço, cliente, carro e categorias vinculados, retorno esses dados em contexto para o front end, no formato {json}
+# No front end, ao receber esses dados, preencho os campos do form que será habilitado com o evento que foi disparado quando enviei o formulario no step acima, nesse form terá um botão de submit para alterar as categorias e quantidades do serviço:
+# Ainda em avaliação se permito mudar o cliente ou só as categorias. 1 - Adicionar uma nova categoria, editar a existente ou remover alguma, da pra usar o mesmo layout que usei ao cadastrar as categorias no front end, na parte de novo serviço.
 def editar_servico(request):
     if request.method == 'GET':
         lista_servicos = Servicos.objects.all()
