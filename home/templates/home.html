@@ -68,10 +68,32 @@ Dashboard | AutoSync
     <br>
     <hr style="background-color:gray;">
     <div class="pai">
+        <div class="cabecalho">
+            <div class="dados-inicias">
+                <h3>Insights dos Gráficos</h3>
+                <p>Tenha uma visão detalhada da distribuição e do desempenho dos serviços realizados na oficina.<br>Entenda como cada etapa do fluxo de trabalho está progredindo.</p>
+            </div>
+            <div class="icon-grafico">
+                <i class="fas fa-chart-area"></i>
+            </div>
+        </div>
+        <div class="saber-mais" onclick="saberMais()">
+            <i class="fas fa-chevron-down"></i>
+            <p>Saber mais!</p>
+        </div>
+        
         <div class="insights2">
-            <h3>Insights dos Gráficos</h3>
-            <p>Tenha uma visão detalhada da distribuição e do desempenho dos serviços realizados na oficina. Entenda como cada etapa do fluxo de trabalho está progredindo.</p>
-            <p>O gráfico de distribuição de serviços revela o status atual de pendências, finalizações e aprovações, ajudando a identificar gargalos e oportunidades de melhoria. Já o gráfico de serviços por categoria permite monitorar a frequência e a popularidade das atividades realizadas, oferecendo insights estratégicos para decisões baseadas em dados.</p>
+            <div class="texto-rosca">
+                <h5>Gráfico de Distribuição de Serviços</h5>
+                <hr style="background-color:rgba(238, 238, 238, 0.322);">
+                <p>O gráfico de distribuição de serviços revela o status atual de pendências, finalizações e aprovações, ajudando a identificar gargalos e oportunidades de melhoria.</p>
+            </div>
+            <div class="texto-barras">
+                <h5>Gráfico de Serviços por Categoria</h5>
+                <hr style="background-color:rgba(238, 238, 238, 0.322);">
+                <p>O gráfico de serviços por categoria permite monitorar a frequência e a popularidade das atividades realizadas, oferecendo insights estratégicos para decisões baseadas em dados.
+                </p>
+            </div>
         </div>
         <div class="graficos">
             <div class="rosca">
@@ -361,6 +383,5 @@ Dashboard | AutoSync
     SalesChart(data, labels);
     OrderChart(data, labels);
 </script>
-
-
+<script src="{% static 'home/js/home.js' %}"></script>
 {% endblock %}

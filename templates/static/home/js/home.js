@@ -1,27 +1,14 @@
-
-// Gráfico de Distribuição de Serviços
-const servicesCtx = document.getElementById('servicesChart').getContext('2d');
-new Chart(servicesCtx, {
-    type: 'doughnut',
-    data: {
-        labels: ['Pendentes', 'Finalizados'],
-        datasets: [{
-            data: [{{ total_pendentes }}, {{ total_finalizados }}],
-            backgroundColor: ['#ffc107', '#28a745']
-        }]
+function saberMais() {
+    const insights2 = document.querySelector('.insights2');
+    const icon = document.querySelector('.saber-mais i');
+    
+    insights2.classList.toggle('visible');
+    
+    if (insights2.classList.contains('visible')) {
+        icon.classList.remove('fa-chevron-down');
+        icon.classList.add('fa-chevron-up');
+    } else {
+        icon.classList.remove('fa-chevron-up');
+        icon.classList.add('fa-chevron-down');
     }
-});
-
-// Gráfico de Receita
-const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-new Chart(revenueCtx, {
-    type: 'bar',
-    data: {
-        labels: ['Pendentes', 'Finalizados'],
-        datasets: [{
-            label: 'Receita (R$)',
-            data: [{{ total_valor_pendentes }}, {{ total_valor_finalizados }}],
-            backgroundColor: ['#ffc107', '#28a745']
-        }]
-    }
-});
+}
