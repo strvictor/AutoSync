@@ -6,7 +6,7 @@ function add_carro() {
         <br id="br-${id}">
         <div class="row" id="${id}">
             <div class="col-md">
-                <input type="text" placeholder="Carro" class="form-control" name="carro" required>
+                <input type="text" placeholder="Veículo" class="form-control" name="carro" required>
             </div>
             <div class="col-md">
                 <input type="text" placeholder="Placa" class="form-control" name="placa" required>

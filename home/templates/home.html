@@ -12,6 +12,7 @@ Dashboard | AutoSync
 {% endblock %}
 
 {% block 'dashboard' %}
+<br>
 <div class="container-fluid distanciamento">
     <div class="row">
         <div class="card card-red">
@@ -67,9 +68,10 @@ Dashboard | AutoSync
     <br>
     <hr style="background-color:gray;">
     <div class="pai">
-        <div class="insights">
-            <h3>Insights do Faturamento Mensal</h3>
-            <p>Acompanhe o desempenho do faturamento mensal para identificar tendências e oportunidades de crescimento.</p>
+        <div class="insights2">
+            <h3>Insights dos Gráficos</h3>
+            <p>Tenha uma visão detalhada da distribuição e do desempenho dos serviços realizados na oficina. Entenda como cada etapa do fluxo de trabalho está progredindo.</p>
+            <p>O gráfico de distribuição de serviços revela o status atual de pendências, finalizações e aprovações, ajudando a identificar gargalos e oportunidades de melhoria. Já o gráfico de serviços por categoria permite monitorar a frequência e a popularidade das atividades realizadas, oferecendo insights estratégicos para decisões baseadas em dados.</p>
         </div>
         <div class="graficos">
             <div class="rosca">
@@ -82,9 +84,28 @@ Dashboard | AutoSync
             
         </div>
         <div class="insights">
-            <h3>Insights do Faturamento Mensal</h3>
-            <p>Acompanhe o desempenho do faturamento mensal para identificar tendências e oportunidades de crescimento.</p>
+            <h3>
+                <i class="fas fa-chart-line"></i> Insights do Faturamento Mensal
+            </h3>
+            <div class="insight-content">
+                <div class="insight-item">
+                    <i class="fas fa-calendar-alt"></i>
+                    <p><strong>Acompanhamento Mensal:</strong></p>
+                    <p>Monitore o faturamento mês a mês para entender o desempenho e a sazonalidade do seu negócio.</p>
+                </div>
+                <div class="insight-item">
+                    <i class="fas fa-chart-bar"></i>
+                    <p><strong>Comparações Visuais:</strong></p>
+                    <p>Compare facilmente o faturamento de diferentes meses para identificar os períodos mais lucrativos.</p>
+                </div>
+                <div class="insight-item">
+                    <i class="fas fa-lightbulb"></i>
+                    <p><strong>Identificação de Tendências:</strong></p>
+                    <p>Descubra oportunidades de crescimento e otimize estratégias com base nos dados apresentados.</p>
+                </div>
+            </div>
         </div>
+        
         <div class="graficos-v2">
             <div class="vendas">
                 <canvas id="chartSales"></canvas>
