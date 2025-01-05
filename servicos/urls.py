@@ -10,3 +10,5 @@ urlpatterns = [
     path('alterar_servico/<int:servico_id>', login_required(views.alterar_servico, login_url='/login/'), name='alterar_servico'),
     path("carros-por-cliente/<int:cliente_id>/", login_required(views.carros_por_cliente, login_url='/login/'), name="carros_por_cliente"),
 ]
+
+teste
