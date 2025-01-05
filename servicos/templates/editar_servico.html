@@ -39,39 +39,104 @@ Atualizar Serviço | AutoSync
     </div>
 
     <div class="editar_servico">
-        <form action='{% url "editar_servico" %}' method="POST">
+        <form action='{% url "seleciona_servico" %}' method="POST">
             {% csrf_token %}
-                <label for="id_cliente">Serviços:</label>
-                <select id="servico" onchange="atualiza_servico()" name="servico" class="form-control select-servico">
-                    <option value="" disabled selected>Selecione um serviço</option>
-                    {% for servico in servicos %}
-                    <option value="{{ servico.id }}">{{ servico.titulo }} | {{ servico.protocolo }}</option>
-                    {% endfor %}
-                </select>
+            <div class="row">
+                <div class="col-md-11">
+                    <p>Selecione um serviço:</p>
+                    <select id="servico_selecionado" name="servico_selecionado" class="form-control select-servico" required>
+                        <option value="" disabled selected>Selecione um serviço</option>
+                        {% for servico in servicos %}
+                        <option value="{{ servico.id }}">{{ servico.titulo }} | {{ servico.protocolo }} | {{ servico.cliente }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-1">
+                    <p>Ação</p>
+                    <button type="submit" class="btn btn-primary">Editar</button>
+                </div>
+            </div>
         </form>
         <br>
-        <div id="form-atualiza-servico" style="display: none;">
-            <input type="hidden" id="id_servico">
-            <p>Título:</p>
-            <input type="text" id="titulo" class="form-control">
-            <br>
-            <p>Cliente:</p>
-            <input type="text" id="cliente" class="form-control">
-            <br>
-            <p>Carro:</p>
-            <input type="text" id="carro" class="form-control">
-            <br>
-            <p>Categoria de Manutenção:</p>
-            <input type="text" id="categoria_manutencao" class="form-control">
-            <br>
-            <p>Data de Início:</p>
-            <input type="date" id="data_inicio" class="form-control">
-            <br>
-            <p>Data de Entrega:</p>
-            <input type="date" id="data_entrega" class="form-control">
-            <br>
-            <button id="salvar-servico" class="btn btn-success">Salvar</button>
+
+        {% if dados %}
+            <div class="row">
+                <!-- Cliente -->
+                <div class="col-md-6 form-group">
+                    <label>Cliente:</label>
+                    <input disabled name="cliente" type="text" value="Nome do Cliente" class="form-control">
+                </div>
+
+                <!-- Carro -->
+                <div class="col-md-6 form-group">
+                    <label>Veículo:</label>
+                    <input disabled name="veiculo" type="text" value="Nome do Veiculo" class="form-control">
+                </div>
+
+                <!-- Título do Serviço -->
+                <div class="col-md-6 form-group">
+                    <label>Título do Serviço:</label>
+                    <input name="servico" type="text" value="Nome do Titulo" class="form-control">
+                </div>
+                <div class="col-md-6 form-group">
+                    <label>Mecânico Responsável:</label>
+                    <input name="mecanico" type="text" value="Nome do Mecancio" class="form-control">
+                </div>
+                <div class="col-md-12 form-group">
+                    <label for="categorias">Serviços:</label>
+                    <div id="categorias-container">
+                        {% for categoria in dados.relacao %}
+                            <div class="row mb-2 categoria-row">
+                                <div class="col-md-6">
+                                    <select name="categorias" id='categorias' class="form-control" required>
+                                        <option value="{{categoria.categoria.id}}" selected>{{ categoria.categoria }}</option>
+                                            {% for categorias_exist in dados.categorias_existentes %}
+                                                <option value="{{ categorias_exist.id }}">{{ categorias_exist.titulo }}</option>
+                                            {% endfor %}
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="text" name="valor_mao_de_obra" value="{{categoria.valor_mao_de_obra}}" class="form-control" placeholder="Valor do Serviço">
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="number" name="quantidades" value="{{categoria.quantidade}}" class="form-control" placeholder="Quantidade" min="1" required>
+                                </div>
+                                <!-- <div class="col-md-1">
+                                    <button type="button" class="btn btn-danger" onclick="remover_servico()">X</button>
+                                </div> -->
+                            </div>
+                        </div>
+
+                        {% endfor %}
+                    <button type="button" id="add-categoria" class="btn btn-primary mt-2">Adicionar Serviço</button>
+                </div>
+            <!-- Data Início -->
+            <div class="col-md-6 form-group">
+                <label for="data_inicio">Data Início:</label>
+                <input id="data_inicio" name="data_inicio" type="date" class="form-control" required>
+            </div>
+
+            <!-- Data Entrega -->
+            <div class="col-md-6 form-group">
+                <label for="data_entrega">Data Entrega:</label>
+                <input id="data_entrega" name="data_entrega" type="date" class="form-control" required>
+            </div>
         </div>
+
+
+
+            <p>{{dados}}</p>
+            <p>{{dados.relacao}}</p>
+            {% for categoria in dados.relacao %}
+                <p>Categoria:</p>
+                <p>{{categoria}}</p>
+                <p>Qtd</p>
+                <p>{{categoria.quantidade}}</p>
+                <p>Mao de obra</p>
+                <p>{{categoria.valor_mao_de_obra}}</p>
+            {% endfor %}
+        {% endif %}
+
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

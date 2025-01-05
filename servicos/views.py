@@ -6,7 +6,7 @@ from django.http import HttpResponse, JsonResponse
 from .commands import ProcessaServicos, EnviaEmail
 from django.core import serializers
 from django.contrib import messages 
-from .models import Servicos, Cliente, Carro
+from .models import Servicos, CategoriaManutencao
 import json
 
 
@@ -44,39 +44,7 @@ def editar_servico(request):
         return render(request, 'editar_servico.html', {'servicos': lista_servicos})
 
     elif request.method == 'POST':
-        id_servico = request.POST.get('servico_id')
-        servicos = Servicos.objects.filter(id=id_servico).select_related('cliente', 'carro').prefetch_related('categoria_manutencao')
-        
-        if servicos.exists():
-            servico = servicos.first()
-            cliente = servico.cliente
-            carro = servico.carro
-            categorias = servico.categoria_manutencao.all()
-
-            servico_data = {
-                'id': servico.id,
-                'titulo': servico.titulo,
-                'cliente': {
-                    'id': cliente.id,
-                    'nome': cliente.nome,
-                    'sobrenome': cliente.sobrenome,
-                    'email': cliente.email,
-                    'cpf': cliente.cpf,
-                },
-                'carro': {
-                    'id': carro.id,
-                    'carro': carro.carro,
-                    'placa': carro.placa,
-                    'ano': carro.ano,
-                },
-                'categorias': [{'id': categoria.id, 'titulo': categoria.titulo, 'preco': categoria.preco} for categoria in categorias],
-                'data_inicio': servico.data_inicio,
-                'data_entrega': servico.data_entrega,
-            }
-
-            return JsonResponse({'valores': servico_data})
-        else:
-            return JsonResponse({'error': 'Serviço não encontrado'}, status=404)
+        ...
     else:
         return redirect('editar_servico')
 
@@ -118,9 +86,30 @@ def carros_por_cliente(request, cliente_id):
     return processa_servicos.busca_carros_por_cliente(cliente_id)
 
 
-
-
-
+def seleciona_servico(request):
+    if request.method == 'GET':
+        return redirect('novo_servico')
+    else:
+        servico_id = request.POST.get('servico_selecionado')
+        servicos = Servicos.objects.all()
+        print(f'servico id: {servico_id}')
+        
+        categorias_existentes = CategoriaManutencao.objects.all()
+        
+        servico = Servicos.objects.get(id=servico_id)
+        dados = {
+            'titulo': servico.titulo,
+            'cliente': servico.cliente.nome,
+            'carro': servico.carro.carro,
+            'placa': servico.carro.placa,
+            'categoria': servico.categoria_manutencao.all(),
+            'relacao': servico.servicocategoriaquantidade_set.all(),
+            'categorias_existentes': categorias_existentes,
+        }
+            
+        return render(request, 'editar_servico.html', {'servicos:': servicos,
+                                                  'dados': dados,
+                                                  })
 
 
 
