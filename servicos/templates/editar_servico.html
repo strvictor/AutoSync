@@ -7,6 +7,8 @@ Atualizar Serviço | AutoSync
 
 {% block 'head' %}
     <link rel="stylesheet" href="{% static 'servicos/css/editar_servico.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 {% endblock %}
 
 {% block 'dashboard' %}
@@ -40,10 +42,10 @@ Atualizar Serviço | AutoSync
         <form action='{% url "editar_servico" %}' method="POST">
             {% csrf_token %}
                 <label for="id_cliente">Serviços:</label>
-                <select id="servico" onchange="atualiza_servico()" name="servico" class="form-control">
+                <select id="servico" onchange="atualiza_servico()" name="servico" class="form-control select-servico">
                     <option value="" disabled selected>Selecione um serviço</option>
                     {% for servico in servicos %}
-                    <option value="{{ servico.id }}">{{ servico.titulo }} | {{ servico.cliente }}</option>
+                    <option value="{{ servico.id }}">{{ servico.titulo }} | {{ servico.protocolo }}</option>
                     {% endfor %}
                 </select>
         </form>
@@ -72,6 +74,7 @@ Atualizar Serviço | AutoSync
         </div>
     </div>
 </div>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="{% static 'servicos/js/editar_servico.js' %}"></script>
 {% endblock %}

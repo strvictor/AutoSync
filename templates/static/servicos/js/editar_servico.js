@@ -60,3 +60,12 @@ document.getElementById('salvar-servico').addEventListener('click', function() {
         console.error('Erro ao atualizar serviço:', error);
     });
 });
+
+$(document).ready(function () {
+    $('.select-servico').select2({
+        placeholder: 'Selecione um serviço',
+        allowClear: true,
+        minimumResultsForSearch: 4, // Mostra a barra de pesquisa sempre
+        maximumInputLength: 20,    // Limita o número de caracteres que podem ser digitados
+    });
+});

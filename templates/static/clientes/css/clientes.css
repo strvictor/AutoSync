@@ -46,7 +46,12 @@
     display: none;
 }
 
-
-.select-cliente {
+.select2-container {
     width: 100% !important;
+}
+
+.select2-selection--single {
+    height: 37.5px !important;
+    padding-top: 3.5px;
+    padding-left: 3.5px;
 }
