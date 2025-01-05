@@ -41,7 +41,7 @@ def novo_servico(request):
 def editar_servico(request):
     if request.method == 'GET':
         lista_servicos = Servicos.objects.all()
-        return render(request, 'editar_servico.html', {'servicos': lista_servicos})
+        return render(request, 'editar_servico.html', {'dados': {'servicos': lista_servicos}})
 
     elif request.method == 'POST':
         ...
@@ -99,16 +99,20 @@ def seleciona_servico(request):
         servico = Servicos.objects.get(id=servico_id)
         dados = {
             'titulo': servico.titulo,
-            'cliente': servico.cliente.nome,
+            'nome': servico.cliente.nome,
+            'sobrenome': servico.cliente.sobrenome,
             'carro': servico.carro.carro,
             'placa': servico.carro.placa,
             'categoria': servico.categoria_manutencao.all(),
             'relacao': servico.servicocategoriaquantidade_set.all(),
             'categorias_existentes': categorias_existentes,
+            'servicos': servicos,
+            'mecanico_responsavel': servico.mecanico_resp,
+            'data_inicio': servico.data_inicio,
+            'data_entrega': servico.data_entrega,
         }
             
-        return render(request, 'editar_servico.html', {'servicos:': servicos,
-                                                  'dados': dados,
+        return render(request, 'editar_servico.html', {'dados': dados,
                                                   })
 
 

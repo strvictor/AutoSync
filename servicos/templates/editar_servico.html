@@ -46,41 +46,41 @@ Atualizar Serviço | AutoSync
                     <p>Selecione um serviço:</p>
                     <select id="servico_selecionado" name="servico_selecionado" class="form-control select-servico" required>
                         <option value="" disabled selected>Selecione um serviço</option>
-                        {% for servico in servicos %}
+                        {% for servico in dados.servicos %}
                         <option value="{{ servico.id }}">{{ servico.titulo }} | {{ servico.protocolo }} | {{ servico.cliente }}</option>
                         {% endfor %}
                     </select>
                 </div>
                 <div class="col-md-1">
-                    <p>Ação</p>
+                    <p>Ação:</p>
                     <button type="submit" class="btn btn-primary">Editar</button>
                 </div>
             </div>
         </form>
         <br>
 
-        {% if dados %}
+        {% if dados.relacao %}
             <div class="row">
                 <!-- Cliente -->
                 <div class="col-md-6 form-group">
                     <label>Cliente:</label>
-                    <input disabled name="cliente" type="text" value="Nome do Cliente" class="form-control">
+                    <input disabled name="cliente" type="text" value="{{ dados.nome }} {{ dados.sobrenome }}" class="form-control">
                 </div>
 
                 <!-- Carro -->
                 <div class="col-md-6 form-group">
                     <label>Veículo:</label>
-                    <input disabled name="veiculo" type="text" value="Nome do Veiculo" class="form-control">
+                    <input disabled name="veiculo" type="text" value="{{ dados.carro }} | {{ dados.placa }}" class="form-control">
                 </div>
 
                 <!-- Título do Serviço -->
                 <div class="col-md-6 form-group">
                     <label>Título do Serviço:</label>
-                    <input name="servico" type="text" value="Nome do Titulo" class="form-control">
+                    <input name="servico" type="text" value="{{ dados.titulo }}" class="form-control">
                 </div>
                 <div class="col-md-6 form-group">
                     <label>Mecânico Responsável:</label>
-                    <input name="mecanico" type="text" value="Nome do Mecancio" class="form-control">
+                    <input name="mecanico" type="text" value="{{ dados.mecanico_responsavel|default:'-' }}"class="form-control">
                 </div>
                 <div class="col-md-12 form-group">
                     <label for="categorias">Serviços:</label>
@@ -105,26 +105,27 @@ Atualizar Serviço | AutoSync
                                     <button type="button" class="btn btn-danger" onclick="remover_servico()">X</button>
                                 </div> -->
                             </div>
+                            {% endfor %}
                         </div>
-
-                        {% endfor %}
-                    <button type="button" id="add-categoria" class="btn btn-primary mt-2">Adicionar Serviço</button>
+                        <button type="button" id="add-categoria" class="btn btn-primary mt-2">Adicionar Serviço</button>
+                    </div>
+                <!-- Data Início -->
+                <div class="col-md-6 form-group">
+                    <label>Data Início:</label>
+                    <input name="data_inicio" value="{{ dados.data_inicio|date:'Y-m-d' }}" type="date" class="form-control" required>
                 </div>
-            <!-- Data Início -->
-            <div class="col-md-6 form-group">
-                <label for="data_inicio">Data Início:</label>
-                <input id="data_inicio" name="data_inicio" type="date" class="form-control" required>
+                <!-- Data Entrega -->
+                <div class="col-md-6 form-group">
+                    <label>Data Entrega:</label>
+                    <input name="data_entrega" value="{{ dados.data_entrega|date:'Y-m-d' }}" type="date" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <input type="submit" value="Confirmar Edição!" class="btn btn-success">
+                </div>
             </div>
 
-            <!-- Data Entrega -->
-            <div class="col-md-6 form-group">
-                <label for="data_entrega">Data Entrega:</label>
-                <input id="data_entrega" name="data_entrega" type="date" class="form-control" required>
-            </div>
-        </div>
-
-
-
+            <p></p>
+            <p>{{ dados.servicos }}</p>
             <p>{{dados}}</p>
             <p>{{dados.relacao}}</p>
             {% for categoria in dados.relacao %}
