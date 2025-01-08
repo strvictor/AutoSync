@@ -1,0 +1,183 @@
+.protocolo {
+    color: inherit;  
+    text-decoration: none; 
+    position: relative;  
+}
+
+.protocolo:hover::after {
+    content: '→';  
+    position: absolute;
+    right: -15px;  
+    top: 8%;
+    transform: rotate(-50deg);  
+    font-size: 1em;  /* Tamanho da seta */
+    color: #ffc107;  /* Cor da seta (a mesma do texto, mas pode ser alterada) */
+}
+
+.card-dashboard{
+    background-color: var(--main-color);
+    width: 100%;
+    margin-left: 10px;
+    margin-top: 40px;
+    text-align: center;
+    padding: 20px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-dashboard:hover{
+    background-color: #133a6e;
+    color: white;
+    transition: background-color 0.2s ease;
+
+}
+
+.text-card{
+
+    font-size: 25px;
+    text-decoration: none;
+    text-decoration-line: none;
+}
+
+
+.table th, .table td {
+    color: white; /* Muda a cor da fonte para branco */
+  }
+
+.table th:hover{
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.distanciamento{
+    padding-left: 50px;
+    padding-right: 50px;
+    padding-top: 40px;
+}
+
+.badge-dark{
+    background-color: white;
+    color: var(--background-geral);
+}
+
+h3 {
+    text-decoration: underline;
+    text-decoration-color: #53f7e9a2;
+}
+
+.cabecalho {
+    display: flex;
+    width: 100%;
+    height: 80px;
+    align-items: center;
+    justify-content: left;
+    background: linear-gradient(to right, #11111454, transparent);
+    border-radius: 10px;
+    margin-bottom: 26px;
+    margin-top: 16px;
+}
+
+.cabecalho h3 {
+    padding-left: 15px;
+}
+
+
+
+/* Estilo para o campo de busca */
+.dataTables_filter label {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; /* Alinha o campo de busca à direita */
+    align-items: center;
+    width: 100%; /* Faz ocupar o espaço disponível */
+    margin-bottom: 10px; /* Adiciona espaçamento inferior */
+}
+
+.dataTables_filter input {
+    width: 260px; /* Define a largura do input */
+    height: 35px;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px; /* Deixa as bordas arredondadas */
+    background-color: #fff; /* Fundo branco */
+    color: #495057; /* Texto preto */
+    outline: none;
+    font-size: 16px;
+    transition: 0.3s ease;
+}
+
+/* Ícone de busca (adiciona espaço se necessário) */
+.dataTables_filter label::before {
+    content: "\f002"; /* Ícone de busca do Font Awesome */
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    color: #495057;
+    font-size: 16px;
+    background-color: #e9ecef;
+    padding: 6px 12px;
+    border-radius: 4px;
+}
+
+
+/* Seletor de "Mostrar registros por página" */
+.dataTables_length label {
+    font-size: 15px;
+    color: #fff;
+}
+
+.dataTables_length select {
+    margin-left: 4px;
+    margin-right: 4px;
+    padding: 4px 7px;
+    border-radius: 5px;
+    border: none;
+    background-color: #11111454; /* Cor de fundo */
+    color: #fff;
+    cursor: pointer;
+}
+
+.dataTables_length select option {
+    background-color: #222; 
+}
+
+/* Estilo ao passar o mouse sobre as opções */
+.dataTables_length select option:hover {
+    background-color: #4444447e;
+}
+
+
+
+
+/* Paginação */
+.dataTables_paginate {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.dataTables_paginate .paginate_button {
+    padding: 5px 10px;
+    font-size: 14px;
+    border-radius: 3px;
+    background-color: #11111454;
+    color: #fff;
+    text-decoration: none;
+}
+
+.dataTables_paginate .paginate_button:hover {
+    background-color: rgba(170, 170, 170, 0.548);
+    cursor: pointer;
+}
+
+.dataTables_paginate .paginate_button.current {
+    background-color: #007bff;
+    cursor: pointer;
+}
+
+/* Informações de página */
+.dataTables_info {
+    font-size: 14px;
+    color: #ffffff;
+}

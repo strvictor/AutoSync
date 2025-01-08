@@ -1,3 +1,5 @@
+version: "3.9"
+
 services:
   db-postgres:
     restart: always
@@ -16,8 +18,7 @@ services:
     build: .
     volumes:
       - .:/core
-    ports:
-      - "8000:8000"
+      - static_volume:/core/static
     env_file:
       - .env
     depends_on:
@@ -30,9 +31,9 @@ services:
       DB_HOST: ${DB_HOST}
       CELERY_BROKER_URL: ${CELERY_BROKER_URL}
     command: >
-      sh -c "python manage.py makemigrations &&
-              python manage.py migrate &&
-              python manage.py runserver 0.0.0.0:8000"
+      sh -c "python manage.py collectstatic --noinput &&
+             python manage.py migrate &&
+             gunicorn --bind 0.0.0.0:8000 core.wsgi:application --workers 3 --threads 2"
 
   rabbitmq:
     restart: always
@@ -61,5 +62,17 @@ services:
     command: >
       sh -c "celery -A core worker --loglevel=info"
 
+  nginx:
+    restart: always
+    image: nginx:latest
+    ports:
+      - "80:80"
+    depends_on:
+      - core-app
+    volumes:
+      - static_volume:/core/static
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+
 volumes:
   postgres_data:
+  static_volume:

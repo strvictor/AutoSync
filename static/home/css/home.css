@@ -1,0 +1,292 @@
+
+/* Flexbox para os cards */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+/* Estilo base dos cards */
+.card {
+    flex: 1;
+    width: 400px;
+    height: 130px;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out;
+    color: white;
+    text-align: center;
+    padding: 10px 12px;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    cursor: pointer;
+}
+
+/* Estilo para os cabeçalhos */
+.card-header {
+    font-weight: bold;
+    padding: 5px;
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Estilo para os valores */
+.card-body h2 {
+    font-size: 1.8rem;
+}
+
+/* Cores específicas */
+.card-red {
+    background: var(--card-vermelho);
+}
+
+.card-blue {
+    background: var(--main-color);
+}
+
+.card-green {
+    background: var(--card-azul);
+}
+
+.card-yellow {
+    background: var(--contrast-color);
+}
+
+.card-purple {
+    background: var(--card-roxo);
+}
+
+/* Ícones */
+.card-header i {
+    font-size: 1.1rem;
+}
+
+
+.distanciamento {
+    padding: 40px 50px 0;
+}
+
+.graficos {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    width: 100%;
+    margin-bottom: 25px;
+}
+
+.rosca, .barras {
+    background: #292e332d;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 10px 10px 10px #00000015;
+}
+
+.rosca {
+    width: 35%;
+}
+
+.barras {
+    width: 65%;
+}
+
+.graficos-v2 {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 25px;
+    gap: 25px;
+    width: 100%;
+}
+
+.vendas, .faturamento {
+    width: 100%;
+    background: #161718;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 10px 10px 10px #0000001f;
+}
+
+.pai {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    align-items: center;
+}
+
+.insights {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.insight-content {
+    display: flex;
+    gap: 25px;
+    margin-bottom: 25px;
+}
+
+.insights h3 {
+    font-size: 1.8rem;
+    color: #ffffff;
+    margin-bottom: 25px;
+}
+
+.insight-item {
+    padding: 20px;
+    border-radius: 12px;
+    background-color: #111114b2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    color: #ffffff;
+}
+
+.insight-item i {
+    font-size: 6rem;
+    color: #53f7e9c7;
+    margin-bottom: 10px;
+}
+
+.insights2 {
+    display: flex;
+    width: 100%;
+    gap: 30px;
+    justify-content: space-between;
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: height 0.5s ease, opacity 0.5s ease;
+}
+
+.texto-rosca {
+    border-radius: 10px;
+    text-align: center;
+    width: 35%;
+    background-color: #2024277e;
+    padding: 10px;
+    box-shadow: 0 10px 10px 10px #00000015;
+}
+
+.texto-barras {
+    overflow-x: hidden;
+    border-radius: 10px;
+    text-align: center;
+    width: 65%;
+    background-color: #2024277e;
+    padding: 10px;
+    box-shadow: 0 10px 10px 10px #00000015;
+}
+
+.cabecalho {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: auto;
+}
+
+.dados-inicias {
+    background: linear-gradient(to right, #11111436, transparent);
+    width: 50%;
+    padding: 10px 15px;
+    border-radius: 10px;
+}
+.dados-inicias p{
+    font-size: 0.9rem;
+    text-align: start;
+    color: #ffffff;
+}
+
+.dados-inicias h3 {
+    font-size: 1.2rem;
+    color: #ffffff;
+    text-align: start;
+    text-decoration: underline;
+    text-decoration-color: #53f7e9a2;   
+}
+
+.icon-grafico {
+    background: linear-gradient(to left, #11111436, #ffffff00);
+    border-radius: 10px;
+    width: 50%;
+    padding: 0px 15px;
+    font-size: 4.8rem;
+    color: #53f7e9a2;
+    text-align: right;
+}
+
+.saber-mais {
+    display: flex;
+    margin: top 5px !important;
+    gap: 5px;
+    align-items: baseline;
+    font-size: 0.8rem;
+    color: #ffffff8f;
+    transition: all 0.3s;
+}
+
+.saber-mais:hover {
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.insights2.visible {
+    height: auto;
+    opacity: 1;
+    margin-bottom: 20px;
+    
+}
+
+/* Resposta para dispositivos menores */
+@media (max-width: 768px) {
+    .card {
+        max-width: 100%;
+    }
+
+    .row {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .graficos {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .rosca, .barras {
+        width: 100% !important;
+    }
+
+    .insight-content {
+        flex-direction: column;
+    }
+
+    .insights2 {
+        flex-direction: column;
+    }
+
+    .texto-rosca, .texto-barras {
+        width: 100%;
+    }
+
+    .cabecalho{
+        flex-direction: column;
+    }
+
+    .dados-inicias {
+        text-align: center;
+        width: 100%;
+    }
+    
+    .icon-grafico {
+        height: 0;
+        opacity: 0;
+    }
+}

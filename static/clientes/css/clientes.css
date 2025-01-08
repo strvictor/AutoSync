@@ -1,0 +1,57 @@
+.card-dashboard{
+
+    background-color: var(--main-color);
+    width: 100%;
+    margin-left: 10px;
+    margin-top: 40px;
+    text-align: center;
+    padding: 20px;
+    cursor: pointer;
+}
+
+.card-dashboard:hover{
+    background-color: #133a6e;
+    transition: background-color 0.2s ease;
+
+}
+
+.text-card{
+
+    font-size: 25px;
+
+}
+
+.btn-add-carros{
+
+    background-color: var(--contrast-color);
+    padding: 5px;
+    font-weight: bold;
+    cursor: pointer;
+
+}
+
+.btn-principal{
+    color:white;
+    border: none;
+    background-color: var(--dark-color);
+    padding: 5px;
+    font-size: 30px;
+}
+
+#atualizar_cliente {
+    display: none;
+}
+
+#form-atualiza-cliente {
+    display: none;
+}
+
+.select2-container {
+    width: 100% !important;
+}
+
+.select2-selection--single {
+    height: 37.5px !important;
+    padding-top: 3.5px;
+    padding-left: 3.5px;
+}

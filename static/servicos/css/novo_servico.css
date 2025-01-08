@@ -1,0 +1,35 @@
+a {
+    text-decoration: none !important;
+    color: white;
+}
+
+.card-dashboard{
+    background-color: var(--main-color);
+    width: 100%;
+    margin-left: 10px;
+    margin-top: 40px;
+    text-align: center;
+    padding: 20px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-dashboard:hover{
+    background-color: #133a6e;
+    color: white;
+    transition: background-color 0.2s ease;
+
+}
+
+.text-card{
+    font-size: 25px;
+    text-decoration: none;
+    text-decoration-line: none;
+}
+
+.select2-container .select2-selection--single {
+    padding-top: 3.5px;
+    padding-left: 3.5px;
+    height: 37.5px !important;
+}
