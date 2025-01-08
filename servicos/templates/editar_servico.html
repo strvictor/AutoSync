@@ -67,7 +67,7 @@ Atualizar Serviço | AutoSync
                     <input disabled name="cliente" type="text" value="{{ dados.nome }} {{ dados.sobrenome }}" class="form-control">
                 </div>
 
-                <!-- Carro -->
+                <!-- Veiculo -->
                 <div class="col-md-6 form-group">
                     <label>Veículo:</label>
                     <input disabled name="veiculo" type="text" value="{{ dados.carro }} | {{ dados.placa }}" class="form-control">
@@ -98,12 +98,12 @@ Atualizar Serviço | AutoSync
                                 <div class="col-md-3">
                                     <input type="text" name="valor_mao_de_obra" value="{{categoria.valor_mao_de_obra}}" class="form-control" placeholder="Valor do Serviço">
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <input type="number" name="quantidades" value="{{categoria.quantidade}}" class="form-control" placeholder="Quantidade" min="1" required>
                                 </div>
-                                <!-- <div class="col-md-1">
-                                    <button type="button" class="btn btn-danger" onclick="remover_servico()">X</button>
-                                </div> -->
+                                <div class="col-md-1">
+                                    <button type="button" class="btn btn-danger" onclick="remover_servico()">Excluir</button>
+                                </div>
                             </div>
                             {% endfor %}
                         </div>

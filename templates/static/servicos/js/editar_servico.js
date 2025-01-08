@@ -1,71 +1,85 @@
-function atualiza_servico() {
-    const servicoId = document.getElementById('servico').value;
-    const csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+// botão de adicionar nova categoria
+$(document).ready(function () {
+    $('#add-categoria').on('click', function () {
+        // Duplica o primeiro elemento com a classe 'categoria-row'
+        const newField = $('.categoria-row:first').clone();
 
-    const data = new FormData();
-    data.append('servico_id', servicoId);
+        // Remove IDs duplicados e cria novos IDs únicos
+        newField.find('[id]').each(function () {
+            const originalId = $(this).attr('id');
+            const newId = originalId + '_' + ($('.categoria-row').length + 1);
+            $(this).attr('id', newId);
+        });
 
-    fetch("/servicos/editar_servico/", {
-        method: "POST",
-        headers: {
-            'X-CSRFToken': csrf_token,
-        },
-        body: data
-    }).then(function(result) {
-        return result.json();
-    }).then(function(data) {
-        if (data.error) {
-            alert(data.error);
-            return;
-        }
+        // Limpa os valores dos campos clonados
+        newField.find('input, select').val('');
 
-        const servico = data['valores'];
+        // Remove a instância existente do Select2 no campo clonado
+        newField.find('.select2').remove();
 
-        document.getElementById('form-atualiza-servico').style.display = 'block';
+        // Adiciona o novo campo ao container
+        $('#categorias-container').append(newField);
 
-        document.getElementById('id_servico').value = servico.id;
-        document.getElementById('titulo').value = servico.titulo;
-        document.getElementById('cliente').value = `${servico.cliente.nome} ${servico.cliente.sobrenome}`;
-        document.getElementById('carro').value = `${servico.carro.carro} (${servico.carro.placa})`;
-        document.getElementById('categoria_manutencao').value = servico.categorias.map(categoria => categoria.titulo).join(', ');
-        document.getElementById('data_inicio').value = servico.data_inicio;
-        document.getElementById('data_entrega').value = servico.data_entrega;
+        // Inicializa o Select2 no novo campo
+        const selectElement = newField.find('select');
+        selectElement.select2({
+            placeholder: 'Selecione um serviço',
+            allowClear: true,
+            minimumResultsForSearch: 4,
+            maximumInputLength: 20,
+        });
+
+        // Garante que o Select2 tenha a largura correta
+        selectElement.next('.select2-container').css('width', '100%');
     });
-}
 
-document.getElementById('salvar-servico').addEventListener('click', function() {
-    const servicoId = document.getElementById('id_servico').value;
-    const csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-
-    const data = new FormData();
-    data.append('servico_id', servicoId);
-    data.append('titulo', document.getElementById('titulo').value);
-    data.append('cliente', document.getElementById('cliente').value);
-    data.append('carro', document.getElementById('carro').value);
-    data.append('categoria_manutencao', document.getElementById('categoria_manutencao').value);
-    data.append('data_inicio', document.getElementById('data_inicio').value);
-    data.append('data_entrega', document.getElementById('data_entrega').value);
-
-    fetch("/servicos/atualiza_servico/", {
-        method: "POST",
-        headers: {
-            'X-CSRFToken': csrf_token,
-        },
-        body: data
-    }).then(function(result) {
-        return result.json();
-    }).then(function(data) {
-        alert('Serviço atualizado com sucesso!');
-    }).catch(function(error) {
-        console.error('Erro ao atualizar serviço:', error);
+    // Inicializa o Select2 para os campos já existentes na página
+    $('.categoria-row select').select2({
+        placeholder: 'Selecione um serviço',
+        allowClear: true,
+        minimumResultsForSearch: 4,
+        maximumInputLength: 20,
+        width: 'resolve', // Ajusta a largura com base no elemento pai
     });
 });
 
+
+// select2 no select das categorias
 $(document).ready(function () {
-    $('.select-servico').select2({
+    $('#categorias').select2({
         placeholder: 'Selecione um serviço',
         allowClear: true,
         minimumResultsForSearch: 4, // Mostra a barra de pesquisa sempre
         maximumInputLength: 20,    // Limita o número de caracteres que podem ser digitados
+        dropdownCssClass: 'custom-dropdown',
+        selectionCssClass: 'custom-selection',
     });
 });
+
+
+// select2 no select dos serviços
+$(document).ready(function () {
+    $('#servico_selecionado').select2({
+        placeholder: 'Selecione um serviço',
+        allowClear: true,
+        minimumResultsForSearch: 4, // Mostra a barra de pesquisa sempre
+        maximumInputLength: 20,    // Limita o número de caracteres que podem ser digitados
+        dropdownCssClass: 'custom-dropdown',
+        selectionCssClass: 'custom-selection',
+    });
+});
+
+
+function remover_servico() {
+    // Get the button that was clicked
+    var button = event.target;
+    // Find the closest row (categoria-row)
+    var row = button.closest('.categoria-row');
+    // Check if there is more than one row
+    if ($('.categoria-row').length > 1) {
+        // Remove the row
+        row.remove();
+    } else {
+        alert('Você deve ter pelo menos uma categoria.');
+    }
+}

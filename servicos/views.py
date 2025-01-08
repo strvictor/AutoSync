@@ -91,9 +91,8 @@ def seleciona_servico(request):
         return redirect('novo_servico')
     else:
         servico_id = request.POST.get('servico_selecionado')
+
         servicos = Servicos.objects.all()
-        print(f'servico id: {servico_id}')
-        
         categorias_existentes = CategoriaManutencao.objects.all()
         
         servico = Servicos.objects.get(id=servico_id)
