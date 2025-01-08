@@ -88,6 +88,8 @@ class ProcessaServicos:
             for categoria_id, quantidade_, valor_mao_de_obra_ in zip(categorias, quantidade, valor_mao_de_obra):
                 if not valor_mao_de_obra_:
                     valor_mao_de_obra_ = 0
+                else:
+                    valor_mao_de_obra_ = str(valor_mao_de_obra_).replace(',', '.')
                 categoria_obj = categorias_objs.get(id=categoria_id)
 
                 # Atualiza ou cria o registro no modelo intermediário

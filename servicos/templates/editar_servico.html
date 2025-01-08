@@ -30,7 +30,7 @@ Atualizar Serviço | AutoSync
             </a>
         </div>
         <div class="col-md">
-            <a href="{% url 'listar_servico' %}">
+            <a href="{% url 'listar_servico' %}" target="_blank">
                 <div class="card-dashboard">
                     <p class="text-card">Listar Serviços</p>
                 </div>
@@ -62,18 +62,19 @@ Atualizar Serviço | AutoSync
         {% if dados.relacao %}
         <form action="{% url 'editar_servico' %}" method="POST">
             <input type="hidden" name="servico_id" value="{{ dados.id }}">
+            <input type="hidden" name="protocolo" value="{{ dados.protocolo }}">
             {% csrf_token %}
             <div class="row">
                 <!-- Cliente -->
                 <div class="col-md-6 form-group">
                     <label>Cliente:</label>
-                    <input disabled name="cliente" type="text" value="{{ dados.nome }} {{ dados.sobrenome }}" class="form-control">
+                    <input disabled name="cliente" type="text" value="{{ dados.nome }} {{ dados.sobrenome }}" class="form-control cliente">
                 </div>
 
                 <!-- Veiculo -->
                 <div class="col-md-6 form-group">
                     <label>Veículo:</label>
-                    <input disabled name="veiculo" type="text" value="{{ dados.carro }} | {{ dados.placa }}" class="form-control">
+                    <input disabled name="veiculo" type="text" value="{{ dados.carro }} | {{ dados.placa }}" class="form-control veiculo">
                 </div>
 
                 <!-- Título do Serviço -->
@@ -126,8 +127,19 @@ Atualizar Serviço | AutoSync
                     <input type="submit" value="Confirmar Edição!" class="btn btn-success">
                 </div>
             </div>
+            <br>
         </form>
+        {% endif %}
+        
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="{% static 'servicos/js/editar_servico.js' %}"></script>
+{% endblock %}
 
+
+<!-- 
         <p>{{ dados.servicos }}</p>
         <p>{{dados}}</p>
         <p>{{dados.relacao}}</p>
@@ -138,14 +150,4 @@ Atualizar Serviço | AutoSync
             <p>{{categoria.quantidade}}</p>
             <p>Mao de obra</p>
             <p>{{categoria.valor_mao_de_obra}}</p>
-        {% endfor %}
-
-        {% endif %}
-
-    </div>
-</div>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script src="{% static 'servicos/js/editar_servico.js' %}"></script>
-{% endblock %}
-
+        {% endfor %} -->

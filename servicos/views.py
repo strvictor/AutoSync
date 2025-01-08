@@ -1,13 +1,8 @@
-from django.shortcuts import render
-
-# Create your views here.
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse
 from .commands import ProcessaServicos, EnviaEmail
-from django.core import serializers
 from django.contrib import messages 
 from .models import Servicos, CategoriaManutencao
-import json
 
 
 #TODO Falta validar as mensagens de retorno ao front-end
@@ -32,12 +27,6 @@ def novo_servico(request):
             return HttpResponse(f'ERRO {processa_servicos.erro_msg}')
 
 
-#TODO Em desenvolvimento
-# Idéia:
-# Adicionar um form para o input de busca de serviço, ao selecionar é enviado o id desse serviço para um endpoint ex: servicos/alterar_serviço<id>
-# Pego esse id aqui na view e faço as buscas do serviço, cliente, carro e categorias vinculados, retorno esses dados em contexto para o front end, no formato {json}
-# No front end, ao receber esses dados, preencho os campos do form que será habilitado com o evento que foi disparado quando enviei o formulario no step acima, nesse form terá um botão de submit para alterar as categorias e quantidades do serviço:
-# Ainda em avaliação se permito mudar o cliente ou só as categorias. 1 - Adicionar uma nova categoria, editar a existente ou remover alguma, da pra usar o mesmo layout que usei ao cadastrar as categorias no front end, na parte de novo serviço.
 def editar_servico(request):
     if request.method == 'GET':
         lista_servicos = Servicos.objects.all()
@@ -45,6 +34,7 @@ def editar_servico(request):
 
     elif request.method == 'POST':
         servico_id = request.POST.get('servico_id')
+        protocolo = request.POST.get('protocolo')
         titulo_servico = request.POST.get('servico')
         mecanico = request.POST.get('mecanico')
 
@@ -57,10 +47,38 @@ def editar_servico(request):
 
         ProcessaServicos.edita_servico(servico_id, titulo_servico, mecanico, categorias, valor_mao_de_obra, quantidade, data_inicio, data_entrega)
 
-        return HttpResponse('Serviço alterado com sucesso!')
+        return redirect('servico', protocolo)
     
     else:
         return redirect('editar_servico')
+
+def seleciona_servico(request):
+    if request.method == 'GET':
+        return redirect('novo_servico')
+    else:
+        servico_id = request.POST.get('servico_selecionado')
+        servico = get_object_or_404(Servicos, id=servico_id)
+        
+        dados = {
+            'id': servico_id,
+            'protocolo': servico.protocolo,
+            'titulo': servico.titulo,
+            'nome': servico.cliente.nome,
+            'sobrenome': servico.cliente.sobrenome,
+            'carro': servico.carro.carro,
+            'placa': servico.carro.placa,
+            'categoria': servico.categoria_manutencao.all(),
+            'relacao': servico.servicocategoriaquantidade_set.all(),
+            'categorias_existentes': CategoriaManutencao.objects.all(),
+            'servicos': Servicos.objects.all(),
+            'mecanico_responsavel': servico.mecanico_resp,
+            'data_inicio': servico.data_inicio,
+            'data_entrega': servico.data_entrega,
+        }
+            
+        return render(request, 'editar_servico.html', {'dados': dados})
+
+
 
 def listar_servico(request):
     if request.method == 'GET':
@@ -98,36 +116,5 @@ def carros_por_cliente(request, cliente_id):
     processa_servicos = ProcessaServicos(request)
     
     return processa_servicos.busca_carros_por_cliente(cliente_id)
-
-
-def seleciona_servico(request):
-    if request.method == 'GET':
-        return redirect('novo_servico')
-    else:
-        servico_id = request.POST.get('servico_selecionado')
-
-        servicos = Servicos.objects.all()
-        categorias_existentes = CategoriaManutencao.objects.all()
-        
-        servico = Servicos.objects.get(id=servico_id)
-        dados = {
-            'id': servico_id,
-            'titulo': servico.titulo,
-            'nome': servico.cliente.nome,
-            'sobrenome': servico.cliente.sobrenome,
-            'carro': servico.carro.carro,
-            'placa': servico.carro.placa,
-            'categoria': servico.categoria_manutencao.all(),
-            'relacao': servico.servicocategoriaquantidade_set.all(),
-            'categorias_existentes': categorias_existentes,
-            'servicos': servicos,
-            'mecanico_responsavel': servico.mecanico_resp,
-            'data_inicio': servico.data_inicio,
-            'data_entrega': servico.data_entrega,
-        }
-            
-        return render(request, 'editar_servico.html', {'dados': dados,
-                                                  })
-
 
 
