@@ -60,6 +60,9 @@ Atualizar Serviço | AutoSync
         <br>
 
         {% if dados.relacao %}
+        <form action="{% url 'editar_servico' %}" method="POST">
+            <input type="hidden" name="servico_id" value="{{ dados.id }}">
+            {% csrf_token %}
             <div class="row">
                 <!-- Cliente -->
                 <div class="col-md-6 form-group">
@@ -123,19 +126,20 @@ Atualizar Serviço | AutoSync
                     <input type="submit" value="Confirmar Edição!" class="btn btn-success">
                 </div>
             </div>
+        </form>
 
-            <p></p>
-            <p>{{ dados.servicos }}</p>
-            <p>{{dados}}</p>
-            <p>{{dados.relacao}}</p>
-            {% for categoria in dados.relacao %}
-                <p>Categoria:</p>
-                <p>{{categoria}}</p>
-                <p>Qtd</p>
-                <p>{{categoria.quantidade}}</p>
-                <p>Mao de obra</p>
-                <p>{{categoria.valor_mao_de_obra}}</p>
-            {% endfor %}
+        <p>{{ dados.servicos }}</p>
+        <p>{{dados}}</p>
+        <p>{{dados.relacao}}</p>
+        {% for categoria in dados.relacao %}
+            <p>Categoria:</p>
+            <p>{{categoria}}</p>
+            <p>Qtd</p>
+            <p>{{categoria.quantidade}}</p>
+            <p>Mao de obra</p>
+            <p>{{categoria.valor_mao_de_obra}}</p>
+        {% endfor %}
+
         {% endif %}
 
     </div>
@@ -144,3 +148,4 @@ Atualizar Serviço | AutoSync
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="{% static 'servicos/js/editar_servico.js' %}"></script>
 {% endblock %}
+

@@ -44,7 +44,21 @@ def editar_servico(request):
         return render(request, 'editar_servico.html', {'dados': {'servicos': lista_servicos}})
 
     elif request.method == 'POST':
-        ...
+        servico_id = request.POST.get('servico_id')
+        titulo_servico = request.POST.get('servico')
+        mecanico = request.POST.get('mecanico')
+
+        categorias = request.POST.getlist('categorias')
+        valor_mao_de_obra = request.POST.getlist('valor_mao_de_obra')
+        quantidade = request.POST.getlist('quantidades')
+
+        data_inicio = request.POST.get('data_inicio')
+        data_entrega = request.POST.get('data_entrega')
+
+        ProcessaServicos.edita_servico(servico_id, titulo_servico, mecanico, categorias, valor_mao_de_obra, quantidade, data_inicio, data_entrega)
+
+        return HttpResponse('Serviço alterado com sucesso!')
+    
     else:
         return redirect('editar_servico')
 
@@ -97,6 +111,7 @@ def seleciona_servico(request):
         
         servico = Servicos.objects.get(id=servico_id)
         dados = {
+            'id': servico_id,
             'titulo': servico.titulo,
             'nome': servico.cliente.nome,
             'sobrenome': servico.cliente.sobrenome,

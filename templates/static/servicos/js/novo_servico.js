@@ -34,8 +34,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-
-
 $(document).ready(function () {
     $('#add-categoria').on('click', function () {
         // Duplica o primeiro elemento com a classe 'categoria-row'
@@ -100,3 +98,20 @@ $(document).ready(function () {
         maximumInputLength: 20,    // Limita o número de caracteres que podem ser digitados
     });
 });
+
+
+
+function remover_servico(event) {
+    console.log('Removendo serviço...');
+    // Get the button that was clicked
+    const button = event.target;
+    // Find the closest row (categoria-row)
+    var row = button.closest('.categoria-row');
+    // Check if there is more than one row
+    if ($('.categoria-row').length > 1) {
+        // Remove the row
+        row.remove();
+    } else {
+        alert('Você deve ter pelo menos uma categoria.');
+    }
+};

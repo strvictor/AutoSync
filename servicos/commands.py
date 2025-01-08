@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 from clientes.models import Cliente, Carro
 from django.http import JsonResponse
 from servicos.tasks import valida_info_email
+from django.db import transaction
 
 
 class ProcessaServicos:
@@ -69,6 +70,42 @@ class ProcessaServicos:
 
         self.salva_servico_bd.save()
 
+
+    @staticmethod
+    def edita_servico(servico_id, titulo_servico, mecanico, categorias, valor_mao_de_obra, quantidade, data_inicio, data_entrega):
+        servico = get_object_or_404(Servicos, id=servico_id)
+        categorias_objs = CategoriaManutencao.objects.filter(id__in=categorias)
+
+        # Atualiza os campos básicos do serviço
+        servico.titulo = titulo_servico
+        servico.mecanico_resp = mecanico
+        servico.data_inicio = data_inicio
+        servico.data_entrega = data_entrega
+        servico.save()
+
+        with transaction.atomic():
+            # Itera pelas categorias para criar ou atualizar o modelo intermediário
+            for categoria_id, quantidade_, valor_mao_de_obra_ in zip(categorias, quantidade, valor_mao_de_obra):
+                if not valor_mao_de_obra_:
+                    valor_mao_de_obra_ = 0
+                categoria_obj = categorias_objs.get(id=categoria_id)
+
+                # Atualiza ou cria o registro no modelo intermediário
+                servico.categoria_manutencao.through.objects.update_or_create(
+                    servico=servico,  # Campo que referencia o serviço
+                    categoria=categoria_obj,  # Campo que referencia a categoria
+                    defaults={
+                        'quantidade': quantidade_,
+                        'valor_mao_de_obra': valor_mao_de_obra_,
+                    }
+                )
+
+            # Remove as relações que não estão na lista atual
+            servico.categoria_manutencao.through.objects.filter(
+                servico=servico
+            ).exclude(
+                categoria__id__in=categorias
+            ).delete()
 
     def salva_servico(self):
         self.salva_servico_bd = Servicos(
