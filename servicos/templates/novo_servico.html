@@ -44,7 +44,7 @@ Novo Serviço | AutoSync
                 <!-- Cliente -->
                 <div class="col-md-6 form-group">
                     <label for="id_cliente">Cliente:</label>
-                    <select id="id_cliente" name="cliente" class="form-control select-carro" required>
+                    <select id="id_cliente" name="cliente" class="form-control select-cliente" required>
                         <option value="" disabled selected>Selecione um cliente</option>
                         {% for cliente in clientes %}
                         <option value="{{ cliente.id }}">{{ cliente.nome }} {{ cliente.sobrenome }}</option>
