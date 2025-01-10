@@ -82,8 +82,6 @@ h3 {
     padding-left: 15px;
 }
 
-
-
 /* Estilo para o campo de busca */
 .dataTables_filter label {
     display: flex;
@@ -119,7 +117,6 @@ h3 {
     border-radius: 4px;
 }
 
-
 /* Seletor de "Mostrar registros por página" */
 .dataTables_length label {
     font-size: 15px;
@@ -145,9 +142,6 @@ h3 {
 .dataTables_length select option:hover {
     background-color: #4444447e;
 }
-
-
-
 
 /* Paginação */
 .dataTables_paginate {
@@ -180,4 +174,30 @@ h3 {
 .dataTables_info {
     font-size: 14px;
     color: #ffffff;
+}
+
+.atrasado {
+    text-decoration: underline;
+    text-decoration-color: rgb(207, 39, 39);
+    text-decoration-thickness: 3px;
+    cursor: pointer;
+}
+
+.atrasado:hover {
+    position: relative;
+    }
+
+    .atrasado:hover::after {
+        content: 'serviço atrasado!';
+        position: absolute;
+        top: -30px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #000000;
+        color: #fff;
+        padding: 5px 10px;
+        border-radius: 5px;
+        white-space: nowrap;
+        font-size: 12px;
+        z-index: 1;
 }
