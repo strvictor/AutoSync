@@ -103,7 +103,6 @@ def alterar_servico(request, servico_id):
 
         messages.success(request, "Serviço atualizado com sucesso!")
 
-        print('Envia Email com Celery')
         envia_email = EnviaEmail()
         envia_email.trata_emails(servico_id)
         
