@@ -251,6 +251,9 @@ Serviço | {{ servico.titulo }}
             <p><strong>Data de Início:</strong> {{ servico.data_inicio }}</p>
             <p><strong>Data de Entrega:</strong> {{ servico.data_entrega }}</p>
             <p><strong>Status:</strong> {{ servico.status }}</p>
+            {% if servico.status == 'Finalizado' %}
+                <p><strong>Finalizado em:</strong> {{ servico.data_finalizacao|default:'-' }}</p>
+            {% endif %}
         </div>
         
         <!-- Actions -->
