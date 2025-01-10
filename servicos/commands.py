@@ -4,6 +4,7 @@ from clientes.models import Cliente, Carro
 from django.http import JsonResponse
 from servicos.tasks import valida_info_email
 from django.db import transaction
+from django.conf import settings
 
 
 class ProcessaServicos:
@@ -154,8 +155,11 @@ class ProcessaServicos:
 class EnviaEmail:
     @staticmethod
     def trata_emails(id_servico):
+        if settings.DEBUG:
+            return
+        
         servico_cliente = Servicos.objects.get(id=id_servico)
-
+        
         if servico_cliente.status == 'Em Orçamento' and servico_cliente.notifica_cliente:
             assunto = "AutoSync: Seu orçamento está pronto! Confira os detalhes 💼"
 

@@ -6,10 +6,12 @@ from servicos.models import Servicos
 from celery import shared_task
 from django.core.mail import send_mail
 from django.conf import settings
+from time import sleep
 
 
 @shared_task
 def valida_info_email(id_servico, caminho, assunto):
+    sleep(10)
     # Obtém o serviço usando o ID
     servico_cliente = Servicos.objects.get(id=id_servico)
 
