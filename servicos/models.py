@@ -41,8 +41,8 @@ class Servicos(models.Model):
         if not self.protocolo:
             self.protocolo = datetime.now().strftime('%d%m%Y%H%M%S') + token_hex(2)
 
-        # if self.status == 'Finalizado':
-        #     self.data_finalizacao = datetime.now()
+        if self.status == 'Finalizado':
+            self.data_finalizacao = datetime.now()
             
         super(Servicos, self).save(*args, **kwargs)
 
