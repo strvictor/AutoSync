@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'servicos',
     'home',
     'autenticacao',
+    'estoque',
 ]
 
 # Adicionar apps e middlewares específicos para desenvolvimento
