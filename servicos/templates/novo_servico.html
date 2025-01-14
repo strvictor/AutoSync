@@ -8,11 +8,20 @@ Novo Serviço | AutoSync
 {% block 'head' %}
     <link rel="stylesheet" href="{% static 'servicos/css/novo_servico.css' %}">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-{% endblock %}
-
-{% block 'dashboard' %}
-<br>
-<div class="container">
+    {% endblock %}
+    
+    {% block 'dashboard' %}
+    <br>
+    <div class="container">
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
     <div class="row mb-4">
         <div class="col-md-6">
             <a href="{% url 'novo_servico' %}">
@@ -77,16 +86,6 @@ Novo Serviço | AutoSync
                     <label for="data_inicio">Mecânico Responsável:</label>
                     <input id="mecanico_responsavel" name="mecanico_responsavel" type="text" class="form-control">
                 </div>
-                <!-- Categorias -->
-                <!-- <div class="col-md-6 form-group">
-                    <label for="categorias">Serviço(s):</label>
-                    <select id="categorias" name="categorias" class="form-control" required multiple>
-                        {% for categoria in categorias %}
-                        <option value="{{ categoria.id }}">{{ categoria.titulo }}</option>
-                        {% endfor %}
-                    </select>
-                </div> -->
-
                 <div class="col-md-12 form-group">
                     <label for="categorias">Serviços:</label>
                     <div id="categorias-container">
@@ -113,9 +112,6 @@ Novo Serviço | AutoSync
                     <button type="button" id="add-categoria" class="btn btn-primary mt-2">Adicionar Serviço</button>
                 </div>
                 
-
-
-
                 <!-- Data Início -->
                 <div class="col-md-6 form-group">
                     <label for="data_inicio">Data Início:</label>
@@ -133,16 +129,7 @@ Novo Serviço | AutoSync
         </form>
         <br>
 
-        {% if messages %}
-            <div class="messages">
-                {% for message in messages %}
-                    <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-
+        <br>
     </div>
 </div>
 

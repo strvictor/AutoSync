@@ -5,11 +5,11 @@ from django.http import JsonResponse
 from servicos.tasks import valida_info_email
 from django.db import transaction
 from django.conf import settings
-
+from estoque.commands import ProcessaEstoque
 
 class ProcessaServicos:
     def __init__(self, requisicao):
-        self.erro_msg = None
+        self.erro_msg = []
         self.requisicao_post = requisicao.POST
 
         self.cliente_selecionado = self.requisicao_post.get('cliente')
@@ -53,6 +53,27 @@ class ProcessaServicos:
 
         return True
 
+    def processa_estoque(self):
+        categorias_objs = CategoriaManutencao.objects.filter(id__in=self.categorias_servico)
+        qtd_servicos_estoque_invalido = 0
+
+        for categoria_id, quantidade, _ in zip(self.categorias_servico, self.quantidades_servico, self.valor_mao_de_obra):
+            categoria_obj = categorias_objs.get(id=categoria_id)
+
+            estoque = ProcessaEstoque(categoria_obj, quantidade)
+            quantidade_minima_em_estoque = estoque.valida_qtd_minima()
+
+            if quantidade_minima_em_estoque:
+                estoque.retira_qtd_do_estoque()
+            else:
+                self.erro_msg.append(estoque.erro_msg)
+                qtd_servicos_estoque_invalido +=1
+                continue
+
+        if len(self.categorias_servico) == qtd_servicos_estoque_invalido:
+            return False
+        return True
+
 
     def associa_categorias(self):
         # Associa as categorias de manutenção (ManyToMany)
@@ -63,17 +84,24 @@ class ProcessaServicos:
             if not valor_mao_de_obra:
                 valor_mao_de_obra = 0
             categoria_obj = categorias_objs.get(id=categoria_id)
-            self.salva_servico_bd.categoria_manutencao.add(
-                categoria_obj,
-                through_defaults={'quantidade': quantidade,
-                                'valor_mao_de_obra': valor_mao_de_obra}
-            )
+
+            estoque = ProcessaEstoque(categoria_obj, quantidade)
+            quantidade_minima_em_estoque = estoque.valida_qtd_minima()
+
+            if quantidade_minima_em_estoque:         
+                self.salva_servico_bd.categoria_manutencao.add(
+                    categoria_obj,
+                    through_defaults={'quantidade': quantidade,
+                                    'valor_mao_de_obra': valor_mao_de_obra}
+                )
 
         self.salva_servico_bd.save()
 
 
     @staticmethod
     def edita_servico(servico_id, titulo_servico, mecanico, categorias, valor_mao_de_obra, quantidade, data_inicio, data_entrega):
+        erro_msg = []
+        qtd_servicos_estoque_invalido = 0
         servico = get_object_or_404(Servicos, id=servico_id)
         categorias_objs = CategoriaManutencao.objects.filter(id__in=categorias)
 
@@ -92,16 +120,25 @@ class ProcessaServicos:
                 else:
                     valor_mao_de_obra_ = str(valor_mao_de_obra_).replace(',', '.')
                 categoria_obj = categorias_objs.get(id=categoria_id)
+                
+                estoque = ProcessaEstoque(categoria_obj, quantidade_)
+                quantidade_minima_em_estoque = estoque.valida_qtd_minima()
 
-                # Atualiza ou cria o registro no modelo intermediário
-                servico.categoria_manutencao.through.objects.update_or_create(
-                    servico=servico,  # Campo que referencia o serviço
-                    categoria=categoria_obj,  # Campo que referencia a categoria
-                    defaults={
-                        'quantidade': quantidade_,
-                        'valor_mao_de_obra': valor_mao_de_obra_,
-                    }
-                )
+                if quantidade_minima_em_estoque:
+                    estoque.retira_qtd_do_estoque()
+
+                    # Atualiza ou cria o registro no modelo intermediário
+                    servico.categoria_manutencao.through.objects.update_or_create(
+                        servico=servico,  # Campo que referencia o serviço
+                        categoria=categoria_obj,  # Campo que referencia a categoria
+                        defaults={
+                            'quantidade': quantidade_,
+                            'valor_mao_de_obra': valor_mao_de_obra_,
+                        }
+                    )
+                else:
+                    qtd_servicos_estoque_invalido +=1
+                    erro_msg.append(estoque.erro_msg)
 
             # Remove as relações que não estão na lista atual
             servico.categoria_manutencao.through.objects.filter(
@@ -109,6 +146,11 @@ class ProcessaServicos:
             ).exclude(
                 categoria__id__in=categorias
             ).delete()
+
+            if len(categorias) == qtd_servicos_estoque_invalido:
+                return False, erro_msg
+            
+            return True, erro_msg
 
     def salva_servico(self):
         self.salva_servico_bd = Servicos(
