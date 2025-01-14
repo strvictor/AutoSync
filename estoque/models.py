@@ -4,6 +4,7 @@ from servicos.models import CategoriaManutencao
 class Estoque(models.Model):
     nome = models.ForeignKey(CategoriaManutencao, on_delete=models.SET_NULL, null=True)
     quantidade_em_estoque = models.IntegerField()
+    atualizado_em = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.nome.titulo
+        return f'{self.nome.titulo} - {self.quantidade_em_estoque} em estoque'
