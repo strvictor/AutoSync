@@ -7,7 +7,7 @@ class ProcessaEstoque:
         self.quantidade_estoque_atual = self.obj_no_estoque.quantidade_em_estoque
         self.quantidade_repassada = int(quantidade)
 
-    def valida_se_add_ou_acres(self, quantidade_salva):
+    def valida_se_add_ou_remove(self, quantidade_salva):
         if quantidade_salva > self.quantidade_repassada:
             diferenca = quantidade_salva - self.quantidade_repassada
             print(f'Acrescenta {diferenca}')

@@ -81,7 +81,7 @@ class ProcessaServicos:
 
             quantidade_salva = nome_categoria_atual.quantidade if nome_categoria_atual else 0
             if estoque.valida_qtd_minima():
-                estoque.valida_se_add_ou_acres(quantidade_salva)
+                estoque.valida_se_add_ou_remove(quantidade_salva)
 
     def salva_servico(self):
         self.salva_servico_bd = Servicos(
@@ -149,7 +149,7 @@ class ProcessaServicos:
 
                     quantidade_salva = nome_categoria_atual.quantidade if nome_categoria_atual else 0
 
-                    estoque.valida_se_add_ou_acres(quantidade_salva)
+                    estoque.valida_se_add_ou_remove(quantidade_salva)
 
                     # Atualiza ou cria o registro no modelo intermediário
                     servico.categoria_manutencao.through.objects.update_or_create(
