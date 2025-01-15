@@ -17,24 +17,22 @@ def novo_servico(request):
         processa_servicos = ProcessaServicos(request)
 
         if processa_servicos.valida_ids():
-            validacao_estoque = processa_servicos.processa_estoque()
+            if processa_servicos.valida_estoque():  # Valida o estoque antes de salvar o serviço
+                servico = processa_servicos.salva_servico()  # Cria e salva a instância do serviço
+                processa_servicos.processa_estoque()  # Processa o estoque
+                processa_servicos.associa_categorias(servico)  # Passa a instância do serviço
 
-            if validacao_estoque:
-                protocolo = processa_servicos.salva_servico()
-                processa_servicos.associa_categorias()
-
+                if processa_servicos.erro_msg:
+                    messages.error(request, processa_servicos.erro_msg)
+                else:
+                    messages.success(request, "Serviço adicionado com sucesso!")
+                return redirect('servico', servico.protocolo)
             else:
                 messages.error(request, processa_servicos.erro_msg)
                 return render(request, 'novo_servico.html')
-            
-            if processa_servicos.erro_msg:
-                messages.error(request, processa_servicos.erro_msg)
-            else:
-                messages.success(request, "Serviço adicionado com sucesso!")
-            return redirect('servico', protocolo)
         else:
-            return HttpResponse(f'ERRO {processa_servicos.erro_msg}')
-
+            messages.error(request, processa_servicos.erro_msg)
+            return render(request, 'novo_servico.html')
 
 def editar_servico(request):
     if request.method == 'GET':

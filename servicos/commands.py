@@ -1,4 +1,4 @@
-from servicos.models import Servicos, CategoriaManutencao
+from servicos.models import Servicos, CategoriaManutencao, ServicoCategoriaQuantidade
 from django.shortcuts import get_object_or_404
 from clientes.models import Cliente, Carro
 from django.http import JsonResponse
@@ -26,7 +26,6 @@ class ProcessaServicos:
         self.status = self.requisicao_post.get('status')  
         self.avisa_cliente = self.requisicao_post.get('notifica_cliente') == 'on' #converte o valor do checkbox para True ou False
 
-
     def valida_ids(self):
         # Valida o cliente
         try:
@@ -53,7 +52,7 @@ class ProcessaServicos:
 
         return True
 
-    def processa_estoque(self):
+    def valida_estoque(self):
         categorias_objs = CategoriaManutencao.objects.filter(id__in=self.categorias_servico)
         qtd_servicos_estoque_invalido = 0
 
@@ -63,19 +62,41 @@ class ProcessaServicos:
             estoque = ProcessaEstoque(categoria_obj, quantidade)
             quantidade_minima_em_estoque = estoque.valida_qtd_minima()
 
-            if quantidade_minima_em_estoque:
-                estoque.retira_qtd_do_estoque()
-            else:
+            if not quantidade_minima_em_estoque:
                 self.erro_msg.append(estoque.erro_msg)
-                qtd_servicos_estoque_invalido +=1
-                continue
+                qtd_servicos_estoque_invalido += 1
 
         if len(self.categorias_servico) == qtd_servicos_estoque_invalido:
             return False
         return True
 
+    def processa_estoque(self):
+        categorias_objs = CategoriaManutencao.objects.filter(id__in=self.categorias_servico)
 
-    def associa_categorias(self):
+        for categoria_id, quantidade, _ in zip(self.categorias_servico, self.quantidades_servico, self.valor_mao_de_obra):
+            categoria_obj = categorias_objs.get(id=categoria_id)
+
+            estoque = ProcessaEstoque(categoria_obj, quantidade)
+            nome_categoria_atual = ServicoCategoriaQuantidade.objects.filter(servico=self.salva_servico_bd, categoria=categoria_obj).first()
+
+            quantidade_salva = nome_categoria_atual.quantidade if nome_categoria_atual else 0
+            if estoque.valida_qtd_minima():
+                estoque.valida_se_add_ou_acres(quantidade_salva)
+
+    def salva_servico(self):
+        self.salva_servico_bd = Servicos(
+            titulo=self.titulo_servico,
+            cliente=self.cliente_obj,
+            carro=self.carro_obj,
+            data_inicio=self.data_inicio,
+            data_entrega=self.data_entrega,
+            notifica_cliente=self.notifica_cliente,
+            mecanico_resp=self.mecanico_responsavel,
+        )
+        self.salva_servico_bd.save()
+        return self.salva_servico_bd
+
+    def associa_categorias(self, servico):
         # Associa as categorias de manutenção (ManyToMany)
         categorias_objs = CategoriaManutencao.objects.filter(id__in=self.categorias_servico)
 
@@ -89,14 +110,13 @@ class ProcessaServicos:
             quantidade_minima_em_estoque = estoque.valida_qtd_minima()
 
             if quantidade_minima_em_estoque:         
-                self.salva_servico_bd.categoria_manutencao.add(
+                servico.categoria_manutencao.add(
                     categoria_obj,
                     through_defaults={'quantidade': quantidade,
                                     'valor_mao_de_obra': valor_mao_de_obra}
                 )
 
-        self.salva_servico_bd.save()
-
+        servico.save()
 
     @staticmethod
     def edita_servico(servico_id, titulo_servico, mecanico, categorias, valor_mao_de_obra, quantidade, data_inicio, data_entrega):
@@ -125,7 +145,11 @@ class ProcessaServicos:
                 quantidade_minima_em_estoque = estoque.valida_qtd_minima()
 
                 if quantidade_minima_em_estoque:
-                    estoque.retira_qtd_do_estoque()
+                    nome_categoria_atual = ServicoCategoriaQuantidade.objects.filter(servico=servico, categoria=categoria_obj).first()
+
+                    quantidade_salva = nome_categoria_atual.quantidade if nome_categoria_atual else 0
+
+                    estoque.valida_se_add_ou_acres(quantidade_salva)
 
                     # Atualiza ou cria o registro no modelo intermediário
                     servico.categoria_manutencao.through.objects.update_or_create(
@@ -152,41 +176,21 @@ class ProcessaServicos:
             
             return True, erro_msg
 
-    def salva_servico(self):
-        self.salva_servico_bd = Servicos(
-            titulo=self.titulo_servico,
-            cliente=self.cliente_obj,
-            carro=self.carro_obj,
-            data_inicio=self.data_inicio,
-            data_entrega=self.data_entrega,
-            notifica_cliente=self.notifica_cliente,
-            mecanico_resp=self.mecanico_responsavel,
-        )
-        self.salva_servico_bd.save()
-        return self.salva_servico_bd.protocolo
-
-
     def retorna_obj(self):
         self.clientes_bd = Cliente.objects.all()
         self.categorias_bd = CategoriaManutencao.objects.all()
 
         return self.clientes_bd, self.categorias_bd
     
-    
     def busca_carros_por_cliente(self, cliente_id):
-
         carros = Carro.objects.filter(cliente_id=cliente_id)  # Filtra os carros do cliente
-
         carros_data = [{"id": carro.id, "nome": carro.carro} for carro in carros]  # Formata para JSON
         return JsonResponse({"carros": carros_data})
     
-    
     def muda_status_servico(self, servico_id):
         servico = get_object_or_404(Servicos, id=servico_id)
-
         servico.status = self.status
         servico.notifica_cliente = self.avisa_cliente
-
         servico.save()
         return servico.protocolo
     
