@@ -35,8 +35,8 @@ def novo_servico(request):
             return render(request, 'novo_servico.html')
 
 def editar_servico(request):
+    lista_servicos = Servicos.objects.all()
     if request.method == 'GET':
-        lista_servicos = Servicos.objects.all()
         return render(request, 'editar_servico.html', {'dados': {'servicos': lista_servicos}})
 
     elif request.method == 'POST':
@@ -56,7 +56,7 @@ def editar_servico(request):
 
         if not validacao:
             messages.error(request, servico_editado)
-            return render(request, 'editar_servico.html') 
+            return render(request, 'editar_servico.html', {'dados': {'servicos': lista_servicos}}) 
         else:
             if servico_editado:
                 messages.error(request, servico_editado)
