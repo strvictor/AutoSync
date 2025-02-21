@@ -63,8 +63,10 @@ Certifique-se de ter os seguintes requisitos instalados:
 
 4. Acesse a aplicação:
    - A aplicação web estará disponível em [http://localhost:80](http://localhost:80)
-   - Use como email padrão para entrar: admin@gmail.com. Senha: admin.
-   - Para criar novos usuários acesse /admin e crie dentro da interface do django.
+   4.1 Acesse remotamente:
+      - Acesse de forma remota clicando aqui: https://encurtador.com.br/HJxmJ
+      - Use como email padrão para entrar: admin@gmail.com. Senha: admin.
+      - Para criar novos usuários acesse /admin e crie dentro da interface do django.
 
 
 ## Estrutura do Projeto
