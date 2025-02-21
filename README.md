@@ -62,14 +62,10 @@ Certifique-se de ter os seguintes requisitos instalados:
    ```
 
 4. Acesse a aplicação:
-   - A aplicação web estará disponível em [http://localhost:8000](http://localhost:8000)
+   - A aplicação web estará disponível em [http://localhost:80](http://localhost:80)
+   - Use como email padrão para entrar: admin@gmail.com. Senha: admin.
+   - Para criar novos usuários acesse /admin e crie dentro da interface do django.
 
-## Testes
-
-Execute os testes para garantir que tudo esteja funcionando corretamente:
-```bash
-docker-compose run web python manage.py test
-```
 
 ## Estrutura do Projeto
 
