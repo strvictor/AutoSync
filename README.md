@@ -93,13 +93,11 @@ Fique à vontade para contribuir com melhorias, correções de bugs ou novas fun
    ```
 5. Abra um Pull Request.
 
-## Licença
-
-Este projeto está licenciado sob a Licença MIT. Consulte o arquivo [LICENSE](LICENSE) para mais informações.
 
 ## Contato
 
 Para dúvidas ou sugestões, entre em contato:
 - **Autor:** Paulo Victor
 - **GitHub:** [strvictor](https://github.com/strvictor)
+- **LinkedIn:** [strvictor](https://www.linkedin.com/in/strvictor/)
 
