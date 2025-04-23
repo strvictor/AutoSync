@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block 'title' %}Estoque | AutoSync{% endblock %}
+
+{% block 'head' %}
+<link rel="stylesheet" href="{% static 'estoque/css/estoque.css' %}">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block 'dashboard' %}
+<br>
+<div class="container-fluid distanciamento">
+    <div class="cabecalho">
+        <h3>Gerenciamento de Estoque</h3>
+    </div>      
+
+    <!-- Cards com informações rápidas -->
+    <div class="row mb-5">
+        <!-- Card 1: Itens no Estoque -->
+        <div class="col-md-4">
+            <div class="azul card text-white mb-3" style="height: 250px;">
+                <div class="card-header d-flex align-items-center">
+                    <i class="fas fa-boxes fa-2x mr-3"></i>
+                    <span>Itens no Estoque</span>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ qtd_itens }} Itens</h5>
+                    <p class="card-text">Quantidade total de itens atualmente no estoque.</p>
+                    <a href="{% url 'reabastecer_estoque' %}" class="btn btn-light btn-sm mt-3">
+                        <i class="fas fa-plus-circle"></i> Fazer Reabastecimento
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2: Itens com Quantidade Mínima -->
+        <div class="col-md-4">
+            <div class="amarelo card text-white mb-3" style="height: 250px;">
+                <div class="card-header d-flex align-items-center">
+                    <i class="fas fa-exclamation-triangle fa-2x mr-3"></i>
+                    <span>Itens com Quantidade Mínima</span>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ qtd_minima }} Itens</h5>
+                    <p class="card-text">Itens que precisam ser reabastecidos com urgência.</p>
+                    <a href="{% url 'quantidade_minima' %}" class="btn btn-light btn-sm mt-3">
+                        <i class="fas fa-eye"></i> Visualizar Itens
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 3: Último Reabastecimento -->
+        <div class="col-md-4">
+            <div class="verde card text-white mb-3" style="height: 250px;">
+                <div class="card-header d-flex align-items-center">
+                    <i class="fas fa-chart-line fa-2x mr-3"></i>
+                    <span>Último Reabastecimento</span>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Em {{ ultima_atualizacao }}</h5>
+                    <p class="card-text">Última atualização realizada no estoque.</p>
+                    <a href="#" class="btn btn-light btn-sm mt-3">
+                        <i class="fas fa-search"></i> Consultar Histórico
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

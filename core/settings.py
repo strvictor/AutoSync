@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'servicos',
     'home',
     'autenticacao',
+    'estoque',
 ]
 
 # Adicionar apps e middlewares específicos para desenvolvimento
@@ -107,10 +108,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Internacionalização
-LANGUAGE_CODE = 'pt-br'
-TIME_ZONE = 'America/Belem'
+LANGUAGE_CODE = 'pt-BR'
+TIME_ZONE = 'America/Sao_Paulo'
 USE_I18N = True
-USE_TZ = True
+USE_TZ = False
 
 # Arquivos estáticos e mídia
 STATIC_URL = 'static/'

@@ -6,7 +6,6 @@ from .models import Servicos, CategoriaManutencao
 from datetime import datetime
 
 
-#TODO Falta validar as mensagens de retorno ao front-end
 def novo_servico(request):
     if request.method == 'GET':
         clientes_obj, categorias_obj = ProcessaServicos(request).retorna_obj()
@@ -17,20 +16,28 @@ def novo_servico(request):
 
     elif request.method == 'POST':
         processa_servicos = ProcessaServicos(request)
+
         if processa_servicos.valida_ids():
-            protocolo = processa_servicos.salva_servico()
-            processa_servicos.associa_categorias()
+            if processa_servicos.valida_estoque():  # Valida o estoque antes de salvar o serviço
+                servico = processa_servicos.salva_servico()  # Cria e salva a instância do serviço
+                processa_servicos.processa_estoque()  # Processa o estoque
+                processa_servicos.associa_categorias(servico)  # Passa a instância do serviço
 
-            messages.success(request, "Serviço adicionado com sucesso!")
-
-            return redirect('servico', protocolo)
+                if processa_servicos.erro_msg:
+                    messages.error(request, processa_servicos.erro_msg)
+                else:
+                    messages.success(request, "Serviço adicionado com sucesso!")
+                return redirect('servico', servico.protocolo)
+            else:
+                messages.error(request, processa_servicos.erro_msg)
+                return render(request, 'novo_servico.html')
         else:
-            return HttpResponse(f'ERRO {processa_servicos.erro_msg}')
-
+            messages.error(request, processa_servicos.erro_msg)
+            return render(request, 'novo_servico.html')
 
 def editar_servico(request):
+    lista_servicos = Servicos.objects.all()
     if request.method == 'GET':
-        lista_servicos = Servicos.objects.all()
         return render(request, 'editar_servico.html', {'dados': {'servicos': lista_servicos}})
 
     elif request.method == 'POST':
@@ -46,9 +53,18 @@ def editar_servico(request):
         data_inicio = request.POST.get('data_inicio')
         data_entrega = request.POST.get('data_entrega')
 
-        ProcessaServicos.edita_servico(servico_id, titulo_servico, mecanico, categorias, valor_mao_de_obra, quantidade, data_inicio, data_entrega)
+        validacao, servico_editado = ProcessaServicos.edita_servico(servico_id, titulo_servico, mecanico, categorias, valor_mao_de_obra, quantidade, data_inicio, data_entrega)
 
-        return redirect('servico', protocolo)
+        if not validacao:
+            messages.error(request, servico_editado)
+            return render(request, 'editar_servico.html', {'dados': {'servicos': lista_servicos}}) 
+        else:
+            if servico_editado:
+                messages.error(request, servico_editado)
+                return redirect('servico', protocolo)
+            else:
+                messages.success(request, "Serviço modificado com sucesso!")
+            return redirect('servico', protocolo)
     
     else:
         return redirect('editar_servico')
@@ -78,7 +94,6 @@ def seleciona_servico(request):
         }
             
         return render(request, 'editar_servico.html', {'dados': dados})
-
 
 
 def listar_servico(request):
