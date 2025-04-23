@@ -27,7 +27,12 @@
             <div class="col-md-6 form-group">
                 <label for="item">Item do Estoque:</label>
                 <select name="item" id="item" class="form-control" required>
-                    <option value="" disabled selected>Selecione um item</option>
+                    {% if item_id %}
+                        <option value="{{ item_id }}" selected>{{ item_nome }} (atual: {{ item_quantidade }})</option>
+                    {% else %}
+                        <option value="" disabled selected>Selecione um item</option>
+                    {% endif %}
+                    
                     {% for item in estoque %}
                         <option value="{{ item.id }}">{{ item.nome.titulo }} (atual: {{ item.quantidade_em_estoque }})</option>
                     {% endfor %}

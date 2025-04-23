@@ -33,6 +33,7 @@ Itens com Quantidade Mínima | AutoSync
             <th scope="col">Nome do Item</th>
             <th scope="col">Quantidade Atual</th>
             <th scope="col">Quantidade Mínima</th>
+            <th scope="col">Quantidade Comprada</th>
             <th scope="col">Ações</th>
           </tr>
         </thead>
@@ -43,8 +44,9 @@ Itens com Quantidade Mínima | AutoSync
                 <td>{{item.nome}}</td>
                 <td>{{item.quantidade_em_estoque}}</td>
                 <td>{{item.quantidade_minima}}</td>
+                <td></td>
                 <td>
-                    <a href="{% url 'reabastecer_estoque' %}?item_id={{ item.id }}" class="btn btn-success btn-sm">
+                    <a href="{% url 'reabastecer_estoque' %}?id={{ item.id }}" class="btn btn-success btn-sm">
                         <i class="fas fa-plus-circle"></i> Reabastecer
                     </a>
                 </td>

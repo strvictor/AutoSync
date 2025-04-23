@@ -28,9 +28,25 @@ def reabastecer_estoque(request):
 
         messages.success(request, f"{quantidade} unidades adicionadas ao estoque de {item.nome.titulo}.")
         return redirect("reabastecer_estoque")
+    
+   # Obtém o item_id da query string (se existir)
+    item_id = request.GET.get("id")
+    item_nome = None
+    item_quantidade = None
+
+    if item_id:
+        item = get_object_or_404(Estoque, id=item_id)
+        item_nome = item.nome
+        item_quantidade = item.quantidade_em_estoque
 
     estoque = Estoque.objects.select_related('nome').all()
-    return render(request, "reabastecer.html", {"estoque": estoque})
+
+    return render(request, "reabastecer.html", {
+        "estoque": estoque,
+        "item_id": item_id,
+        "item_nome": item_nome,
+        "item_quantidade": item_quantidade,
+    })
 
 
 def quantidade_minima(request):
