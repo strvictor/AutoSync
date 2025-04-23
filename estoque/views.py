@@ -2,12 +2,16 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Estoque, Reabastecimento
 from django.contrib import messages
-
+from django.db.models import F
 
 def estoque(request):
-    qtd_itens = Estoque.objects.all().count()
-    print(estoque)
-    return render(request, "estoque.html", {"qtd_itens": qtd_itens})
+    if request.method == "GET":
+        estoque = Estoque.objects.all()
+        qtd_itens = len(estoque)
+        qtd_minima = Estoque.objects.filter(quantidade_em_estoque__lt=F('quantidade_minima')).count()
+        ultima_atualizacao = Estoque.objects.order_by('-atualizado_em').first().atualizado_em.strftime("%d/%m/%Y %H:%M") if Estoque.objects.exists() else None
+        
+        return render(request, "estoque.html", {"qtd_itens": qtd_itens, 'qtd_minima': qtd_minima, 'ultima_atualizacao': ultima_atualizacao})
 
 
 def reabastecer_estoque(request):
@@ -27,3 +31,12 @@ def reabastecer_estoque(request):
 
     estoque = Estoque.objects.select_related('nome').all()
     return render(request, "reabastecer.html", {"estoque": estoque})
+
+
+def quantidade_minima(request):
+    if request.method == "GET":
+
+        estoque = Estoque.objects.filter(quantidade_em_estoque__lt=F('quantidade_minima'))
+        for c in estoque:
+            print(f'{c.nome}, {c.quantidade_em_estoque}')
+        return render(request, "quantidade_minima.html", {"estoque": estoque})

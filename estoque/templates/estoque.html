@@ -42,9 +42,9 @@
                     <span>Itens com Quantidade Mínima</span>
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title">10 Itens</h5>
+                    <h5 class="card-title">{{ qtd_minima }} Itens</h5>
                     <p class="card-text">Itens que precisam ser reabastecidos com urgência.</p>
-                    <a href="#" class="btn btn-light btn-sm mt-3">
+                    <a href="{% url 'quantidade_minima' %}" class="btn btn-light btn-sm mt-3">
                         <i class="fas fa-eye"></i> Visualizar Itens
                     </a>
                 </div>
@@ -59,7 +59,7 @@
                     <span>Último Reabastecimento</span>
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title">Há 3 dias</h5>
+                    <h5 class="card-title">Em {{ ultima_atualizacao }}</h5>
                     <p class="card-text">Última atualização realizada no estoque.</p>
                     <a href="#" class="btn btn-light btn-sm mt-3">
                         <i class="fas fa-search"></i> Consultar Histórico

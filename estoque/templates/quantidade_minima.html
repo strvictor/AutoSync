@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block 'title' %}
+Itens com Quantidade Mínima | AutoSync
+{% endblock %}
+
+{% block 'head' %}
+    <link rel="stylesheet" href="{% static 'estoque/css/quantidade_minima.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block 'dashboard' %}
+<div class="container-fluid distanciamento">
+    <div class="cabecalho">
+        <h3>Itens com Quantidade Mínima:</h3>
+    </div>
+
+
+    <!-- Botão para download em PDF -->
+    <div class="botao mb-3 text-end">
+        <button id="download-pdf" class="btn btn-danger">
+            <i class="fas fa-file-pdf"></i> Baixar PDF
+        </button>
+    </div>
+    <!-- Fim do botão para download em PDF -->
+
+
+    <table id="tabela-itens" class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nome do Item</th>
+            <th scope="col">Quantidade Atual</th>
+            <th scope="col">Quantidade Mínima</th>
+            <th scope="col">Ações</th>
+          </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% for item in estoque %}
+            <tr>
+                <td>{{forloop.counter}}</td>
+                <td>{{item.nome}}</td>
+                <td>{{item.quantidade_em_estoque}}</td>
+                <td>{{item.quantidade_minima}}</td>
+                <td>
+                    <a href="{% url 'reabastecer_estoque' %}?item_id={{ item.id }}" class="btn btn-success btn-sm">
+                        <i class="fas fa-plus-circle"></i> Reabastecer
+                    </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center text-muted">Nenhum item com quantidade mínima encontrado.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+      </table>
+
+</div>
+<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="{% static 'estoque/js/quantidade_minima.js' %}"></script>
+{% endblock %}

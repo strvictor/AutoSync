@@ -4,7 +4,7 @@ from estoque.models import Estoque
 
 class EstoqueInline(admin.TabularInline):
     model = Estoque
-    fields = ('quantidade_em_estoque', 'atualizado_em')  # Campos visíveis no admin
+    fields = ('quantidade_em_estoque','quantidade_minima', 'atualizado_em')  # Campos visíveis no admin
     readonly_fields = ('atualizado_em',)  # Campos apenas para leitura
 
 class CategoriaManutencaoAdmin(admin.ModelAdmin):
