@@ -3,9 +3,9 @@ from servicos.models import CategoriaManutencao
 
      
 class Estoque(models.Model):
-    nome = models.OneToOneField(CategoriaManutencao, on_delete=models.SET_NULL, null=True)
+    nome = models.OneToOneField(CategoriaManutencao, on_delete=models.CASCADE, null=True)
     quantidade_em_estoque = models.IntegerField()
-    quantidade_minima = models.IntegerField(null=True, blank=True, default=5)
+    quantidade_minima = models.IntegerField(null=True, blank=True, default=10)
     atualizado_em = models.DateTimeField(auto_now=True)
 
     def __str__(self):

@@ -1,0 +1,38 @@
+.distanciamento{
+    padding-left: 50px !important; 
+    padding-right: 50px !important;
+    padding-top: 40px !important;
+}
+
+
+.cabecalho {
+    display: flex;
+    width: 100%;
+    height: 80px;
+    align-items: center;
+    justify-content: left;
+    background: linear-gradient(to right, #11111454, transparent);
+    border-radius: 10px;
+    margin-bottom: 26px;
+    margin-top: 16px;
+}
+
+.cabecalho h3 {
+    padding-left: 15px;
+    text-decoration: underline;
+    text-decoration-color: #53f7e9a2;
+}
+
+
+
+.azul {
+    background-color: var(--main-color) !important;
+}
+
+.amarelo {
+    background-color: var(--contrast-color) !important;
+}
+
+.verde {
+    background-color: var(--card-azul) !important;
+}
