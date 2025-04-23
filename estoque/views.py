@@ -26,7 +26,7 @@ def reabastecer_estoque(request):
         item.quantidade_em_estoque += quantidade
         item.save()
 
-        messages.success(request, f"{quantidade} unidades adicionadas ao estoque de {item.nome.titulo}.")
+        messages.success(request, f"{quantidade} unidades adicionadas ao estoque do item {item.nome.titulo}.")
         return redirect("reabastecer_estoque")
     
    # Obtém o item_id da query string (se existir)
