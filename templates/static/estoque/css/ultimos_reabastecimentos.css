@@ -1,39 +1,4 @@
 
-/* .card-dashboard{
-    background-color: var(--main-color);
-    width: 100%;
-    margin-left: 10px;
-    margin-top: 40px;
-    text-align: center;
-    padding: 20px;
-    cursor: pointer;
-    align-items: center;
-    justify-content: center;
-} */
-
-/* .card-dashboard:hover{
-    background-color: #133a6e;
-    color: white;
-    transition: background-color 0.2s ease;
-
-} */
-
-/* .text-card{
-
-    font-size: 25px;
-    text-decoration: none;
-    text-decoration-line: none;
-} */
-
-/* .botao {
-    width: 100%;
-    display: flex;
-}
-
-.botao button {
-    align-items: flex-end;
-    justify-content: flex-end;
-} */
 .table th, .table td {
     color: white; /* Muda a cor da fonte para branco */
   }
@@ -48,11 +13,6 @@
     padding-right: 50px;
     padding-top: 40px;
 }
-
-/* .badge-dark{
-    background-color: white;
-    color: var(--background-geral);
-} */
 
 .cabecalho {
     display: flex;
@@ -71,8 +31,6 @@
     text-decoration: underline;
     text-decoration-color: #53f7e9a2;
 }
-
-
 
 /* Estilo para o campo de busca */
 .dataTables_filter label {
@@ -109,7 +67,6 @@
     border-radius: 4px;
 }
 
-
 /* Seletor de "Mostrar registros por página" */
 .dataTables_length label {
     font-size: 15px;
@@ -141,7 +98,8 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    margin-top: 10px;
+    margin-top: 4px;
+    margin-bottom: 25px;;
 }
 
 .dataTables_paginate .paginate_button {

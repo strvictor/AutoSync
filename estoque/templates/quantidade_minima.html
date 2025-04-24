@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block 'title' %}
-Itens com Quantidade Mínima | AutoSync
+Quantidade Mínima | AutoSync
 {% endblock %}
 
 {% block 'head' %}
@@ -18,9 +18,9 @@ Itens com Quantidade Mínima | AutoSync
 
 
     <!-- Botão para download em PDF -->
-    <div class="botao mb-3 text-end">
-        <button id="download-pdf" class="btn btn-danger">
-            <i class="fas fa-file-pdf"></i> Baixar PDF
+    <div class="botao mb-3" style="text-align: right;">
+        <button id="download-pdf" class="btn btn-primary">
+            <i class="fas fa-file-pdf"></i> Baixar Itens
         </button>
     </div>
     <!-- Fim do botão para download em PDF -->
@@ -33,7 +33,6 @@ Itens com Quantidade Mínima | AutoSync
             <th scope="col">Nome do Item</th>
             <th scope="col">Quantidade Atual</th>
             <th scope="col">Quantidade Mínima</th>
-            <th scope="col">Quantidade Comprada</th>
             <th scope="col">Ações</th>
           </tr>
         </thead>
@@ -44,7 +43,6 @@ Itens com Quantidade Mínima | AutoSync
                 <td>{{item.nome}}</td>
                 <td>{{item.quantidade_em_estoque}}</td>
                 <td>{{item.quantidade_minima}}</td>
-                <td></td>
                 <td>
                     <a href="{% url 'reabastecer_estoque' %}?id={{ item.id }}" class="btn btn-success btn-sm">
                         <i class="fas fa-plus-circle"></i> Reabastecer

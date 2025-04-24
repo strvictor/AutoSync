@@ -18,4 +18,4 @@ class Reabastecimento(models.Model):
     data_reabastecimento = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'{self.item.nome.titulo} - +{self.quantidade_adicionada} em {self.data_reabastecimento.strftime("%d/%m/%Y %H:%M")}'
+        return f'{self.item.nome.titulo} - + {self.quantidade_adicionada} em {self.data_reabastecimento.strftime("%d/%m/%Y %H:%M")}'

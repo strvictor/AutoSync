@@ -34,6 +34,7 @@ $(document).ready(function () {
   });
 });
 
+
 // Função para gerar o PDF
 $("#download-pdf").on("click", function () {
   const { jsPDF } = window.jspdf;
@@ -50,10 +51,24 @@ $("#download-pdf").on("click", function () {
   tempDiv.appendChild(tabelaClone);
   document.body.appendChild(tempDiv);
 
-  // Altera as cores da tabela clonada para preto
-  tabelaClone.querySelectorAll("th, td").forEach((cell) => {
-    cell.style.color = "black";
-    cell.style.borderColor = "black";
+
+  // Adiciona o cabeçalho da nova coluna na penúltima posição
+  const newColumnHeader = document.createElement("th");
+  newColumnHeader.textContent = "Quantidade Comprada";
+  // newColumnHeader.style.textAlign = "center";
+  newColumnHeader.style.width = "50px";
+
+  const headerRow = tabelaClone.querySelector("thead tr");
+  const ths = headerRow.querySelectorAll("th");
+  headerRow.insertBefore(newColumnHeader, ths[ths.length - 1]);
+
+  // Adiciona a nova célula em cada linha do corpo na penúltima posição
+  tabelaClone.querySelectorAll("tbody tr").forEach((row) => {
+    const tds = row.querySelectorAll("td");
+    const newCell = document.createElement("td");
+    newCell.textContent = ""; // Célula vazia
+    newCell.style.textAlign = "center";
+    row.insertBefore(newCell, tds[tds.length - 1]);
   });
 
   // Remove o conteúdo da última coluna e adiciona um checkbox
@@ -63,17 +78,24 @@ $("#download-pdf").on("click", function () {
       '<input type="checkbox" style="transform: scale(1.5);">';
   });
 
-  // Captura a tabela clonada como imagem
+  // Altera as cores da tabela clonada para preto
+  tabelaClone.querySelectorAll("th, td").forEach((cell) => {
+    cell.style.color = "black";
+    cell.style.borderColor = "black";
+  });
+
+  // Captura a tabela clonada como imagem e gera o PDF
   html2canvas(tabelaClone)
     .then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
-      const imgWidth = 190; // Largura da imagem no PDF
-      const pageHeight = 295; // Altura da página no PDF
+      const imgWidth = 190;
+      const pageHeight = 295;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      const position = 10; // Margem superior
+      const position = 10;
 
       doc.addImage(imgData, "PNG", 10, position, imgWidth, imgHeight);
-      doc.save("itens_quantidade_minima.pdf");
+      const currentDate = new Date().toISOString().split("T")[0];
+      doc.save(`itens_qtd_min_${currentDate}.pdf`);
 
       // Remove o contêiner temporário
       document.body.removeChild(tempDiv);
