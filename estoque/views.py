@@ -4,6 +4,7 @@ from .models import Estoque, Reabastecimento
 from django.contrib import messages
 from django.db.models import F
 
+
 def estoque(request):
     if request.method == "GET":
         estoque = Estoque.objects.all()
@@ -56,3 +57,9 @@ def quantidade_minima(request):
         for c in estoque:
             print(f'{c.nome}, {c.quantidade_em_estoque}')
         return render(request, "quantidade_minima.html", {"estoque": estoque})
+    
+    
+def ultimos_reabastecimentos(request):
+    if request.method == "GET":
+        reabastecimentos = Reabastecimento.objects.all()
+        return render(request, "ultimos_reabastecimentos.html", {"reabastecimentos": reabastecimentos})
