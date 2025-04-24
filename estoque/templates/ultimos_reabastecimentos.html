@@ -1,50 +1,76 @@
-{% extends "base.html" %}
-{% load static %}
-
-{% block 'title' %}
-Ultimos Reabastecimentos | AutoSync
-{% endblock %}
-
-{% block 'head' %}
-    <link rel="stylesheet" href="{% static 'estoque/css/ultimos_reabastecimentos.css' %}">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-{% endblock %}
-
-{% block 'dashboard' %}
+{% extends "base.html" %} {% load static %} {% block 'title' %} Ultimos
+Reabastecimentos | AutoSync {% endblock %} {% block 'head' %}
+<link
+  rel="stylesheet"
+  href="{% static 'estoque/css/ultimos_reabastecimentos.css' %}"
+/>
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+  rel="stylesheet"
+/>
+{% endblock %} {% block 'dashboard' %}
 <div class="container-fluid distanciamento">
-    <div class="cabecalho">
-        <h3>Ultimos Reabastecimentos:</h3>
+  <div class="cabecalho">
+    <h3>Ultimos Reabastecimentos:</h3>
+  </div>
+
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <label for="data-inicial">Data Inicial:</label>
+      <input type="date" id="data-inicial" class="form-control" />
     </div>
+    <div class="col-md-4">
+      <label for="data-final">Data Final:</label>
+      <input type="date" id="data-final" class="form-control" />
+    </div>
+    <div class="col-md-4 d-flex align-items-end">
+      <button id="filtrar" class="btn btn-primary w-100">Filtrar</button>
+    </div>
+  </div>
 
-    <table id="tabela-itens" class="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Nome do Item</th>
-            <th scope="col">Quantidade Adicionada</th>
-            <th scope="col">Data</th>
-          </tr>
-        </thead>
-        <tbody class="table-group-divider">
-            {% for item in reabastecimentos %}
-            <tr>
-                <td>{{forloop.counter}}</td>
-                <td>{{item.item.nome.titulo}}</td>
-                <td>{{item.quantidade_adicionada}}</td>
-                <td>{{item.data_reabastecimento}}</td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="5" class="text-center text-muted">Nenhum abastecimento encontrado.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-      </table>
+  <button id="exportar-excel" class="btn btn-success mb-3">
+    <i class="fas fa-file-excel"></i> Exportar para Excel
+  </button>
 
+  <table id="tabela-itens" class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nome do Item</th>
+        <th scope="col">Quantidade Adicionada</th>
+        <th scope="col">Data</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      {% for item in reabastecimentos %}
+      <tr>
+        <td>{{forloop.counter}}</td>
+        <td>{{item.item.nome.titulo}}</td>
+        <td>{{item.quantidade_adicionada}}</td>
+        <td>{{item.data_reabastecimento}}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="5" class="text-center text-muted">
+          Nenhum abastecimento encontrado.
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
-<script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+<script
+  type="text/javascript"
+  charset="utf8"
+  src="https://code.jquery.com/jquery-3.6.0.min.js"
+></script>
+<script
+  type="text/javascript"
+  charset="utf8"
+  src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"
+></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="{% static 'estoque/js/ultimos_reabastecimentos.js' %}"></script>
 {% endblock %}
