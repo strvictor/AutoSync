@@ -25,12 +25,15 @@
     text-decoration-line: none;
 } */
 
-.botao {
+/* .botao {
     width: 100%;
-    align-items: flex-end;
-    
+    display: flex;
 }
 
+.botao button {
+    align-items: flex-end;
+    justify-content: flex-end;
+} */
 .table th, .table td {
     color: white; /* Muda a cor da fonte para branco */
   }
