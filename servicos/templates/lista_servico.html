@@ -54,7 +54,11 @@ Listagem de Serviços | AutoSync
                     <td>{{servico.mecanico_resp|default:"-"}}</td>
                     <td>{{servico.cliente}}</td>
                     <td>{{servico.data_inicio|date:"d/m/Y"}}</td>
-                    <td>{{servico.data_entrega|date:"d/m/Y"}}</td>
+                    {% if servico.data_entrega < data_atual and servico.status != 'Finalizado' and servico.status != 'Orçamento Reprovado'%}
+                        <td><span class="atrasado">{{servico.data_entrega|date:"d/m/Y"}}</span></td>
+                    {% else %}
+                        <td>{{servico.data_entrega|date:"d/m/Y"}}</td>
+                    {% endif %}
                     <td>
                         {% if servico.status == 'Em Orçamento' %}
                             <span class="badge badge-info">Em Orçamento</span>

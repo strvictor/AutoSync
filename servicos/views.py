@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from .commands import ProcessaServicos, EnviaEmail
 from django.contrib import messages 
 from .models import Servicos, CategoriaManutencao
+from datetime import datetime
 
 
 def novo_servico(request):
@@ -98,7 +99,8 @@ def seleciona_servico(request):
 def listar_servico(request):
     if request.method == 'GET':
         servicos = Servicos.objects.all()
-        return render(request, 'lista_servico.html', {'servicos': servicos})
+        data_atual = datetime.now().date()
+        return render(request, 'lista_servico.html', {'servicos': servicos, 'data_atual': data_atual})
     else:
         return redirect('listar_servico')
 

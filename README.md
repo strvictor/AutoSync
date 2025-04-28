@@ -62,14 +62,13 @@ Certifique-se de ter os seguintes requisitos instalados:
    ```
 
 4. Acesse a aplicação:
-   - A aplicação web estará disponível em [http://localhost:8000](http://localhost:8000)
+   - A aplicação web estará disponível em [http://localhost:80](http://localhost:80)
+     
+   4.1 Acesse remotamente:
+      - Acesse de forma remota clicando aqui: https://encurtador.com.br/HJxmJ
+      - Use como email padrão para entrar: admin@gmail.com. Senha: admin.
+      - Para criar novos usuários acesse /admin e crie dentro da interface do django.
 
-## Testes
-
-Execute os testes para garantir que tudo esteja funcionando corretamente:
-```bash
-docker-compose run web python manage.py test
-```
 
 ## Estrutura do Projeto
 
@@ -97,13 +96,11 @@ Fique à vontade para contribuir com melhorias, correções de bugs ou novas fun
    ```
 5. Abra um Pull Request.
 
-## Licença
-
-Este projeto está licenciado sob a Licença MIT. Consulte o arquivo [LICENSE](LICENSE) para mais informações.
 
 ## Contato
 
 Para dúvidas ou sugestões, entre em contato:
 - **Autor:** Paulo Victor
 - **GitHub:** [strvictor](https://github.com/strvictor)
+- **LinkedIn:** [strvictor](https://www.linkedin.com/in/strvictor/)
 
