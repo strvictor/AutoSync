@@ -1,15 +1,6 @@
 from pathlib import Path
 import os
-import sentry_sdk
 
-# Inicialização do Sentry
-sentry_sdk.init(
-    dsn="https://74cc343ed9cb893268638585a7273a37@o4508456550072320.ingest.de.sentry.io/4508456917663824",
-    traces_sample_rate=1.0,
-    _experiments={
-        "continuous_profiling_auto_start": True,
-    },
-)
 
 # Caminhos básicos
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -17,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Configurações gerais
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-ns%r&2=bwzzxnu383rkx2h%ck_(8xds#$p_f76ly1901zk7ur%')
 DEBUG = os.getenv('DEBUG', 'True').lower() in ('true', '1', 'yes')
-ALLOWED_HOSTS = ['*'] if DEBUG else os.getenv('ALLOWED_HOSTS', '').split(',')
+ALLOWED_HOSTS = ['*'] if DEBUG else os.getenv('ALLOWED_HOSTS')
 
 # Apps
 INSTALLED_APPS = [
