@@ -21,7 +21,7 @@ def home(request):
 
     total_finalizados = finalizados.count()
     total_valor_finalizados = sum(
-        item.categoria.preco * item.quantidade + item.valor_mao_de_obra
+        (item.categoria.preco * item.quantidade) + item.valor_mao_de_obra
         for servico in finalizados
         for item in servico.servicocategoriaquantidade_set.all()
     )
