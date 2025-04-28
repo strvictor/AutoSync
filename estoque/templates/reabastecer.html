@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block 'title' %}Reabastecer Estoque{% endblock %}
+
+{% block 'head' %}
+<link rel="stylesheet" href="{% static 'estoque/css/estoque.css' %}">
+{% endblock %}
+
+{% block 'dashboard' %}
+<br>
+<div class="container">
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <h3>Adicionar Entrada de Material</h3>
+    <form action="{% url 'reabastecer_estoque' %}" method="POST">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <label for="item">Item do Estoque:</label>
+                <select name="item" id="item" class="form-control" required>
+                    {% if item_id %}
+                        <option value="{{ item_id }}" selected>{{ item_nome }} (atual: {{ item_quantidade }})</option>
+                    {% else %}
+                        <option value="" disabled selected>Selecione um item</option>
+                    {% endif %}
+                    
+                    {% for item in estoque %}
+                        <option value="{{ item.id }}">{{ item.nome.titulo }} (atual: {{ item.quantidade_em_estoque }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-6 form-group">
+                <label for="quantidade">Quantidade a Adicionar:</label>
+                <input type="number" name="quantidade" id="quantidade" class="form-control" min="1" required>
+            </div>
+        </div>
+        <br>
+        <input type="submit" class="btn btn-success" value="Adicionar ao Estoque">
+    </form>
+</div>
+{% endblock %}

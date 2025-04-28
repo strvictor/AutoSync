@@ -1,6 +1,9 @@
 from pathlib import Path
 import os
+<<<<<<< HEAD
 import ast  # para interpretar lista string como lista real
+=======
+>>>>>>> 120120f09af25392fd734176606655dcd6b84804
 
 
 # Caminhos básicos
@@ -9,9 +12,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Configurações gerais
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-ns%r&2=bwzzxnu383rkx2h%ck_(8xds#$p_f76ly1901zk7ur%')
 DEBUG = os.getenv('DEBUG', 'True').lower() in ('true', '1', 'yes')
+<<<<<<< HEAD
 ALLOWED_HOSTS = ['*'] if DEBUG else os.getenv('ALLOWED_HOSTS', '').split(',')
 CSRF_TRUSTED_ORIGINS = ast.literal_eval(os.getenv('CSRF_TRUSTED_ORIGINS', '[]'))
 
+=======
+ALLOWED_HOSTS = ['*'] if DEBUG else os.getenv('ALLOWED_HOSTS')
+>>>>>>> 120120f09af25392fd734176606655dcd6b84804
 
 # Apps
 INSTALLED_APPS = [
@@ -31,6 +38,7 @@ INSTALLED_APPS = [
     'servicos',
     'home',
     'autenticacao',
+    'estoque',
 ]
 
 # Adicionar apps e middlewares específicos para desenvolvimento
@@ -101,10 +109,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Internacionalização
-LANGUAGE_CODE = 'pt-br'
-TIME_ZONE = 'America/Belem'
+LANGUAGE_CODE = 'pt-BR'
+TIME_ZONE = 'America/Sao_Paulo'
 USE_I18N = True
-USE_TZ = True
+USE_TZ = False
 
 # Arquivos estáticos e mídia
 STATIC_URL = 'static/'
