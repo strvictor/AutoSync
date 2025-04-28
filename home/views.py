@@ -85,14 +85,14 @@ def home(request):
         mes: [dados_estruturados[mes].get(categoria, 0) for categoria in categorias]
         for mes in meses
     }
-
+    #TODO : Calcular o valor da mao de obra dos serviços também
     # Preparar dados para os gráficos de vendas e pedidos
     servicos_por_mes = (
         Servicos.objects.filter(status="Finalizado")
         .annotate(mes=TruncMonth('data_finalizacao'))  # Agrupar por mês
         .annotate(
             valor_total=ExpressionWrapper(
-                F('servicocategoriaquantidade__quantidade') * F('servicocategoriaquantidade__categoria__preco'),
+                F('servicocategoriaquantidade__quantidade') * F('servicocategoriaquantidade__categoria__preco') + F('servicocategoriaquantidade__valor_mao_de_obra'),
                 output_field=DecimalField(max_digits=10, decimal_places=2)
             )
         )
