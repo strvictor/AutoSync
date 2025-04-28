@@ -21,7 +21,7 @@ def home(request):
 
     total_finalizados = finalizados.count()
     total_valor_finalizados = sum(
-        item.categoria.preco * item.quantidade
+        (item.categoria.preco * item.quantidade) + item.valor_mao_de_obra
         for servico in finalizados
         for item in servico.servicocategoriaquantidade_set.all()
     )
@@ -92,7 +92,7 @@ def home(request):
         .annotate(mes=TruncMonth('data_finalizacao'))  # Agrupar por mês
         .annotate(
             valor_total=ExpressionWrapper(
-                F('servicocategoriaquantidade__quantidade') * F('servicocategoriaquantidade__categoria__preco') + F('servicocategoriaquantidade__valor_mao_de_obra'),
+                F('servicocategoriaquantidade__quantidade') * F('servicocategoriaquantidade__categoria__preco'),
                 output_field=DecimalField(max_digits=10, decimal_places=2)
             )
         )
