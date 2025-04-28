@@ -1,4 +1,5 @@
 from pathlib import Path
+import ast
 import os
 import ast  # para interpretar lista string como lista real
 

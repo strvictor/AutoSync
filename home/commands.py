@@ -2,13 +2,14 @@ from django.db.models import Sum, F, ExpressionWrapper, DecimalField
 from django.db.models.functions import TruncMonth
 from servicos.models import Servicos
 
+#TODO : Calcular o valor da mao de obra dos serviços também
 # Agrupando por mês e somando o valor total dos serviços finalizados
 servicos_por_mes = (
     Servicos.objects.filter(status="Finalizado")
     .annotate(mes=TruncMonth('data_finalizacao'))  # Agrupa por mês
     .annotate(  # Calcula o valor total para cada serviço
         valor_total=ExpressionWrapper(
-            F('servicocategoriaquantidade__quantidade') * F('servicocategoriaquantidade__categoria__preco'),
+            F('servicocategoriaquantidade__quantidade') * F('servicocategoriaquantidade__categoria__preco') + F('servicocategoriaquantidade__valor_mao_de_obra'),
             output_field=DecimalField(max_digits=10, decimal_places=2)
         )
     )
