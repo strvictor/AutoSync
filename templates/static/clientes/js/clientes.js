@@ -10,8 +10,8 @@ $(document).ready(function () {
 
 // Mascara cpf e telefone
 
-const mascara_cpf = document.getElementsByName('cpf');
-const mascara_telefone = document.getElementByName('telefone');
+const mascara_cpf = document.getElementById('cpf');
+const mascara_telefone = document.getElementById('telefone');
 
 mascara_cpf.addEventListener('input', () => {
 let value = mascara_cpf.value.replace(/\D/g, ''); // remove tudo que não for número

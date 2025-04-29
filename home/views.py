@@ -85,7 +85,6 @@ def home(request):
         mes: [dados_estruturados[mes].get(categoria, 0) for categoria in categorias]
         for mes in meses
     }
-    #TODO : Calcular o valor da mao de obra dos serviços também
     # Preparar dados para os gráficos de vendas e pedidos
     servicos_por_mes = (
         Servicos.objects.filter(status="Finalizado")
