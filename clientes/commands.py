@@ -13,6 +13,7 @@ class ProcessaUsuarios:
     
             self.nome = body['nome']
             self.sobrenome = body['sobrenome']
+            self.telefone = body['telefone']
             self.email = body['email']
             self.cpf = body['cpf']
 
@@ -20,6 +21,7 @@ class ProcessaUsuarios:
             self.requisicao_post = requisicao.POST
             self.nome = self.requisicao_post.get('nome')
             self.sobrenome = self.requisicao_post.get('sobrenome')
+            self.telefone = self.requisicao_post.get('telefone')
             self.email = self.requisicao_post.get('email')
             self.cpf = self.requisicao_post.get('cpf')
 
@@ -66,6 +68,7 @@ class ProcessaUsuarios:
         self.cliente_bd = Cliente(
             nome=self.nome,
             sobrenome=self.sobrenome,
+            telefone=self.telefone,
             email=self.email,
             cpf=self.cpf
         )
@@ -76,6 +79,7 @@ class ProcessaUsuarios:
         self.cliente_bd = get_object_or_404(Cliente, id=self.id_usuario)
         self.cliente_bd.nome = self.nome
         self.cliente_bd.sobrenome = self.sobrenome
+        self.cliente_bd.telefone = self.telefone
         self.cliente_bd.email = self.email
         self.cliente_bd.cpf = self.cpf
         self.cliente_bd.save()

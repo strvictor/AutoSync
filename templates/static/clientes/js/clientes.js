@@ -7,6 +7,32 @@ $(document).ready(function () {
     });
 });
 
+
+// Mascara cpf e telefone
+
+const mascara_cpf = document.getElementsByName('cpf');
+const mascara_telefone = document.getElementByName('telefone');
+
+mascara_cpf.addEventListener('input', () => {
+let value = mascara_cpf.value.replace(/\D/g, ''); // remove tudo que não for número
+value = value.replace(/(\d{3})(\d)/, '$1.$2');
+value = value.replace(/(\d{3})(\d)/, '$1.$2');
+value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+mascara_cpf.value = value;
+});
+
+mascara_telefone.addEventListener('input', () => {
+let value = mascara_telefone.value.replace(/\D/g, '');
+value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
+value = value.replace(/(\d{5})(\d{1,4})$/, '$1-$2');
+mascara_telefone.value = value;
+});
+
+
+
+
+
+
 function add_carro() {
     const container = document.getElementById("form-carro");
 
@@ -79,6 +105,9 @@ function dados_clientes() {
 
         sobrenome = document.getElementById('sobrenome')
         sobrenome.value = data['cliente']['sobrenome']
+        
+        telefone = document.getElementById('telefone')
+        telefone.value = data['cliente']['telefone']
 
         email = document.getElementById('email')
         email.value = data['cliente']['email']
@@ -173,6 +202,7 @@ function update_cliente() {
     id = document.getElementById('id_cliente').value
     nome = document.getElementById('nome').value
     sobrenome = document.getElementById('sobrenome').value
+    telefone = document.getElementById('telefone').value
     email = document.getElementById('email').value
     cpf = document.getElementById('cpf').value
 
@@ -184,6 +214,7 @@ function update_cliente() {
         body: JSON.stringify({
             nome: nome,
             sobrenome: sobrenome,
+            telefone: telefone,
             email: email,
             cpf: cpf,
         })
@@ -195,3 +226,7 @@ function update_cliente() {
         console.log(data)
     })
 }
+
+
+
+
