@@ -5,6 +5,7 @@
 
 {% block 'head' %}
 <link rel="stylesheet" href="{% static 'estoque/css/estoque.css' %}">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 {% endblock %}
 
 {% block 'dashboard' %}
@@ -19,8 +20,9 @@
             {% endfor %}
         </div>
     {% endif %}
+    <br>
+    <h3>Reabastecimento de Material</h3>
 
-    <h3>Adicionar Entrada de Material</h3>
     <form action="{% url 'reabastecer_estoque' %}" method="POST">
         {% csrf_token %}
         <div class="row">
@@ -32,7 +34,6 @@
                     {% else %}
                         <option value="" disabled selected>Selecione um item</option>
                     {% endif %}
-                    
                     {% for item in estoque %}
                         <option value="{{ item.id }}">{{ item.nome.titulo }} (atual: {{ item.quantidade_em_estoque }})</option>
                     {% endfor %}
@@ -43,8 +44,38 @@
                 <input type="number" name="quantidade" id="quantidade" class="form-control" min="1" required>
             </div>
         </div>
-        <br>
         <input type="submit" class="btn btn-success" value="Adicionar ao Estoque">
     </form>
+    <br>
+    <br>
+    <hr style="background-color: gray;">
+    <br>
+    <br>
+
+
+    <h3>Adicionar Novo Item ao Estoque</h3>
+    <form method="POST" action="{% url 'criar_item_estoque' %}">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <label for="nome">Nome do item:</label>
+                <input type="text" class="form-control" id="nome" name="nome" required>
+            </div>
+            <div class="col-md-6 form-group">
+                <label for="preco">Preço:</label>
+                <input type="number" step="0.01" class="form-control" id="preco" name="preco" required>
+            </div>
+            <div class="col-md-6 form-group">
+                <label for="estoque_atual">Estoque atual:</label>
+                <input type="number" class="form-control" id="estoque_atual" name="estoque_atual" required>
+            </div>
+            <div class="col-md-6 form-group">
+                <label for="estoque_minimo">Estoque mínimo:</label>
+                <input type="number" class="form-control" value="10" id="estoque_minimo" name="estoque_minimo" required>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Salvar Novo Item</button>
+    </form>
+    
 </div>
 {% endblock %}

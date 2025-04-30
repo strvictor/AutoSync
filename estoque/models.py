@@ -5,8 +5,8 @@ from servicos.models import CategoriaManutencao
 class Estoque(models.Model):
     empresa = models.ForeignKey('autenticacao.Empresa', on_delete=models.CASCADE)
     
-    nome = models.OneToOneField(CategoriaManutencao, on_delete=models.CASCADE, null=True)
-    quantidade_em_estoque = models.IntegerField()
+    nome = models.OneToOneField(CategoriaManutencao, on_delete=models.CASCADE)
+    quantidade_em_estoque = models.IntegerField(default=1)
     quantidade_minima = models.IntegerField(default=10)
     atualizado_em = models.DateTimeField(auto_now=True)
 
