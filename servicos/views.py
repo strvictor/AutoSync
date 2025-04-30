@@ -35,7 +35,7 @@ def novo_servico(request):
             return render(request, 'novo_servico.html')
 
 def editar_servico(request):
-    lista_servicos = Servicos.objects.all()
+    lista_servicos = Servicos.objects.filter(empresa=request.empresa)
     if request.method == 'GET':
         return render(request, 'editar_servico.html', {'dados': {'servicos': lista_servicos}})
 
@@ -52,7 +52,7 @@ def editar_servico(request):
         data_inicio = request.POST.get('data_inicio')
         data_entrega = request.POST.get('data_entrega')
 
-        validacao, servico_editado = ProcessaServicos.edita_servico(servico_id, titulo_servico, mecanico, categorias, valor_mao_de_obra, quantidade, data_inicio, data_entrega)
+        validacao, servico_editado = ProcessaServicos.edita_servico(request, servico_id, titulo_servico, mecanico, categorias, valor_mao_de_obra, quantidade, data_inicio, data_entrega)
 
         if not validacao:
             messages.error(request, servico_editado)
@@ -86,7 +86,7 @@ def seleciona_servico(request):
             'categoria': servico.categoria_manutencao.all(),
             'relacao': servico.servicocategoriaquantidade_set.all(),
             'categorias_existentes': CategoriaManutencao.objects.all(),
-            'servicos': Servicos.objects.all(),
+            'servicos': Servicos.objects.filter(empresa=request.empresa),
             'mecanico_responsavel': servico.mecanico_resp,
             'data_inicio': servico.data_inicio,
             'data_entrega': servico.data_entrega,
@@ -97,7 +97,7 @@ def seleciona_servico(request):
 
 def listar_servico(request):
     if request.method == 'GET':
-        servicos = Servicos.objects.all()
+        servicos = Servicos.objects.filter(empresa=request.empresa)
         data_atual = datetime.now().date()
         return render(request, 'lista_servico.html', {'servicos': servicos, 'data_atual': data_atual})
     else:
@@ -106,7 +106,7 @@ def listar_servico(request):
 
 def protocolo(request, protocolo):
     if request.method == 'GET':
-        servicos = get_object_or_404(Servicos, protocolo=protocolo)
+        servicos = get_object_or_404(Servicos, protocolo=protocolo, empresa=request.empresa)
         return render(request, 'servico.html', {'servico': servicos})
     else:
         return redirect('listar_servico')
