@@ -8,6 +8,8 @@ class ProcessaUsuarios:
     def __init__(self, requisicao, id_usuario=False):
         self.id_usuario = id_usuario
         self.erro_msg = None
+        self.requisicao = requisicao
+        
         if self.id_usuario:
             body = json.loads(requisicao.body)
     
@@ -39,7 +41,7 @@ class ProcessaUsuarios:
             self.erro_msg = 'CPF inválido, reveja o formato.'
             return False
         
-        if Cliente.objects.filter(cpf=self.cpf).exclude(id=self.id_usuario).exists():
+        if Cliente.objects.filter(empresa=self.requisicao.empresa, cpf=self.cpf).exclude(id=self.id_usuario).exists():
             self.erro_msg = 'CPF já cadastrado.'
             return False
         
@@ -47,7 +49,7 @@ class ProcessaUsuarios:
             self.erro_msg = 'E-mail inválido, reveja o formato.'
             return False
         
-        if Cliente.objects.filter(email=self.email).exclude(id=self.id_usuario).exists():
+        if Cliente.objects.filter(empresa=self.requisicao.empresa, email=self.email).exclude(id=self.id_usuario).exists():
             self.erro_msg = 'E-mail já cadastrado.'
             return False
         
@@ -66,6 +68,7 @@ class ProcessaUsuarios:
     
     def salva_cliente(self):
         self.cliente_bd = Cliente(
+            empresa=self.requisicao.empresa,
             nome=self.nome,
             sobrenome=self.sobrenome,
             telefone=self.telefone,
@@ -77,6 +80,7 @@ class ProcessaUsuarios:
 
     def atualiza_cliente(self):
         self.cliente_bd = get_object_or_404(Cliente, id=self.id_usuario)
+        self.cliente_bd.empresa = self.requisicao.empresa
         self.cliente_bd.nome = self.nome
         self.cliente_bd.sobrenome = self.sobrenome
         self.cliente_bd.telefone = self.telefone
@@ -90,13 +94,14 @@ class ProcessaUsuarios:
         for nome_carro, placa, ano in relaciona_carros:
 
             carro = Carro(
+                empresa=self.requisicao.empresa,
                 carro=nome_carro,
                 placa=placa,
                 ano=ano,
                 cliente=self.cliente_bd
             )
 
-            if Carro.objects.filter(placa=placa).exists():
+            if Carro.objects.filter(empresa=self.requisicao.empresa, placa=placa).exists():
                 self.erro_msg += f'A placa {placa} ja existe no banco de dados. O carro {nome_carro} ano {ano} não foi cadastrado.\n'
                 continue
             
@@ -112,8 +117,8 @@ class AtualizaUsuarios:
         self.requisicao_post = requisicao.POST
         self.id_cliente = self.requisicao_post.get('id_cliente')
 
-        self.id_cliente_bd = Cliente.objects.filter(id=self.id_cliente)
-        self.carros_cliente = Carro.objects.filter(cliente=self.id_cliente_bd[0])
+        self.id_cliente_bd = Cliente.objects.filter(empresa=requisicao.empresa, id=self.id_cliente)
+        self.carros_cliente = Carro.objects.filter(empresa=requisicao.empresa, cliente=self.id_cliente_bd[0])
 
 
     def valida_usuario(self):
@@ -140,6 +145,7 @@ class AtualizaCarros:
     def __init__(self, requisicao, id_carro):
         self.erro_msg = None
         self.id_carro = id_carro
+        self.requisicao = requisicao
         self.requisicao_post = requisicao.POST
 
         self.nome_carro = self.requisicao_post.get('carro')
@@ -149,7 +155,7 @@ class AtualizaCarros:
         self.carro_bd = None
 
         try:
-            self.carro_bd = Carro.objects.get(id=self.id_carro)
+            self.carro_bd = Carro.objects.get(empresa=requisicao.empresa, id=self.id_carro)
         except Carro.DoesNotExist:
             self.erro_msg = f'id {self.id_carro} <carro> não encontrado.'
 
@@ -159,7 +165,7 @@ class AtualizaCarros:
         if not self.carro_bd:
             return False
 
-        if Carro.objects.filter(placa=self.placa_carro).exclude(id=self.id_carro).exists():
+        if Carro.objects.filter(empresa=self.requisicao.empresa, placa=self.placa_carro).exclude(id=self.id_carro).exists():
             self.erro_msg = f'Placa {self.placa_carro} já existente.'
             return False
 
@@ -173,8 +179,8 @@ class AtualizaCarros:
         self.carro_bd.save()
 
     @staticmethod
-    def salva_carro_novo(id_cliente, nome_carro, placa, ano):
-        cliente = Cliente.objects.get(id=id_cliente)
+    def salva_carro_novo(requisicao, id_cliente, nome_carro, placa, ano):
+        cliente = Cliente.objects.get(empresa=requisicao.empresa, id=id_cliente)
         carro = Carro(
             carro=nome_carro,
             placa=placa,

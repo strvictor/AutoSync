@@ -1,6 +1,8 @@
 from django.db import models
 
 class Cliente(models.Model):
+    empresa = models.ForeignKey('autenticacao.Empresa', on_delete=models.CASCADE)
+    
     nome = models.CharField(max_length=50)
     sobrenome = models.CharField(max_length=50)
     email = models.EmailField(max_length=254)
@@ -12,6 +14,8 @@ class Cliente(models.Model):
     
     
 class Carro(models.Model):
+    empresa = models.ForeignKey('autenticacao.Empresa', on_delete=models.CASCADE)
+    
     carro = models.CharField(max_length=50)
     placa = models.CharField(max_length=20)
     ano = models.IntegerField()

@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponse
 from .commands import ProcessaServicos, EnviaEmail
 from django.contrib import messages 
 from .models import Servicos, CategoriaManutencao

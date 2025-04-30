@@ -8,7 +8,7 @@ from django.contrib import messages
 
 def clientes(request):
     if request.method == 'GET':
-        clientes_bd = Cliente.objects.all()
+        clientes_bd = Cliente.objects.filter(empresa=request.empresa)
         return render(request, 'clientes.html', {'clientes': clientes_bd})
     
     elif request.method == 'POST':
@@ -78,7 +78,7 @@ def salva_carro(request):
     placa = request.POST.get('placa')
     ano = request.POST.get('ano')
 
-    AtualizaCarros.salva_carro_novo(id_cliente, nome, placa, ano)
+    AtualizaCarros.salva_carro_novo(request, id_cliente, nome, placa, ano)
     return HttpResponse('Carro salvo com sucesso!')
 
 
