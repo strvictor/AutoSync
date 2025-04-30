@@ -80,9 +80,13 @@ class ProcessaServicos:
             estoque = ProcessaEstoque(self.requisicao, categoria_obj, quantidade)
             nome_categoria_atual = ServicoCategoriaQuantidade.objects.filter(empresa=self.requisicao.empresa, servico=self.salva_servico_bd, categoria=categoria_obj).first()
 
-            quantidade_salva = nome_categoria_atual.quantidade if nome_categoria_atual else 0
-            if estoque.valida_qtd_minima():
-                estoque.valida_se_add_ou_remove(quantidade_salva)
+            self.quantidade_salva = nome_categoria_atual.quantidade if nome_categoria_atual else 0
+            
+            # if not estoque.valida_qtd_minima():
+            #     
+            #     continue
+            #     estoque.valida_se_add_ou_remove(quantidade_salva)
+
 
     def salva_servico(self):
         self.salva_servico_bd = Servicos(
@@ -98,7 +102,7 @@ class ProcessaServicos:
         self.salva_servico_bd.save()
         return self.salva_servico_bd
 
-    def associa_categorias(self, servico):
+    def associa_categorias(self, servico):        
         # Associa as categorias de manutenção (ManyToMany)
         categorias_objs = CategoriaManutencao.objects.filter(empresa=self.requisicao.empresa, id__in=self.categorias_servico)
 
@@ -106,19 +110,37 @@ class ProcessaServicos:
         for categoria_id, quantidade, valor_mao_de_obra in zip(self.categorias_servico, self.quantidades_servico, self.valor_mao_de_obra):
             if not valor_mao_de_obra:
                 valor_mao_de_obra = 0
+                
+                
+            print(f'categoria_id: {categoria_id}')
+            print(f'quantidade: {quantidade}')
+            print(f'valor_mao_de_obra: {valor_mao_de_obra}')
+            
+            
             categoria_obj = categorias_objs.get(id=categoria_id)
+            
+            print(f'categoria_obj: {categoria_obj}')
 
             estoque = ProcessaEstoque(self.requisicao, categoria_obj, quantidade)
             quantidade_minima_em_estoque = estoque.valida_qtd_minima()
+            
+            print(f'quantidade_minima_em_estoque: {quantidade_minima_em_estoque}')
 
-            if quantidade_minima_em_estoque:         
+            if quantidade_minima_em_estoque:
+                
+                estoque.valida_se_add_ou_remove(self.quantidade_salva)     
+                    
                 servico.categoria_manutencao.add(
                     categoria_obj,
                     through_defaults={'quantidade': quantidade,
                                     'valor_mao_de_obra': valor_mao_de_obra}
                 )
-
+            else:
+                # self.erro_msg.append(estoque.erro_msg)
+                print(f'\n\n\nErro: {estoque.erro_msg}\n\n\n')
+                
         servico.save()
+
         
     # TODO pendente de ajustar para pegar a empresa do usuário logado
     @staticmethod
