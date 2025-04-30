@@ -1,9 +1,9 @@
 from estoque.models import Estoque
 
 class ProcessaEstoque: 
-    def __init__(self, objeto_categoria_manutencao, quantidade):
+    def __init__(self, requisicao, objeto_categoria_manutencao, quantidade):
         self.erro_msg = None
-        self.obj_no_estoque = Estoque.objects.get(nome=objeto_categoria_manutencao)
+        self.obj_no_estoque = Estoque.objects.get(empresa=requisicao.empresa, nome=objeto_categoria_manutencao)
         self.quantidade_estoque_atual = self.obj_no_estoque.quantidade_em_estoque
         self.quantidade_repassada = int(quantidade)
 

@@ -6,10 +6,10 @@ from django.db.models.functions import TruncMonth
 
 def home(request):
     # Filtrar serviços por status
-    em_orcamento = Servicos.objects.filter(status='Em Orçamento')
-    orcamento_reprovado = Servicos.objects.filter(status='Orçamento Reprovado')
-    pendentes = Servicos.objects.filter(status='Em Andamento')
-    finalizados = Servicos.objects.filter(status='Finalizado')
+    em_orcamento = Servicos.objects.filter(empresa=request.empresa, status='Em Orçamento')
+    orcamento_reprovado = Servicos.objects.filter(empresa=request.empresa, status='Orçamento Reprovado')
+    pendentes = Servicos.objects.filter(empresa=request.empresa, status='Em Andamento')
+    finalizados = Servicos.objects.filter(empresa=request.empresa, status='Finalizado')
 
     # Calcular totais
     total_pendentes = pendentes.count()
@@ -45,7 +45,7 @@ def home(request):
 
     # Obter dados agrupados por mês e categoria
     servicos_por_categoria_mes = (
-        ServicoCategoriaQuantidade.objects.filter(servico__status="Finalizado")
+        ServicoCategoriaQuantidade.objects.filter(empresa=request.empresa, servico__status="Finalizado")
         .annotate(mes=TruncMonth('servico__data_finalizacao'))  # Agrupar por mês
         .values('mes', 'categoria__titulo')  # Selecionar mês e categoria
         .annotate(total_servicos=Sum('quantidade'))  # Somar a quantidade de serviços por categoria
@@ -87,7 +87,7 @@ def home(request):
     }
     # Preparar dados para os gráficos de vendas e pedidos
     servicos_por_mes = (
-        Servicos.objects.filter(status="Finalizado")
+        Servicos.objects.filter(empresa=request.empresa, status="Finalizado")
         .annotate(mes=TruncMonth('data_finalizacao'))  # Agrupar por mês
         .annotate(
             valor_total=ExpressionWrapper(
