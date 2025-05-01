@@ -2,6 +2,7 @@ from servicos.models import Servicos, CategoriaManutencao, ServicoCategoriaQuant
 from django.shortcuts import get_object_or_404
 from clientes.models import Cliente, Carro
 from django.http import JsonResponse
+from estoque.models import Estoque
 from servicos.tasks import valida_info_email
 from django.db import transaction
 from django.conf import settings
@@ -205,7 +206,14 @@ class ProcessaServicos:
 
     def retorna_obj(self):
         self.clientes_bd = Cliente.objects.filter(empresa=self.requisicao.empresa)
-        self.categorias_bd = CategoriaManutencao.objects.filter(empresa=self.requisicao.empresa)
+        
+        estoque = Estoque.objects.filter(empresa=self.requisicao.empresa, quantidade_em_estoque__gt=0)
+        categorias_ids = estoque.values_list('nome_id', flat=True).distinct()
+        
+        self.categorias_bd = CategoriaManutencao.objects.filter(
+        empresa=self.requisicao.empresa,
+        id__in=categorias_ids
+    )
 
         return self.clientes_bd, self.categorias_bd
     
