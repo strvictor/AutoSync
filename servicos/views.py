@@ -83,9 +83,9 @@ def seleciona_servico(request):
             'sobrenome': servico.cliente.sobrenome,
             'carro': servico.carro.carro,
             'placa': servico.carro.placa,
-            'categoria': servico.categoria_manutencao.all(),
-            'relacao': servico.servicocategoriaquantidade_set.all(),
-            'categorias_existentes': CategoriaManutencao.objects.all(),
+            'categoria': servico.categoria_manutencao.filter(empresa=request.empresa),
+            'relacao': servico.servicocategoriaquantidade_set.filter(empresa=request.empresa), #TODO: Retornar somente as categorias cujo estoque é maior que 0
+            'categorias_existentes': CategoriaManutencao.objects.filter(empresa=request.empresa),
             'servicos': Servicos.objects.filter(empresa=request.empresa),
             'mecanico_responsavel': servico.mecanico_resp,
             'data_inicio': servico.data_inicio,

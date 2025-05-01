@@ -17,13 +17,18 @@ class ProcessaEstoque:
             print(f'Retira {diferenca}')
             self.retira_qtd_do_estoque(diferenca)
 
-    def valida_qtd_minima(self):
-        if self.quantidade_estoque_atual < self.quantidade_repassada:
-            if self.quantidade_estoque_atual == 0:
-                self.erro_msg = f'O item "{self.obj_no_estoque.nome}" está em falta no estoque!'
-            else:
-                self.erro_msg = f'O item "{self.obj_no_estoque.nome}" está com a quantidade em estoque insuficiente. Estoque atual: {self.quantidade_estoque_atual}'
-            return False
+    def valida_qtd_minima(self, quantidade_salva=0):
+        
+        if self.quantidade_repassada > quantidade_salva:
+            diferenca = self.quantidade_repassada - quantidade_salva
+        
+            if self.quantidade_estoque_atual < diferenca:
+                if self.quantidade_estoque_atual == 0:
+                    self.erro_msg = f'O item "{self.obj_no_estoque.nome}" está em falta no estoque!'
+                else:
+                    self.erro_msg = f'O item "{self.obj_no_estoque.nome}" está com a quantidade em estoque insuficiente. Estoque atual: {self.quantidade_estoque_atual}'
+                return False
+            return True
         return True
 
     def retira_qtd_do_estoque(self, valor):

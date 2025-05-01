@@ -169,13 +169,15 @@ class ProcessaServicos:
                 categoria_obj = categorias_objs.get(id=categoria_id)
                 
                 estoque = ProcessaEstoque(requisicao, categoria_obj, quantidade_)
-                quantidade_minima_em_estoque = estoque.valida_qtd_minima()
+                
+                nome_categoria_atual = ServicoCategoriaQuantidade.objects.filter(empresa=requisicao.empresa, servico=servico, categoria=categoria_obj).first()
+                quantidade_salva = nome_categoria_atual.quantidade if nome_categoria_atual else 0
+                
+                quantidade_minima_em_estoque = estoque.valida_qtd_minima(quantidade_salva)
 
                 if quantidade_minima_em_estoque:
-                    nome_categoria_atual = ServicoCategoriaQuantidade.objects.filter(empresa=requisicao.empresa, servico=servico, categoria=categoria_obj).first()
 
-                    quantidade_salva = nome_categoria_atual.quantidade if nome_categoria_atual else 0
-
+                    #TODO : Se um serviço for editado somente a quantidade, não 
                     estoque.valida_se_add_ou_remove(quantidade_salva)
 
                     # Atualiza ou cria o registro no modelo intermediário
