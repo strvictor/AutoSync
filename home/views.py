@@ -62,6 +62,10 @@ def home(request):
     dados_estruturados = {}
     categorias_set = set()
     
+
+    print ('servicos_por_categoria_mes: ', servicos_por_categoria_mes, request.empresa)
+    
+    
     for servico in servicos_por_categoria_mes:
         mes = meses_abreviados[servico['mes'].month]
         categoria = servico['categoria__titulo']
@@ -80,6 +84,7 @@ def home(request):
     # Organizar as categorias e preparar os dados finais
     categorias = sorted(categorias_set)
     meses = list(dados_estruturados.keys())
+    print('meses: ', meses)
     
     quantidade_servicos_por_mes = {
         mes: [dados_estruturados[mes].get(categoria, 0) for categoria in categorias]
@@ -91,7 +96,7 @@ def home(request):
         .annotate(mes=TruncMonth('data_finalizacao'))  # Agrupar por mês
         .annotate(
             valor_total=ExpressionWrapper(
-                F('servicocategoriaquantidade__quantidade') * F('servicocategoriaquantidade__categoria__preco'),
+                F('servicocategoriaquantidade__quantidade') * F('servicocategoriaquantidade__categoria__preco') + F('servicocategoriaquantidade__valor_mao_de_obra'),
                 output_field=DecimalField(max_digits=10, decimal_places=2)
             )
         )

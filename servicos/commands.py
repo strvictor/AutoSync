@@ -133,7 +133,8 @@ class ProcessaServicos:
                 servico.categoria_manutencao.add(
                     categoria_obj,
                     through_defaults={'quantidade': quantidade,
-                                    'valor_mao_de_obra': valor_mao_de_obra}
+                                    'valor_mao_de_obra': valor_mao_de_obra,
+                                    'empresa': self.requisicao.empresa}
                 )
             else:
                 # self.erro_msg.append(estoque.erro_msg)
@@ -183,6 +184,7 @@ class ProcessaServicos:
                         defaults={
                             'quantidade': quantidade_,
                             'valor_mao_de_obra': valor_mao_de_obra_,
+                            'empresa': requisicao.empresa
                         }
                     )
                 else:
