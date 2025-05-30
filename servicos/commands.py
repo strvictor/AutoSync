@@ -209,6 +209,7 @@ class ProcessaServicos:
     def retorna_obj(self):
         self.clientes_bd = Cliente.objects.filter(empresa=self.requisicao.empresa)
         
+        # Retorno somente as categorias que possuem estoque disponível
         estoque = Estoque.objects.filter(empresa=self.requisicao.empresa, quantidade_em_estoque__gt=0)
         categorias_ids = estoque.values_list('nome_id', flat=True).distinct()
         
