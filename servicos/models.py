@@ -4,6 +4,7 @@ from datetime import datetime
 from clientes.models import Cliente, Carro
 from .categorias import ChoicesCategoriaManutencao
 from babel.numbers import format_currency
+from autenticacao.models import Empresa
 
 # class CategoriaManutencao(models.Model):
 #     titulo = models.CharField(max_length=100, choices=ChoicesCategoriaManutencao.choices)
@@ -13,6 +14,8 @@ from babel.numbers import format_currency
 #         return self.titulo
 
 class CategoriaManutencao(models.Model):
+    empresa = models.ForeignKey('autenticacao.Empresa', on_delete=models.CASCADE)
+    
     titulo = models.CharField(max_length=100, unique=True)
     preco = models.DecimalField(max_digits=7, decimal_places=2)
 
@@ -20,6 +23,8 @@ class CategoriaManutencao(models.Model):
         return self.titulo
 
 class Servicos(models.Model):
+    empresa = models.ForeignKey('autenticacao.Empresa', on_delete=models.CASCADE)
+    
     titulo = models.CharField(max_length=50)
     cliente = models.ForeignKey(Cliente, on_delete=models.SET_NULL, null=True)
     carro = models.ForeignKey(Carro, on_delete=models.SET_NULL, null=True, blank=True)
@@ -56,6 +61,8 @@ class Servicos(models.Model):
 
 
 class ServicoCategoriaQuantidade(models.Model):
+    empresa = models.ForeignKey('autenticacao.Empresa', on_delete=models.CASCADE, null=True, blank=True)  # Permitir valores nulos temporariamente # TODO remover depois
+    
     servico = models.ForeignKey(Servicos, on_delete=models.CASCADE)
     categoria = models.ForeignKey(CategoriaManutencao, on_delete=models.CASCADE)
     quantidade = models.PositiveIntegerField(default=1)

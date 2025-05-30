@@ -26,9 +26,9 @@ Clientes | AutoSync
         </div>
     </div>
 
-
+    #TODO : Refatoração da pagina de adicção de clientes, a parte de atualização deve ser em uma url com uma pagina html separada, ao inves da manipulação do DOM.
     <div id="adicionar-cliente" class="adicionar-cliente">
-        <form action="{% url "clientes" %}" method="POST">
+        <form action="{% url 'clientes' %}" method="POST">
             {% csrf_token %}
             <div class="row">
                 <div class="col-md-6">
@@ -42,12 +42,20 @@ Clientes | AutoSync
             </div>
 
             <br>
-            <p>E-mail:</p>
-            <input type="email" class="form-control" placeholder="nome@email.com" name="email" required>
+            <div class="row">
+                <div class="col-md-6">
+                    <p>Telefone:</p>
+                    <input type="text" class="form-control" placeholder="(__)_____-____" name="telefone" id="telefone" maxlength="15" required>
+                </div>
+                <div class="col-md-6">
+                    <p>E-mail:</p>
+                    <input type="email" class="form-control" placeholder="nome@email.com" name="email" required>
+                </div>
+            </div>
 
             <br>
             <p>CPF:</p>
-            <input type="text" class="form-control" placeholder="___.___.___-__" name="cpf" required>
+            <input type="text" class="form-control" placeholder="___.___.___-__" name="cpf" id="cpf" maxlength="14" required>
             <hr style="background-color:gray;">
 
             <div class="add-carros">
@@ -95,11 +103,19 @@ Clientes | AutoSync
                 </div>
             </div>
             <br>
-            <p>E-mail:</p>
-            <input type="text" id="email" class="form-control">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>Telefone:</p>
+                    <input type="text" id="telefone" name="telefone" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <p>E-mail:</p>
+                    <input type="text" id="email" class="form-control">
+                </div>
+            </div>
             <br>
             <p>CPF:</p>
-            <input type="text" id="cpf" class="form-control">
+            <input type="text" id="cpf" name="cpf" class="form-control">
             <br>
             <input type="submit"  onclick="update_cliente()" value="Atualizar" class="btn btn-success">
             {% if messages %}

@@ -6,10 +6,10 @@ from django.db.models.functions import TruncMonth
 
 def home(request):
     # Filtrar serviços por status
-    em_orcamento = Servicos.objects.filter(status='Em Orçamento')
-    orcamento_reprovado = Servicos.objects.filter(status='Orçamento Reprovado')
-    pendentes = Servicos.objects.filter(status='Em Andamento')
-    finalizados = Servicos.objects.filter(status='Finalizado')
+    em_orcamento = Servicos.objects.filter(empresa=request.empresa, status='Em Orçamento')
+    orcamento_reprovado = Servicos.objects.filter(empresa=request.empresa, status='Orçamento Reprovado')
+    pendentes = Servicos.objects.filter(empresa=request.empresa, status='Em Andamento')
+    finalizados = Servicos.objects.filter(empresa=request.empresa, status='Finalizado')
 
     # Calcular totais
     total_pendentes = pendentes.count()
@@ -45,7 +45,7 @@ def home(request):
 
     # Obter dados agrupados por mês e categoria
     servicos_por_categoria_mes = (
-        ServicoCategoriaQuantidade.objects.filter(servico__status="Finalizado")
+        ServicoCategoriaQuantidade.objects.filter(empresa=request.empresa, servico__status="Finalizado")
         .annotate(mes=TruncMonth('servico__data_finalizacao'))  # Agrupar por mês
         .values('mes', 'categoria__titulo')  # Selecionar mês e categoria
         .annotate(total_servicos=Sum('quantidade'))  # Somar a quantidade de serviços por categoria
@@ -61,6 +61,10 @@ def home(request):
     # Processar os dados em um formato estruturado
     dados_estruturados = {}
     categorias_set = set()
+    
+
+    print ('servicos_por_categoria_mes: ', servicos_por_categoria_mes, request.empresa)
+    
     
     for servico in servicos_por_categoria_mes:
         mes = meses_abreviados[servico['mes'].month]
@@ -80,19 +84,19 @@ def home(request):
     # Organizar as categorias e preparar os dados finais
     categorias = sorted(categorias_set)
     meses = list(dados_estruturados.keys())
+    print('meses: ', meses)
     
     quantidade_servicos_por_mes = {
         mes: [dados_estruturados[mes].get(categoria, 0) for categoria in categorias]
         for mes in meses
     }
-    #TODO : Calcular o valor da mao de obra dos serviços também
     # Preparar dados para os gráficos de vendas e pedidos
     servicos_por_mes = (
-        Servicos.objects.filter(status="Finalizado")
+        Servicos.objects.filter(empresa=request.empresa, status="Finalizado")
         .annotate(mes=TruncMonth('data_finalizacao'))  # Agrupar por mês
         .annotate(
             valor_total=ExpressionWrapper(
-                F('servicocategoriaquantidade__quantidade') * F('servicocategoriaquantidade__categoria__preco'),
+                F('servicocategoriaquantidade__quantidade') * F('servicocategoriaquantidade__categoria__preco') + F('servicocategoriaquantidade__valor_mao_de_obra'),
                 output_field=DecimalField(max_digits=10, decimal_places=2)
             )
         )
